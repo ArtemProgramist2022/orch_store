@@ -161,3 +161,17 @@ async def update(
     except:
         logger.exception(f'Query {query} failed')
         raise
+
+
+async def get_total(
+        where: str,
+        table: str,
+        conn: Connection
+) -> int:
+    result = await conn.fetchrow(
+        f"""
+        SELECT count(*) FROM {table}
+        """
+    )
+
+    return result['count']
