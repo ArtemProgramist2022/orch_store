@@ -1,7 +1,11 @@
 export default {
   // Target: https://go.nuxtjs.dev/config-target
   target: 'static',
-
+  server: {
+    port: 8000,
+    host: "0.0.0.0"
+  },
+  ssr: true,
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     title: 'frontend',
@@ -40,14 +44,51 @@ export default {
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
     // https://go.nuxtjs.dev/pwa
-    '@nuxtjs/pwa'
+    '@nuxtjs/pwa',
+    '@nuxtjs/auth-next',
+    '@nuxtjs/proxy'
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-    baseURL: '/'
+    proxy: true
   },
+
+  proxy: ["http://localhost:8010/api/v1"],
+
+  router: {
+    middleware: ["auth"],
+  },
+
+  auth: {
+    redirect: {
+      login: "/login",
+      logout: "/",
+      home: "/",
+    },
+    strategies: {
+      customStrategy: {
+        scheme: "~/schemes/customStrategy",
+        token: {
+          property: "data.token",
+          required: true,
+          maxAge: 86400,
+        },
+        user: {
+          property: "data.me",
+          autoFetch: true,
+        },
+        endpoints: {
+          login: { url: "/api/v1/auth/login", method: "post" },
+          logout: { url: "/api/v1/auth/logout", method: "post" },
+          user: { url: "/api/v1/auth/me", method: "get" },
+        },
+      },
+    },
+    plugins: ["~/plugins/auth.js"],
+  },
+
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {

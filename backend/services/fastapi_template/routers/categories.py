@@ -17,7 +17,7 @@ router = APIRouter(
 )
 
 
-@router.get('/', response_model=cat_models.CategoriesSuccessResponse)
+@router.get('', response_model=cat_models.CategoriesSuccessResponse)
 async def get_categories(
         conn: Connection = Depends(get_db)
 ):
@@ -27,7 +27,7 @@ async def get_categories(
 
 
 @router.post(
-    "/",
+    "",
     response_model=cat_models.CategorySuccessResponse,
     dependencies=[Depends(check_rule)]
 )

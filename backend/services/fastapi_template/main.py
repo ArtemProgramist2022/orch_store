@@ -54,6 +54,7 @@ def main(args, config):
     register_exception_handler(app)
 
     register_routers(app)
+    register_pages(app)
     register_startup(app)
     register_shutdown(app)
 
@@ -123,8 +124,16 @@ async def startup_jinja(app):
 
 
 def register_routers(app):
-    from . import routers
+    from . import (
+        routers
+    )
+
     return routers.register_routers(app)
+
+
+def register_pages(app):
+    from . import pages
+    return pages.register_pages(app)
 
 
 def check_folders(conf):
