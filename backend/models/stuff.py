@@ -8,6 +8,7 @@ from models.base import (
     SuccessResponse,
     ListData
 )
+from models.categories import Category
 
 
 class BaseStuff(BaseModel):
@@ -16,7 +17,7 @@ class BaseStuff(BaseModel):
     cost: Decimal
     count_on_warehouse: int
     category_id: int
-    category: Optional[str]
+    category: Optional[Category]
 
 
 class Stuff(BaseStuff):

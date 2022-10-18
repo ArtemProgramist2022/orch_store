@@ -27,14 +27,18 @@ async def get_stuff_list(
         conn: Connection
 ) -> Optional[List[Stuff]]:
     offset = limit * (page - 1)
-
+    idx = 3
+    params = [limit, offset]
+    wheres = []
+    if category_id:
+        params.append(category_id)
+        wheres.append(f"category_id = ${idx}")
+        idx += 1
     result = await conn.fetch(
         f"""
-        SELECT * FROM {TABLE} WHERE category_id=$3 LIMIT $1 OFFSET $2
+        SELECT * FROM {TABLE} {'WHERE ' + 'AND'.join(wheres) if wheres else ''} LIMIT $1 OFFSET $2
         """,
-        limit,
-        offset,
-        category_id
+        *params
     )
 
     data: List[Stuff] = record_to_model_list(Stuff, result)
@@ -121,13 +125,16 @@ async def get_total(
         category_id: int,
         conn: Connection
 ) -> int:
+    values = []
+    if category_id:
+        values.append(category_id)
     result = await conn.fetchrow(
         f"""
         SELECT count(*)
         FROM {TABLE}
-        WHERE category_id = $1
+        {"WHERE category_id = $1" if category_id else ''}
         """,
-        category_id
+        *values
     )
 
     return result['count']

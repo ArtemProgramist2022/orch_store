@@ -3,7 +3,8 @@ from . import (
     auth,
     users,
     categories,
-    stuff
+    stuff,
+    cart
 )
 from .admin import register_routers as admin_route
 
@@ -22,6 +23,9 @@ def register_routers(app):
     )
     router.include_router(
         stuff.router
+    )
+    router.include_router(
+        cart.router
     )
     admin_route(app)
     app.include_router(router)

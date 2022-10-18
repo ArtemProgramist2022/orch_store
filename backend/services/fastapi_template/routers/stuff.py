@@ -23,13 +23,12 @@ router = APIRouter(
 
 @router.get('/', response_model=stuff_models.StuffListSuccessResponse)
 async def get_stuff_list(
-        category_id: int,
+        category_id: int = None,
         page: int = 1,
         limit: int = 20,
         conn: Connection = Depends(get_db)
 ):
     limit = min(50, limit)
-
     return stuff_models.StuffListSuccessResponse(
         data=stuff_models.StuffList(
             items=await stuff_db.get_stuff_list(
