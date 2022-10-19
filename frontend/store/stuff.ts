@@ -19,6 +19,9 @@ export const mutations: MutationTree<IListResponse<IStuff>> = {
         state.limit = data.limit
         state.page = data.page
         state.items = data.items
+    },
+    changePage(state, data){
+        state.page = data
     }
 }
 
@@ -35,6 +38,9 @@ export const actions: ActionTree<IListResponse<IStuff>, any> = {
         } catch (error) {
             return error
         }
+    },
+    changePage({commit}, page: number){
+        commit('changePage', page)
     }
 }
 

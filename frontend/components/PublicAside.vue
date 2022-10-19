@@ -1,9 +1,10 @@
 <template>
-  <div>
-      <h3>Категории</h3>
+  <div class="categories-block">
+      
       <div v-if="categories">
         <ul>
-          <li v-for="cat in categories" :key="cat.id" >
+          <li style="margin-top: 20px; display: block;">Категории</li>
+          <li v-for="cat in categories" :key="cat.id" class="category-wrapper">
             <nuxt-link 
               class="link"
               :to="`/stuff/${cat.id}`"
@@ -63,5 +64,14 @@
     text-decoration: none;
   }
   
-  
+  .categories-block {
+    margin-top: 70px;
+    float: left;
+  }
+
+  .category-wrapper {
+    display: block;
+    margin-top: 15px;
+    
+  }
   </style>

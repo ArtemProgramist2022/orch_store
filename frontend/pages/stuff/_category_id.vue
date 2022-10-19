@@ -1,18 +1,28 @@
 <template>
-    <el-row>
-  <el-col :span="8" v-for="(o, index) in 2" :key="o" :offset="index > 0 ? 2 : 0">
-    <el-card :body-style="{ padding: '0px' }">
-      <img src="https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png" class="image">
-      <div style="padding: 14px;">
-        <span>Yummy hamburger</span>
-        <div class="bottom clearfix">
-          <time class="time">{{ currentDate }}</time>
-          <el-button type="text" class="button">Operating</el-button>
-        </div>
-      </div>
-    </el-card>
-  </el-col>
-</el-row>
+    
+    <el-container direction="vertical">
+      <ul class="stuff-grid">
+      <li v-for="item in stuff" :key="item.id" class="stuff-wrapper">
+        <el-card  class="stuff-page__card">
+          <span>{{item.name}}</span>
+          <span>{{item.cost}}</span>
+      </el-card>
+      </li>
+      
+    </ul>
+      <el-pagination
+        :page-size.sync="stuff.length"
+        
+        :current-page="page"
+        :hide-on-single-page="stuff.length <= limit"
+        layout="prev, next, total"
+        :total="total"
+        @prev-click="prevPage"
+        @next-click="nextPage"
+        @current-change="currentChange"
+        >
+      </el-pagination>
+    </el-container>
 </template>
 <script lang="ts">
 import { Vue, Action, Getter, Component} from 'nuxt-property-decorator'
@@ -32,11 +42,45 @@ export default class StuffPage extends Vue {
     @Getter('stuff/limit') limit!: number
 
     @Action('stuff/fetchStuff') fetchStuff: any
-
+    @Action('stuff/changePage') changePage: any
 
     currentDate = new Date()
     async fetch(){
+        
         await this.fetchStuff({
+            page: this.page,
+            limit: this.limit,
+            category_id:this.category_id
+        })
+        console.log(this.stuff.length <= this.limit)
+    }
+
+    
+    pagerCount = this.total / this.limit
+    
+
+    async prevPage(){
+      this.changePage(this.page -1)
+      console.log(this.page)
+      await this.fetchStuff({
+            page: this.page,
+            limit: this.limit,
+            category_id:this.category_id
+        })
+    }
+    async nextPage(){
+      this.changePage(this.page + 1)
+      console.log(this.page)
+      await this.fetchStuff({
+            page: this.page,
+            limit: this.limit,
+            category_id:this.category_id
+        })
+    }
+    async currentChange(val: number) {
+      this.changePage(val)
+      console.log(val)
+      await this.fetchStuff({
             page: this.page,
             limit: this.limit,
             category_id:this.category_id
@@ -45,3 +89,20 @@ export default class StuffPage extends Vue {
 }
 
 </script>
+<style>
+
+.stuff-grid {
+  margin-top: 50px;
+}
+
+.stuff-page__card{
+  width: 250px;
+  height: 300px;
+  border-radius: 20px;
+}
+.stuff-wrapper {
+  display: block;
+  float: left;
+  margin: 20px;
+}
+</style>

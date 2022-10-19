@@ -29,6 +29,7 @@ async def get_stuff_list(
         conn: Connection = Depends(get_db)
 ):
     limit = min(50, limit)
+    page = max(1, page)
     return stuff_models.StuffListSuccessResponse(
         data=stuff_models.StuffList(
             items=await stuff_db.get_stuff_list(

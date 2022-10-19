@@ -1,29 +1,36 @@
 <template>
-    <el-container class="public-layout ">
-      <el-header class="public-layout__header">
+  <el-container>
+    <el-header  class="public-layout__header">
           <PublicHeader/>
       </el-header>
-      <el-aside class="public-layout__aside container" width="10%">
+    
+    <el-container direction="horizontal" class="container">
+      <el-aside width="200px" class="public-layout__aside" > 
         <PublicAside/>
-      </el-aside>
-      <el-main class="public-layout__main container">
-        <nuxt />
-      </el-main>
-      <el-footer class="public-layout__footer">
-        
-      </el-footer>
+    </el-aside>
+         <el-main class="public-layout__main ">
+            <nuxt />
+          </el-main>
+    
     </el-container>
+    <el-footer class="public-layout__footer">
+        </el-footer>
+  </el-container>
+    
 </template>
 
 <style>
 .container {
   padding: 0 10% 0 10%;
-  align-items: center;
+  
 }
 .public-layout__header {
-  background: #eb03f33f;
+  background: #fff;
   padding: 0 10% 0 10%;
-  
+  box-shadow: 0 0 15px 0 rgba(0, 0, 0, .1);
+  border-radius: 0 0 25px 25px;
+  vertical-align: middle;
+  height: 150px;
 }
 .public-layout__main {
     padding: 0;
