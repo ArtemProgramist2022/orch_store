@@ -1,3 +1,3 @@
 export default function ({ $auth }) {
-    $auth.setStrategy('customStrategy')
+  $auth.setStrategy('customStrategy')
 }

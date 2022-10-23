@@ -1,5 +1,4 @@
 
-
 export interface ILoginForm {
     email: string,
     password: string
@@ -9,7 +8,6 @@ export interface IConfirmForm {
     email: string,
     code: string
 }
-
 
 export interface IRegisterForm {
     email: string,
@@ -27,6 +25,7 @@ export interface User {
     en: boolean,
     name: string,
     email: string,
+    is_admin: boolean,
     ctime: string |null
     dtime: string | null,
     atime: string | null

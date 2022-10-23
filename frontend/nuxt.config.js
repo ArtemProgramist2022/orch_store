@@ -1,14 +1,14 @@
 export default {
   // Target: https://go.nuxtjs.dev/config-target
-  target: 'static',
+  target: 'server',
   server: {
-    port: 3000,
-    host: "0.0.0.0"
+    port: 8000,
+    host: '127.0.0.1'
   },
   ssr: true,
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'frontend',
+    title: 'orch.store',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -22,12 +22,14 @@ export default {
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
-    'element-ui/lib/theme-chalk/index.css'
+    'element-ui/lib/theme-chalk/index.css',
+    'element-ui/lib/theme-chalk/display.css'
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     '@/plugins/element-ui'
+
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -55,40 +57,40 @@ export default {
     proxy: true
   },
 
-  proxy: ["http://localhost:8010/api/v1"],
+  proxy: ['http://192.168.0.102/api/v1'],
 
   router: {
-    middleware: ["auth"],
+    middleware: ['auth']
   },
 
   auth: {
     redirect: {
-      login: "/login",
-      logout: "/",
-      home: "/",
+      login: '/login',
+      logout: '/',
+      home: '/'
     },
     strategies: {
       customStrategy: {
-        scheme: "~/schemes/customStrategy",
+        scheme: '~/schemes/customStrategy',
         token: {
-          property: "data.token",
+          property: 'data.token',
           required: true,
           maxAge: 86400,
+          global: true
         },
         user: {
-          property: "data.me",
-          autoFetch: true,
+          property: 'data.me',
+          autoFetch: true
         },
         endpoints: {
-          login: { url: "/api/v1/auth/login", method: "post" },
-          logout: { url: "/api/v1/auth/logout", method: "post" },
-          user: { url: "/api/v1/auth/me", method: "get" },
-        },
-      },
+          login: { url: '/api/v1/auth/login', method: 'post' },
+          logout: { url: '/api/v1/auth/logout', method: 'post' },
+          user: { url: '/api/v1/auth/me', method: 'get' }
+        }
+      }
     },
-    plugins: ["~/plugins/auth.js"],
+    plugins: ['~/plugins/auth.js']
   },
-
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {

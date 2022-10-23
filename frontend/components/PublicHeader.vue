@@ -1,30 +1,49 @@
 <template>
-    <div class="public-header">
-        <nuxt-link 
-            to="/" 
-            class="public-header__logo"
-        >
-            <strong>Orch</strong>.store
-        </nuxt-link>
-        <el-button @click="changeLoginFormVisible"> Вход</el-button>
-        <LoginForm :visible="loginFormVisible"/>
-   </div>
+  <div class="public-header">
+    <nuxt-link
+      to="/"
+      class="public-header__logo"
+    >
+      <strong>Orch</strong>.store
+    
+    </nuxt-link>
+    <nuxt-link v-if="userLoggedIn == true" to="/cart" >
+      Корзина
+      <span class="el-icon-s-goods"></span>
+    </nuxt-link>
+    
+    
+      <nuxt-link v-if="userLoggedIn != true" to="/login">Войти</nuxt-link>
+  </div>
 </template>
 <script lang="ts">
-import {Component, Vue, Action, Getter } from 'nuxt-property-decorator'
-import LoginForm  from "~/components/LoginForm.vue";
+import { Component, Vue, Action, Getter } from 'nuxt-property-decorator'
+
+import LoginForm from '~/components/LoginForm.vue'
+import { ICartItem } from '~/interfaces/cart'
+
 
 @Component({
-    components: {
-        LoginForm
-    }
+  components: {
+    LoginForm,
+  }
 })
-export default class PublicHeader extends Vue{
-    loginFormVisible = false
+export default class PublicHeader extends Vue {
+  @Getter('cart/data') cartItems!: Array<ICartItem>
+  @Action('cart/fetchCart') fetchCart: any
 
-    changeLoginFormVisible(){
-        this.loginFormVisible = !this.loginFormVisible
-    }
+
+  userLoggedIn = this.$auth.loggedIn
+
+  cartDialogVisible = false
+
+  async fetch(){
+    this.fetchCart().then(()=>{})
+  }
+  changeCartDialogVisible () {
+    
+    this.cartDialogVisible = !this.cartDialogVisible
+  }
 }
 </script>
 <style>

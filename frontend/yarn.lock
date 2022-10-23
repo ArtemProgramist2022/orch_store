@@ -1459,7 +1459,7 @@
     webpack-node-externals "^3.0.0"
     webpackbar "^4.0.0"
 
-"@nuxtjs/auth-next@^5.0.0-1648802546.c9880dc":
+"@nuxtjs/auth-next@5.0.0-1648802546.c9880dc":
   version "5.0.0-1648802546.c9880dc"
   resolved "https://registry.yarnpkg.com/@nuxtjs/auth-next/-/auth-next-5.0.0-1648802546.c9880dc.tgz#fe01e44c9ccbcfa876a19104e0c977f42ac69be3"
   integrity sha512-L4IxKQDEP2Z85TZRyz+jNl9lWFjj/AmPWMwKjJLrcGz3Ubh1dGV4aXGfmtqeZmwGSr4vOqSd7MYCYwXTbk1cPA==
@@ -3990,7 +3990,7 @@ element-plus@^2.2.17:
     memoize-one "^6.0.0"
     normalize-wheel-es "^1.2.0"
 
-element-ui@^2.15.6:
+element-ui@^2.15.7:
   version "2.15.10"
   resolved "https://registry.yarnpkg.com/element-ui/-/element-ui-2.15.10.tgz#fde0ff5cb4c30e8eb166d617f85916defe5948f1"
   integrity sha512-jmD++mU2wKXbisvx4fxOl2mHaU+HWHTAq/3Wf8x9Bwyu4GdDZPLABb+CGi3DWN6fPqdgRcd74aX39DO+YHObLw==

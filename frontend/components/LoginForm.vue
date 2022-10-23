@@ -1,184 +1,176 @@
 <template>
-    <el-dialog 
-        title="Вход"
-        :visible.sync="visible"
-        width="30%"
-        :before-close="handleClose"
-        >
-        <el-container
-    direction="vertical"
-    class="auth"
-  >
-    <nuxt-link to="/">
-      <el-button
-        type="primary"
-        size="mini"
-        round
-        class="auth__back"
-      >
-        <i
-          class="el-icon-arrow-left"
-          style="font-size: 23px;"
-        ></i>
-      </el-button>
-    </nuxt-link>
-    <el-row
-      type="flex"
-      class="auth__wrapper"
+  
+    <el-container
+      direction="vertical"
+      class="auth"
     >
-      <el-col
-        class="auth__col auth__col--main"
-        :xl="12"
-        :sm="24"
+      <nuxt-link to="/">
+        <el-button
+          type="primary"
+          size="mini"
+          round
+          class="auth__back"
+        >
+          <i
+            class="el-icon-arrow-left"
+            style="font-size: 23px;"
+          />
+        </el-button>
+      </nuxt-link>
+      <el-row
+        type="flex"
+        class="auth__wrapper"
       >
-        <div class="auth__form-wrapper">
-          <el-form
-            ref="form"
-            v-loading="loading"
-            :model="form"
-            :rules="rules"
-            status-icon
-            class="auth__form auth-form"
-          >
-            <h2 class="auth-form__title">
-              Login
-            </h2>
-            <div class="auth-form__description">
-              Your account details
-            </div>
-            <hr class="auth-form__hr" />
-            <el-form-item
-              label="Email address"
-              prop="email"
+        <el-col
+          class="auth__col auth__col--main"
+          :xl="12"
+          :sm="24"
+        >
+          <div class="auth__form-wrapper">
+            <el-form
+              ref="form"
+              v-loading="loading"
+              :model="form"
+              :rules="rules"
+              status-icon
+              class="auth__form auth-form"
             >
-              <el-input
-                v-model="form.email"
-                placeholder="email@example.com"
-              />
-            </el-form-item>
-            <el-form-item
-              label="Password"
-              prop="password"
-            >
-              <el-input
-                v-model="form.password"
-                type="password"
-                show-password
-                placeholder="Password"
-              />
-            </el-form-item>
-            <el-form-item style="margin-bottom: 10px;">
-              <el-button
-                class="auth-form__submit-btn"
-                type="primary"
-                :loading="loading"
-                @click.prevent="onSubmit"
+              <h2 class="auth-form__title">
+                Login
+              </h2>
+              <div class="auth-form__description">
+                Your account details
+              </div>
+              <hr class="auth-form__hr">
+              <el-form-item
+                label="Email address"
+                prop="email"
               >
-                Submit
-              </el-button>
-            </el-form-item>
-            <el-form-item style="margin-bottom: 0;">
-              <el-row
-                type="flex"
-                justify="space-between"
+                <el-input
+                  v-model="form.email"
+                  placeholder="email@example.com"
+                />
+              </el-form-item>
+              <el-form-item
+                label="Password"
+                prop="password"
               >
-                <el-col
-                  class="auth-form__link"
-                  :span="12"
+                <el-input
+                  v-model="form.password"
+                  type="password"
+                  show-password
+                  placeholder="Password"
+                />
+              </el-form-item>
+              <el-form-item style="margin-bottom: 10px;">
+                <el-button
+                  class="auth-form__submit-btn"
+                  type="primary"
+                  :loading="loading"
+                  @click.prevent="onSubmit"
                 >
-                  <nuxt-link to="/signup">
-                    <el-link
-                      href="#"
-                      :underline="false"
-                      @click.prevent
-                    >
-                      Don't have an account?
-                    </el-link>
-                  </nuxt-link>
-                </el-col>
-                <el-col
-                  class="auth-form__link auth-form__link--right"
-                  :span="12"
+                  Submit
+                </el-button>
+              </el-form-item>
+              <el-form-item style="margin-bottom: 0;">
+                <el-row
+                  type="flex"
+                  justify="space-between"
                 >
-                  <nuxt-link to="/recover">
-                    <el-link
-                      href="#"
-                      :underline="false"
-                      @click.prevent
-                    >
-                      Forget Password?
-                    </el-link>
-                  </nuxt-link>
-                </el-col>
-              </el-row>
-            </el-form-item>
-          </el-form>
-        </div>
-      </el-col>
-      <el-col
-        class="auth__col auth__col--image hidden-sm-and-down"
-        :xl="12"
-      />
-    </el-row>
-  </el-container>
-
-    </el-dialog>
+                  <el-col
+                    class="auth-form__link"
+                    :span="12"
+                  >
+                    <nuxt-link to="/signup">
+                      <el-link
+                        href="#"
+                        :underline="false"
+                        @click.prevent
+                      >
+                        Don't have an account?
+                      </el-link>
+                    </nuxt-link>
+                  </el-col>
+                  <el-col
+                    class="auth-form__link auth-form__link--right"
+                    :span="12"
+                  >
+                    <nuxt-link to="/recover">
+                      <el-link
+                        href="#"
+                        :underline="false"
+                        @click.prevent
+                      >
+                        Forget Password?
+                      </el-link>
+                    </nuxt-link>
+                  </el-col>
+                </el-row>
+              </el-form-item>
+            </el-form>
+          </div>
+        </el-col>
+        <el-col
+          class="auth__col auth__col--image hidden-sm-and-down"
+          :xl="12"
+        />
+      </el-row>
+    </el-container>
+  
 </template>
 <script lang="ts">
-import { Vue,Action,Getter, Component, Ref } from "nuxt-property-decorator";
-import { ILoginForm } from "~/interfaces/users";
-import { ElForm } from "element-ui/types/form";
-
+import { doesNotMatch } from 'assert'
+import { Vue, Action, Getter, Component, Ref } from 'nuxt-property-decorator'
+import { ElForm } from 'element-ui/types/form'
+import { ILoginForm } from '~/interfaces/users'
 
 @Component({
-    props: {
-        visible: {
-            type: Boolean
-        }
-    }
+  
 })
 export default class LoginForm extends Vue {
     @Ref('form') formRef!: ElForm
     form: ILoginForm = {
-        email: '',
-        password: ''
+      email: '',
+      password: ''
     }
+
     rules = {
-    email: [
-      { required: true, message: 'Email is required', trigger: 'blur' },
-      { type: 'email', message: 'Incorrect Email', trigger: 'blur' }
-    ],
-    password: [{ required: true, message: 'Password is required', trigger: 'blur' }]
-  }
+      email: [
+        { required: true, message: 'Email is required', trigger: 'blur' },
+        { type: 'email', message: 'Incorrect Email', trigger: 'blur' }
+      ],
+      password: [{ required: true, message: 'Password is required', trigger: 'blur' }]
+    }
 
     loading = false
 
-    visible = this.$props.visible
-    handleClose(done: any){
-        this.$confirm('Are you sure to close?')
-        .then(_ => {
-            done()
-        }).catch(_ => {})
-    }
-    async login (){
-        this.loading = true
-        try {
-            await this.$auth.loginWith('customStrategy', {data: this.form})
-        } catch (error) {
-            
-        }
-        this.loading = false
+    
+    handleClose (done: any) {
+      this.$confirm('Are you sure to close?')
+        .then((_) => {
+          done()
+        }).catch((_) => {})
     }
 
-    onSubmit(){
-        this.formRef.validate((valid) => {
-            if (valid){
-                this.login()
-            }
-        })
+    async login () {
+      this.loading = true
+      try {
+        await this.$auth.loginWith('customStrategy', { data: this.form })
+      } catch (error) {
+
+      }
+      this.loading = false
+      console.log(this.$auth.loggedIn)
+    }
+
+    onSubmit () {
+      this.formRef.validate((valid) => {
+        if (valid) {
+          this.login()
+        }
+      })
     }
 }
-
 
 </script>
 <style>
