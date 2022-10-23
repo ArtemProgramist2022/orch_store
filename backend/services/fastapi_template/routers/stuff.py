@@ -2,14 +2,15 @@ from fastapi import (
     APIRouter,
     Depends
 )
-from misc import handlers
+from misc import handlers,config
 from services.fastapi_template.depends.admin_area import check_rule
 from db import stuff as stuff_db
 from models import stuff as stuff_models
 from misc.db import (
     Connection,
-
 )
+
+from misc.fastapi.depends.conf import get as get_conf
 from misc.fastapi.depends.db import get as get_db
 import logging
 
@@ -55,11 +56,14 @@ async def get_stuff_list(
 )
 async def add_stuff_item(
         model: stuff_models.NewStuff,
-        conn: Connection = Depends(get_db)
+        conn: Connection = Depends(get_db),
+        conf: dict = Depends(get_conf)
 ):
     data = await stuff_db.add_stuff_item(
         new_stuff=model,
-        conn=conn
+        conn=conn,
+        stuff_image_folder=config.stuff_images_folder(conf),
+        stuff_link_base=conf['urls']['stuff']
     )
     if data:
         return stuff_models.StuffSuccessResponse(

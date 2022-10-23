@@ -26,24 +26,35 @@ async def add_stuff_to_cart(
         model: cart.NewCartItem,
         conn: Connection
 ) -> cart.CartItem:
-    result = await conn.fetchrow(
-        f"""
-        INSERT INTO {TABLE} 
-        (user_id, stuff_id, stuff_count)
-        VALUES ($1,$2,$3)
-        RETURNING *
-        """,
-        user_id,
-        model.stuff_id,
-        model.stuff_count
-    )
-    data: cart.CartItem = record_to_model(cart.CartItem, result)
-    data.stuff = await stuff_db.get_stuff_item(
-        pk=data.stuff_id,
-        conn=conn
-    )
+    item = await check_stuff_item(user_id, model.stuff_id, conn)
+    if not item:
+        result = await conn.fetchrow(
+            f"""
+            INSERT INTO {TABLE} 
+            (user_id, stuff_id, stuff_count)
+            VALUES ($1,$2,$3)
+            RETURNING *
+            """,
+            user_id,
+            model.stuff_id,
+            model.stuff_count
+        )
+        data: cart.CartItem = record_to_model(cart.CartItem, result)
+        data.stuff = await stuff_db.get_stuff_item(
+            pk=data.stuff_id,
+            conn=conn
+        )
 
-    return data
+        return data
+    else:
+        result = await update_stuff_in_cart(
+            item.id,
+            cart.UpdateCartItem(
+                stuff_count=model.stuff_count + item.stuff_count
+            ),
+            conn=conn
+        )
+        return result
 
 
 async def delete_stuff_from_cart(
@@ -111,3 +122,19 @@ async def get_user_cart(
         )
 
     return data
+
+
+async def check_stuff_item(
+        user_id: int,
+        stuff_id: int,
+        conn: Connection
+) -> cart.CartItem:
+    result = await conn.fetchrow(
+        f"""
+        SELECT * FROM {TABLE}
+        WHERE user_id=$1 and stuff_id=$2    
+        """,
+        user_id,
+        stuff_id
+    )
+    return record_to_model(cart.CartItem, result)

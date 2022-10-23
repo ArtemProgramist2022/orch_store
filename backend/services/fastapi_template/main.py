@@ -11,6 +11,7 @@ from fastapi import (
     FastAPI,
     Depends,
 )
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from pathlib import Path
 import logging
@@ -60,6 +61,15 @@ def main(args, config):
 
     static = StaticFiles(directory=Path(__name__).parent.parent.parent.absolute() / 'static')
     app.mount('/static', static, name='static')
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=[
+            "*"
+        ],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"]
+    )
 
     return app
 

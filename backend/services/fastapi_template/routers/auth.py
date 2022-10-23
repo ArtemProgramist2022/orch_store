@@ -90,9 +90,6 @@ async def login(
         session: Session = Depends(get_session),
         conf: dict = Depends(get_conf)
 ):
-    if session.user.is_authenticated:
-        return await error_401()
-
     hashed_password = await get_password_hash(auth.password, conf['salt'])
     user = await users_db.get_user_by_credentials(conn, auth.email, hashed_password)
 

@@ -15,6 +15,7 @@ class BaseUser(BaseModel):
     en: Optional[bool]
     name: Optional[str] = ''
     email: Optional[str] = ''
+    is_admin: Optional[bool] = False
     ctime: Optional[datetime] = Field(None, nullable=True)
     atime: Optional[datetime] = Field(None, nullable=True)
     dtime: Optional[datetime] = Field(None, nullable=True)

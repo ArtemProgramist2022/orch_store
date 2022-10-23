@@ -7,6 +7,7 @@ from models.users import (
     User,
     NewUser,
 )
+from db.admin import check_rules
 from misc import db
 
 logger = logging.getLogger(__name__)
@@ -36,7 +37,10 @@ async def create_user(
     }
     result = await db.create(conn, TABLE, data, fields=USER_DISPLAY_FIELDS)
     await set_password(conn, email, password)
-    return db.record_to_model(User, result)
+    complete: User = db.record_to_model(User, result)
+    admin = await check_rules(conn=conn, user_id=complete.id)
+    complete.is_admin = True if admin else False
+    return complete
 
 
 async def get_user_by_credentials(
@@ -45,7 +49,11 @@ async def get_user_by_credentials(
 ) -> Optional[User]:
     result = await db.get_by_where(conn, TABLE, 'email=$1 AND password=$2 and en', values=[email, password],
                                    fields=USER_DISPLAY_FIELDS)
-    return db.record_to_model(User, result)
+    complete = db.record_to_model(User, result)
+    admin = await check_rules(conn=conn, user_id=complete.id)
+    complete.is_admin = True if admin else False
+
+    return complete
 
 
 async def get_user(
@@ -55,7 +63,11 @@ async def get_user(
     values = [pk]
     query = f'SELECT {", ".join(USER_DISPLAY_FIELDS)} FROM {TABLE} WHERE id = $1 AND en'
     result = await conn.fetchrow(query, *values)
-    return db.record_to_model(User, result)
+    complete = db.record_to_model(User, result)
+    admin = await check_rules(conn=conn, user_id=complete.id)
+    complete.is_admin = True if admin else False
+
+    return complete
 
 
 async def get_user_for_admin(
@@ -65,7 +77,11 @@ async def get_user_for_admin(
     values = [pk]
     query = f'SELECT {", ".join(USER_DISPLAY_FIELDS)} FROM {TABLE} WHERE id = $1'
     result = await conn.fetchrow(query, *values)
-    return db.record_to_model(User, result)
+    complete = db.record_to_model(User, result)
+    admin = await check_rules(conn=conn, user_id=complete.id)
+    complete.is_admin = True if admin else False
+
+    return complete
 
 
 async def check_user_exists(
@@ -103,7 +119,11 @@ async def delete_user(
     result = await conn.fetchrow(query, *values)
     logger.info(f'{query=}')
     logger.info(f'{result=}')
-    return db.record_to_model(User, result)
+    complete = db.record_to_model(User, result)
+    admin = await check_rules(conn=conn, user_id=complete.id)
+    complete.is_admin = True if admin else False
+
+    return complete
 
 
 async def email_exists(
@@ -127,7 +147,12 @@ async def get_users(
     query = f'''SELECT * FROM {TABLE} {where} 
         ORDER BY name ASC LIMIT $1 OFFSET $2'''
     result = await conn.fetch(query, *values)
-    return db.record_to_model_list(User, result)
+    complete: List[User] = db.record_to_model(User, result)
+    for user in complete:
+        admin = await check_rules(conn=conn, user_id=user.id)
+        user.is_admin = True if admin else False
+
+    return complete
 
 
 async def get_total(
@@ -163,7 +188,12 @@ async def get_users_for_admin(
     query = f'''SELECT * FROM {TABLE} {where} 
         ORDER BY name ASC LIMIT $1 OFFSET $2'''
     result = await conn.fetch(query, *values)
-    return db.record_to_model_list(User, result)
+    complete: List[User] = db.record_to_model(User, result)
+    for user in complete:
+        admin = await check_rules(conn=conn, user_id=user.id)
+        user.is_admin = True if admin else False
+
+    return complete
 
 
 async def get_total_for_admin(

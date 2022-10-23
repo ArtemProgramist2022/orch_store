@@ -1,4 +1,9 @@
+import os
+import random
+import string
+
 from pydantic import BaseModel
+
 from typing import (
     Optional,
     List
@@ -17,15 +22,16 @@ class BaseStuff(BaseModel):
     cost: Decimal
     count_on_warehouse: int
     category_id: int
-    category: Optional[Category]
 
 
 class Stuff(BaseStuff):
     id: int
+    category: Optional[Category]
+    stuff_link: Optional[str]
 
 
 class NewStuff(BaseStuff):
-    pass
+    photo: Optional[str] = None
 
 
 class UpdateStuff(BaseModel):
@@ -46,3 +52,19 @@ class StuffList(ListData):
 
 class StuffListSuccessResponse(SuccessResponse):
     data: StuffList
+
+
+def stuff_image_file_path(post_id: int, extension) -> str:
+    post_id_padded = str(post_id).zfill(12)
+    return os.path.join(
+        post_id_padded[-8:-6],
+        post_id_padded[-6:-4],
+        post_id_padded[-4:-2],
+        post_id_padded[-2],
+        str(random.choice(string.ascii_lowercase)),
+        f'{post_id}{extension}'
+    )
+
+
+def stuff_image_absolute_file_path(stuff_image_folder: str, path: str) -> str:
+    return os.path.join(stuff_image_folder, path)

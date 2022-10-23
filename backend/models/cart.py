@@ -4,6 +4,7 @@ from typing import List, Optional
 
 
 class CartItem(BaseModel):
+    id: int
     user_id: int
     stuff_id: int
     stuff: Optional[stuff.Stuff]

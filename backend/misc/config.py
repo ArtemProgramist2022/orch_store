@@ -19,3 +19,7 @@ def static_files_folder(conf: dict) -> str:
 
 def template_files_folder(conf: dict) -> str:
     return conf['folders']['templates']
+
+
+def stuff_images_folder(conf: dict) -> str:
+    return conf['folders']['stuff']
