@@ -11,7 +11,9 @@
       Корзина
       <span class="el-icon-s-goods"></span>
     </nuxt-link>
-    
+    <nuxt-link v-if="userLoggedIn" to="/admin">
+      Админ-панель
+    </nuxt-link>
     
       <nuxt-link v-if="userLoggedIn != true" to="/login">Войти</nuxt-link>
   </div>
@@ -34,6 +36,7 @@ export default class PublicHeader extends Vue {
 
 
   userLoggedIn = this.$auth.loggedIn
+  isAdmin = this.$auth.user?.is_admin
 
   cartDialogVisible = false
 

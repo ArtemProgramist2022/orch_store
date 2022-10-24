@@ -6,6 +6,9 @@ export default {
     host: '127.0.0.1'
   },
   ssr: true,
+  render: {
+    ssr:true
+  },
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     title: 'orch.store',
@@ -28,7 +31,8 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
-    '@/plugins/element-ui'
+    '@/plugins/element-ui',
+    
 
   ],
 

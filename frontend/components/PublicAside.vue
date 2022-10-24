@@ -52,7 +52,9 @@ export default class PublicAside extends Vue {
   .link {
     text-decoration: none;
   }
-
+  .link:hover {
+    text-decoration: underline;
+  }
   .categories-block {
     margin-top: 70px;
     float: left;
