@@ -17,6 +17,10 @@ class UnauthenticatedException(Exception):
     pass
 
 
+class UserRoleException(Exception):
+    pass
+
+
 async def error_409(errors: List[Any]):
     return JSONResponse(status_code=409, content=UpdateErrorResponse(errors=errors).json())
 
@@ -41,6 +45,10 @@ async def error_404(message: str = None) -> ErrorResponse:
 
 async def error_401(message: str = None) -> ErrorResponse:
     return JSONResponse(status_code=401, content=ErrorResponse(error=message or 'unauthorized').dict())
+
+
+async def error_403(message: str = None) -> ErrorResponse:
+    return JSONResponse(status_code=401, content=ErrorResponse(error=message or 'forbidden').dict())
 
 
 async def error_400(message: str = None) -> ErrorResponse:
@@ -85,3 +93,7 @@ def register_exception_handler(app):
     @app.exception_handler(UnauthenticatedException)
     async def validation_exception_handler(request: Request, exc: RequestValidationError) -> ErrorResponse:
         return await error_401()
+
+    @app.exception_handler(UserRoleException)
+    async def validation_exception_handler(request: Request, exc: RequestValidationError) -> ErrorResponse:
+        return await error_403()

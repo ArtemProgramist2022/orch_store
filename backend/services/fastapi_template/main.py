@@ -141,7 +141,6 @@ def register_routers(app):
     return routers.register_routers(app)
 
 
-
 def check_folders(conf):
     if not os.path.exists(config.static_files_folder(conf)):
         os.makedirs(config.static_files_folder(conf))
