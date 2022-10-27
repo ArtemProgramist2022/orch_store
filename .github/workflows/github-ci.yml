@@ -3,7 +3,7 @@ run-name: ${{ github.actor }} run build site
 on:
   push:
     branches: [main]
-  merge:
+  pull-request:
     branches: [main]
 jobs:
   Build:
