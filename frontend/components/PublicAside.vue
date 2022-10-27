@@ -51,14 +51,25 @@ export default class PublicAside extends Vue {
   <style>
   .link {
     text-decoration: none;
+    color: #958abe;
   }
   .link:hover {
     text-decoration: underline;
   }
   .categories-block {
-    margin-top: 70px;
+    margin-top: 90px;
     float: left;
+    
     margin-right: 15px;
+    margin-left: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+    box-shadow: 0 0 15px 0 rgba(0, 0, 0, .1);
+    border-radius: 15px;
+  }
+  .categories-block > div > ul {
+    
+    padding-left: 0;
   }
 
   .category-wrapper {
@@ -67,11 +78,11 @@ export default class PublicAside extends Vue {
 
   }
   .categories-title {
-    margin-top: 20px;
+    color: #958abe;
+    text-decoration: underline;
     display: block;
-    box-shadow: 0 0 15px 0 rgba(0, 0, 0, .1);
-    border-radius: 15px;
-    padding: 15px 25px;
+   
+    padding-top: 15px;
 
   }
   </style>

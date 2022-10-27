@@ -7,15 +7,16 @@
       <strong>Orch</strong>.store
     
     </nuxt-link>
-    <nuxt-link v-if="userLoggedIn == true" to="/cart" >
+    <div>
+      <nuxt-link v-if="userLoggedIn" to="/cart" >
       Корзина
       <span class="el-icon-s-goods"></span>
     </nuxt-link>
-    <nuxt-link v-if="userLoggedIn" to="/admin">
+    <nuxt-link v-if="isAdmin" to="/admin">
       Админ-панель
     </nuxt-link>
     
-      <nuxt-link v-if="userLoggedIn != true" to="/login">Войти</nuxt-link>
+      <nuxt-link v-if="userLoggedIn != true" to="/login">Войти</nuxt-link></div>
   </div>
 </template>
 <script lang="ts">

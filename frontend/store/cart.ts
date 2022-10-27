@@ -23,7 +23,10 @@ export const mutations: MutationTree<SuccessfulResponse<Array<ICartItem>>> = {
     const filteredItems = state.data?.filter((item: ICartItem) => item.id === data.id)[0]
     let index = -1
     if (filteredItems) {
-      index = state.data?.indexOf(filteredItems)
+      let finded_index = state.data?.indexOf(filteredItems)
+      if (finded_index){
+        index = finded_index
+      } 
     }
     if (index !== -1) {
       state.data?.splice(index, 1)

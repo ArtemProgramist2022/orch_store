@@ -1,5 +1,8 @@
 <template>
+  <el-container class="center">
     <LoginForm />
+  </el-container>
+    
   
   </template>
   <script lang="ts">
@@ -15,3 +18,11 @@
   }
   
   </script>
+
+  <style>
+  .center{
+    text-align: center;
+    position: relative;
+  }
+
+</style>

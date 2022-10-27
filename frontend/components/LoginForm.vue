@@ -4,19 +4,6 @@
       direction="vertical"
       class="auth"
     >
-      <nuxt-link to="/">
-        <el-button
-          type="primary"
-          size="mini"
-          round
-          class="auth__back"
-        >
-          <i
-            class="el-icon-arrow-left"
-            style="font-size: 23px;"
-          />
-        </el-button>
-      </nuxt-link>
       <el-row
         type="flex"
         class="auth__wrapper"
@@ -119,7 +106,7 @@
   
 </template>
 <script lang="ts">
-import { doesNotMatch } from 'assert'
+
 import { Vue, Action, Getter, Component, Ref } from 'nuxt-property-decorator'
 import { ElForm } from 'element-ui/types/form'
 import { ILoginForm } from '~/interfaces/users'
@@ -143,15 +130,6 @@ export default class LoginForm extends Vue {
     }
 
     loading = false
-
-    
-    handleClose (done: any) {
-      this.$confirm('Are you sure to close?')
-        .then((_) => {
-          done()
-        }).catch((_) => {})
-    }
-
     async login () {
       this.loading = true
       try {
@@ -160,7 +138,6 @@ export default class LoginForm extends Vue {
 
       }
       this.loading = false
-      console.log(this.$auth.loggedIn)
     }
 
     onSubmit () {

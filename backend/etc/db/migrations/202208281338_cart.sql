@@ -1,11 +1,9 @@
 -- migrate:up
 
-
-
 CREATE TABLE stuff_in_cart (
     id BIGSERIAL PRIMARY KEY,
     user_id BIGINT NOT NULL,
-    en BOOLEAN NOT NULL DEFAULT,
+    en BOOLEAN NOT NULL DEFAULT true,
     stuff_id BIGINT NOT NULL,
     stuff_count BIGINT NOT NULL DEFAULT 1,
     CONSTRAINT user_cart_fkey FOREIGN KEY (user_id)
@@ -15,3 +13,8 @@ CREATE TABLE stuff_in_cart (
     REFERENCES stuff(id)
     ON DELETE CASCADE
 );
+
+
+-- migrate:down
+
+DROP TABLE stuff_in_cart;

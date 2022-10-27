@@ -12,7 +12,9 @@ export interface IConfirmForm {
 export interface IRegisterForm {
     email: string,
     name: string,
-    password: string
+    password: string,
+    confirm_password: string,
+    code: string
 }
 
 export interface IMeForm {

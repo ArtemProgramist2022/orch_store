@@ -47,11 +47,17 @@ async def get_user_by_credentials(
         conn: db.Connection,
         email: str, password: str
 ) -> Optional[User]:
-    result = await db.get_by_where(conn, TABLE, 'email=$1 AND password=$2 and en', values=[email, password],
-                                   fields=USER_DISPLAY_FIELDS)
+    result = await db.get_by_where(
+        conn,
+        TABLE,
+        'email=$1 AND password=$2 and en',
+        values=[email, password],
+        fields=USER_DISPLAY_FIELDS
+    )
     complete = db.record_to_model(User, result)
-    admin = await check_rules(conn=conn, user_id=complete.id)
-    complete.is_admin = True if admin else False
+    if complete is not None:
+        admin = await check_rules(conn=conn, user_id=complete.id)
+        complete.is_admin = True if admin else False
 
     return complete
 

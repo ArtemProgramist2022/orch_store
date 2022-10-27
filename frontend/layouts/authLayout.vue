@@ -4,8 +4,8 @@
         <PublicHeader />
       </el-header>
   
-      <el-container direction="horizontal" class="container">
-        <nuxt keep-alived/>
+      <el-container direction="horizontal" >
+        <nuxt />
         </el-container>
       <el-footer class="public-layout__footer" ></el-footer>
     </el-container>
