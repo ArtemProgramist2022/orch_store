@@ -61,7 +61,7 @@ export default {
     proxy: true
   },
 
-  proxy: ['http://192.168.0.102/api/v1'],
+  proxy: ['http://192.168.250.203/api/v1'],
 
   router: {
     middleware: ['auth']
