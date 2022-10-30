@@ -15,7 +15,7 @@ export const mutations: MutationTree<IListResponse<IStuff>> = {
     state.total = data.total
     state.limit = data.limit
     state.page = data.page
-    state.items = data.items
+    data.items.forEach((item: IStuff) => state.items.push(item)); 
   },
   changePage (state, data) {
     state.page = data

@@ -10,7 +10,7 @@
             class="link"
             :to="`/stuff/${cat.id}`"
           >
-            {{ cat.name }}
+            <el-button>{{ cat.name }}</el-button>
           </nuxt-link>
         </li>
       </ul>
@@ -82,7 +82,7 @@ export default class PublicAside extends Vue {
     text-decoration: underline;
     display: block;
    
-    padding-top: 15px;
+    
 
   }
   </style>

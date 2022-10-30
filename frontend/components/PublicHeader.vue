@@ -8,15 +8,20 @@
     
     </nuxt-link>
     <div>
-      <nuxt-link v-if="userLoggedIn" to="/cart" >
-      Корзина
-      <span class="el-icon-s-goods"></span>
+      <nuxt-link v-if="$auth.loggedIn" to="/cart" >
+        <el-button>Корзина<span class="el-icon-s-goods"></span></el-button>
+      
     </nuxt-link>
     <nuxt-link v-if="$auth.user ? $auth.user.is_admin == true: false" to="/admin">
-      Админ-панель
+      <el-button>Админ-панель</el-button>
     </nuxt-link>
     
-      <nuxt-link v-if="userLoggedIn != true" to="/login">Войти</nuxt-link></div>
+      <nuxt-link v-if="$auth.loggedIn != true" to="/login">
+        <el-button>Войти</el-button>
+      </nuxt-link>
+      <el-button v-if="$auth.loggedIn" @click="$auth.logout()">Выйти</el-button>
+
+    </div>
   </div>
 </template>
 <script lang="ts">

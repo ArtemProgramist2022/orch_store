@@ -15,22 +15,11 @@
         </el-card>
       </li>
     </ul>
-    <el-pagination
-      :page-size.sync="stuff.length"
-
-      :current-page="page"
-      :hide-on-single-page="stuff.length <= limit"
-      layout="prev, next, total"
-      :total="total"
-      @prev-click="prevPage"
-      @next-click="nextPage"
-      @current-change="currentChange"
-    />
+    <infinite-loading v-if="stuff.length" spinner="spiral" @infinite="infiniteScroll"></infinite-loading>
   </el-container>
 </template>
 <script lang="ts">
 import { Component, Action, Getter, Vue } from 'nuxt-property-decorator'
-import LoginForm from "@/components/LoginForm.vue";
 import { IStuff } from '~/interfaces/stuff';
 
 @Component({
@@ -65,27 +54,16 @@ export default class Index extends Vue {
         
       })
     }
-
-    async nextPage () {
-      this.changePage(this.page + 1)
-      console.log(this.page)
-      await this.fetchStuff({
-        page: this.page,
-        limit: this.limit,
-        
-      })
+    infiniteScroll(){
+      setTimeout(()=>{
+        this.changePage(this.page++)
+        this.fetchStuff({
+            page: this.page
+          }
+        )
+      }, 500)
     }
-
-    async currentChange (val: number) {
-      this.changePage(val)
-      console.log(val)
-      await this.fetchStuff({
-        page: this.page,
-        limit: this.limit,
-        
-      })
-    }
-
+    
     addToCart (item: IStuff, count: number) {
       this.addStuffToCart({
         stuff_id: item.id,
