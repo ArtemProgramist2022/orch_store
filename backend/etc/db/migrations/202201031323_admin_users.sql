@@ -3,7 +3,7 @@
 
 create TABLE admin_users (
     user_id INTEGER,
-    en BOOLEAN,
+    en BOOLEAN DEFAULT true,
     ctime TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT (now() at time zone 'utc'),
     atime TIMESTAMP WITHOUT TIME ZONE DEFAULT NULL,
     dtime TIMESTAMP WITHOUT TIME ZONE DEFAULT NULL

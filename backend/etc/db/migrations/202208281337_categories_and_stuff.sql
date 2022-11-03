@@ -9,6 +9,7 @@ CREATE TABLE categories (
 
 CREATE TABLE stuff (
     id BIGSERIAL PRIMARY KEY,
+    en BOOLEAN NOT NULL DEFAULT true,
     name VARCHAR(255) NOT NULL,
     description TEXT NOT NULL,
     cost DECIMAL(10, 2) NOT NULL,

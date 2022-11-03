@@ -33,7 +33,7 @@ async def get_stuff_list(
     offset = limit * (page - 1)
     idx = 3
     params = [limit, offset]
-    wheres = []
+    wheres = [' en = true ']
     if category_id:
         params.append(category_id)
         wheres.append(f"category_id = ${idx}")
@@ -109,7 +109,7 @@ async def get_stuff_item(
 ) -> Stuff:
     result = await conn.fetchrow(
         f"""
-        SELECT * FROM {TABLE} WHERE id = $1
+        SELECT * FROM {TABLE} WHERE id = $1 and en = true
         """,
         pk
     )

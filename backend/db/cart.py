@@ -63,7 +63,8 @@ async def delete_stuff_from_cart(
 ) -> cart.CartItem:
     result = await conn.fetchrow(
         f"""
-        DELETE FROM {TABLE}
+        UPDATE TABLE {TABLE}
+        set en = false
         WHERE id = $1
         RETURNING *
         """,
@@ -108,7 +109,7 @@ async def get_user_cart(
     result = await conn.fetch(
         f"""
         SELECT * FROM {TABLE}
-        WHERE user_id = $1
+        WHERE user_id = $1 and en=true
         """,
         user_id
     )
@@ -132,7 +133,7 @@ async def check_stuff_item(
     result = await conn.fetchrow(
         f"""
         SELECT * FROM {TABLE}
-        WHERE user_id=$1 and stuff_id=$2    
+        WHERE user_id=$1 and stuff_id=$2  and en=True  
         """,
         user_id,
         stuff_id
