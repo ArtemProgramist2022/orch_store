@@ -21,6 +21,7 @@
 
   <style>
   .center{
+    padding: 15px 10% 15px 10%;
     text-align: center;
     position: relative;
   }

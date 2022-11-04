@@ -5,6 +5,9 @@ export default {
   stuff: (category_id: number) => {
     return `/stuff/${Number(category_id)}`
   },
-  admin: '/admin',
+  admin: {
+    categories: '/admin/categories',
+    stuff: '/admin/stuff'
+  },
   signup: '/signup'
 }

@@ -8,32 +8,52 @@
         width="30%"
         :before-close="handleClose">
         <el-form
-      ref="form"
-      :model="form"
-      :rules="rules"
-      label-position="top"
-      size="small"
-    >
-    <el-form-item
-        label="Название"
-        prop="name"
-      >
+            ref="form"
+            :model="form"
+            :rules="rules"
+            label-position="top"
+            size="small"
+        >
+          <el-form-item
+              label="Название"
+              prop="name"
+            >
+            <el-input
+              v-model="form.name"
+              type="text"
+              autosize
+            />
+          </el-form-item>
+          <el-form-item
+              label="Описание"
+              prop="description"
+          >
+            <el-input
+              v-model="form.description"
+              type="textarea"
+              autosize
+            />
+          </el-form-item>
+        <el-form-item
+        label="Цена"
+        prop="cost"
+        >
         <el-input
-          v-model="form.name"
-          type="text"
-          autosize
+        v-model="form.cost"
+        type="number"
+        autosize
         />
-      </el-form-item>
-      <el-form-item
-        label="Описание"
-        prop="description"
-      >
+        </el-form-item>
+        <el-form-item
+        label="Количество на складе"
+        prop="count_on_warehouse"
+        >
         <el-input
-          v-model="form.description"
-          type="textarea"
-          autosize
+        v-model="form.count_on_warehouse"
+        type="number"
+        autosize
         />
-      </el-form-item>
+        </el-form-item>
       <el-form-item label="Категория">
         <el-select
           v-model="form.category_id"
@@ -82,6 +102,7 @@
           </div>
         </transition>
       </el-form-item>
+        <el-button type="primary" @click="uploadNewStuff">Добавить</el-button>
     </el-form>
 
         </el-dialog>
@@ -98,9 +119,11 @@ import { ICategory } from "~/interfaces/categories";
 
 
 @Component({
-    
+    layout: 'adminLayout',
+    middleware: ['check_role'],
+    auth: true
 })
-export default class AdminStuffTab extends Vue {
+export default class AdminStuffPage extends Vue {
     @Action('stuff/fetchStuff') fetchStuff: any
     @Action('stuff/addStuffItem') addStuffItem: any
     @Action('categories/fetchCategories') fetchCategories: any
@@ -155,7 +178,16 @@ export default class AdminStuffTab extends Vue {
       }
 
     async fetch(){
+        await this.fetchCategories()
         await this.fetchStuff()
+    }
+
+    uploadNewStuff(){
+      const data = Object.assign({}, this.form)
+      this.addStuffItem(data).then(()=>{
+        this.onSuccess()
+        this.dialogVisible = false
+      })
     }
 
     handleRemove(file: any, fileList: any) {

@@ -15,7 +15,7 @@
         </el-card>
       </li>
     </ul>
-    <infinite-loading v-if="stuff.length" spinner="spiral" @infinite="infiniteScroll"></infinite-loading>
+
   </el-container>
 </template>
 <script lang="ts">
@@ -42,18 +42,8 @@ export default class Index extends Vue {
         
       })
     }
+// <infinite-loading v-if="stuff.length" spinner="spiral" @infinite="infiniteScroll"></infinite-loading>
 
-    pagerCount = this.total / this.limit
-
-    async prevPage () {
-      this.changePage(this.page - 1)
-      console.log(this.page)
-      await this.fetchStuff({
-        page: this.page,
-        limit: this.limit,
-        
-      })
-    }
     infiniteScroll(){
       setTimeout(()=>{
         this.changePage(this.page++)

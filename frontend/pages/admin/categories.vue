@@ -21,9 +21,11 @@ import { ICategory, INewCategory } from "@/interfaces/categories";
 import { ElForm } from 'element-ui/types/form'
 
 @Component({
-
+    layout: 'adminLayout',
+    middleware: ['check_role'],
+    auth: true
 })
-export default class AdminCategoryTab extends Vue{
+export default class AdminCategoryPage extends Vue{
     @Getter('categories/data') categories! : Array<ICategory>
     
     @Action('categories/addNewCategory') addCategory : any

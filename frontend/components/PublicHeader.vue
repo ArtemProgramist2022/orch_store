@@ -12,7 +12,7 @@
         <el-button>Корзина<span class="el-icon-s-goods"></span></el-button>
       
     </nuxt-link>
-    <nuxt-link v-if="$auth.user ? $auth.user.is_admin == true: false" to="/admin">
+    <nuxt-link v-if="$auth.user ? $auth.user.is_admin == true: false" to="/admin/stuff">
       <el-button>Админ-панель</el-button>
     </nuxt-link>
     

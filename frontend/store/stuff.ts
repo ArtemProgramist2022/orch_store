@@ -15,7 +15,7 @@ export const mutations: MutationTree<IListResponse<IStuff>> = {
     state.total = data.total
     state.limit = data.limit
     state.page = data.page
-    data.items.forEach((item: IStuff) => state.items.push(item)); 
+    state.items = data.items
   },
   changePage (state, data) {
     state.page = data
@@ -39,11 +39,11 @@ export const actions: ActionTree<IListResponse<IStuff>, any> = {
       return error
     }
   },
-  async addStuffItem({commit}, params: INewStuff){
+  async addStuffItem({commit}, data: INewStuff){
     try {
       const response = await this.$axios.$post(
         '/api/v1/stuff',
-        params
+        data
       )
       commit('addItem', response.data)
     } catch (error) {
