@@ -36,7 +36,7 @@ async def get_stuff_list(
     wheres = [' en = true ']
     if category_id:
         params.append(category_id)
-        wheres.append(f"category_id = ${idx}")
+        wheres.append(f" category_id = ${idx} ")
         idx += 1
     result = await conn.fetch(
         f"""

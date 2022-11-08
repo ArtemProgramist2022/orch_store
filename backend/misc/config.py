@@ -12,7 +12,6 @@ def read_config(path):
     with open(path, 'r') as fd:
         return json.load(fd)
 
-
 def static_files_folder(conf: dict) -> str:
     return conf['folders']['static']
 

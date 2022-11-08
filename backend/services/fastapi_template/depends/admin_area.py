@@ -16,6 +16,7 @@ async def check_rule(
         session: Session = Depends(get_session)
 ):
     if not session.user.is_authenticated:
+
         logger.info('тут')
         raise UnauthenticatedException()
     if not await db_admin.check_rules(conn, session.user.id):

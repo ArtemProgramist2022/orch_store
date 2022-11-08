@@ -153,7 +153,7 @@ async def get_users(
     query = f'''SELECT * FROM {TABLE} {where} 
         ORDER BY name ASC LIMIT $1 OFFSET $2'''
     result = await conn.fetch(query, *values)
-    complete: List[User] = db.record_to_model(User, result)
+    complete: List[User] = db.record_to_model_list(User, result)
     for user in complete:
         admin = await check_rules(conn=conn, user_id=user.id)
         user.is_admin = True if admin else False
@@ -194,7 +194,7 @@ async def get_users_for_admin(
     query = f'''SELECT * FROM {TABLE} {where} 
         ORDER BY name ASC LIMIT $1 OFFSET $2'''
     result = await conn.fetch(query, *values)
-    complete: List[User] = db.record_to_model(User, result)
+    complete: List[User] = db.record_to_model_list(User, result)
     for user in complete:
         admin = await check_rules(conn=conn, user_id=user.id)
         user.is_admin = True if admin else False

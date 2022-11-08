@@ -15,7 +15,7 @@
     "sender": "noreply@template.ru"
   },
   "folders": {
-    "stuff_images": "./media/stuff",
+    "stuff": "./media/stuff",
     "static": "./static",
     "templates": "./templates"
   },
