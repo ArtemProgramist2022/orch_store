@@ -4,7 +4,8 @@ from . import (
     users,
     categories,
     stuff,
-    cart
+    cart,
+    orders
 )
 from .admin import register_routers as admin_route
 
@@ -26,6 +27,9 @@ def register_routers(app):
     )
     router.include_router(
         cart.router
+    )
+    router.include_router(
+        orders.router
     )
     admin_route(app)
     app.include_router(router)

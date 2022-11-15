@@ -5,9 +5,16 @@ CREATE TYPE order_status as ENUM ('wait_paid', 'paid', 'delivery', 'done');
 
 CREATE TABLE orders (
     id BIGSERIAL PRIMARY KEY,
+    user_id BIGINT NOT NULL,
     delivery_address TEXT NOT NULL,
     status order_status NOT NULL DEFAULT 'wait_paid',
-    en BOOLEAN NOT NULL DEFAULT true
+    en BOOLEAN NOT NULL DEFAULT true,
+    delivery_date DATE,
+    delivery_time VARCHAR(10),
+    CONSTRAINT order_user_id_fk
+        FOREIGN KEY (user_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE
 );
 
 

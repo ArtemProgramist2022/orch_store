@@ -21,6 +21,26 @@ logger = logging.getLogger(__name__)
 TABLE = "stuff_in_cart"
 
 
+async def get_cart_item(
+        pk: int,
+        conn: Connection
+) -> Optional[cart.CartItem]:
+    result = await conn.fetchrow(
+        f"""
+        SElECT * FROM {TABLE} WHERE id = $1
+        """,
+        pk
+    )
+    if result:
+        data: cart.CartItem = record_to_model(cart.CartItem, result)
+        data.stuff = await stuff_db.get_stuff_item(
+            pk=data.stuff_id,
+            conn=conn
+        )
+        return data
+    return result
+
+
 async def add_stuff_to_cart(
         user_id: int,
         model: cart.NewCartItem,
