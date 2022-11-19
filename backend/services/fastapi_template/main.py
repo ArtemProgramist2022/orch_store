@@ -66,7 +66,7 @@ def main(args, config):
         allow_origins=[
             "*"
         ],
-        allow_credentials=True,
+        allow_credentials=False,
         allow_methods=["*"],
         allow_headers=["*"]
     )
@@ -125,7 +125,7 @@ async def startup_jinja(app):
 
     env = Environment(
         loader=ChoiceLoader([
-            FileSystemLoader('templates')
+            FileSystemLoader(app.state.config['folders']['templates'])
         ]),
         autoescape=select_autoescape()
     )

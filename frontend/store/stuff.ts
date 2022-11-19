@@ -39,11 +39,11 @@ export const actions: ActionTree<IListResponse<IStuff>, any> = {
       return error
     }
   },
-  async addStuffItem({commit}, data: INewStuff){
+  async addStuffItem({commit}, json: INewStuff){
     try {
       const response = await this.$axios.$post(
         '/api/v1/stuff',
-        data
+        json,
       )
       commit('addItem', response.data)
     } catch (error) {

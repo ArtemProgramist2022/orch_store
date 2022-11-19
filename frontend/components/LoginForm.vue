@@ -54,7 +54,7 @@
                   class="auth-form__submit-btn"
                   type="primary"
                   :loading="loading"
-                  @click.prevent="onSubmit"
+                  @click.prevent="onSubmit()"
                 >
                   Submit
                 </el-button>

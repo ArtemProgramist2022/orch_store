@@ -267,6 +267,7 @@
     }
   
     register () {
+      console.log('click')
       this.loading = true
       this.$axios.post('/api/v1/auth/register', this.form).then(() => {
         this.$message.success('The confirmation code has been sent to your email')
@@ -277,6 +278,7 @@
     }
   
     onSubmit () {
+      console.log('click submit')
       this.formRef.validate((valid) => {
         if (valid) {
           this.register()

@@ -2,8 +2,8 @@ export default {
   // Target: https://go.nuxtjs.dev/config-target
   target: 'server',
   server: {
-    port: 8000,
-    host: '127.0.0.1'
+    port: 3000,
+    host: 'localhost'
   },
   ssr: true,
   render: {
@@ -61,7 +61,7 @@ export default {
     proxy: true
   },
 
-  proxy: ['http://192.168.0.102/api/v1'],
+  proxy: ['https://orch.store/api/v1'],
 
   router: {
     middleware: ['auth']
