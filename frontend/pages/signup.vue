@@ -52,9 +52,9 @@
                     prop="email"
                   >
                     <el-input
-                      v-model="form.email"
+                      v-model="form.phone"
                       :disabled="showCode"
-                      placeholder="email@example.com"
+                      placeholder="+79998882233"
                     />
                   </el-form-item>
                 </el-col>
@@ -202,7 +202,7 @@
   export default class RecoverPage extends Vue {
     @Ref('form') formRef!: ElForm
     form: IRegisterForm = {
-      email: '',
+      phone: '',
       name: '',
       password: '',
       confirm_password: '',
@@ -235,7 +235,7 @@
   
     resetForm () {
       this.form = {
-        email: '',
+        phone: '',
         name: '',
         password: '',
         confirm_password: '',
@@ -249,7 +249,7 @@
   
     confirm () {
       const data = {
-        email: this.form.email,
+        email: this.form.phone,
         code: this.form.code
       }
       if (data.email.length && Number(data.code) && data.code.length === 6) {
