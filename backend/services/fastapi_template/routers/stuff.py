@@ -1,6 +1,7 @@
 from fastapi import (
     APIRouter,
-    Depends
+    Depends,
+    Form
 )
 from misc import handlers,config
 from services.fastapi_template.depends.admin_area import check_rule

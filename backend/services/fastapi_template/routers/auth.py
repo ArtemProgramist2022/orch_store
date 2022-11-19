@@ -5,6 +5,7 @@ from fastapi import (
     Depends,
     Request
 )
+from misc import notisend
 from db import users as users_db
 from misc import redis
 from misc.redis import (
@@ -91,7 +92,7 @@ async def login(
         conf: dict = Depends(get_conf)
 ):
     hashed_password = await get_password_hash(auth.password, conf['salt'])
-    user = await users_db.get_user_by_credentials(conn, auth.email, hashed_password)
+    user = await users_db.get_user_by_credentials(conn, auth.phone, hashed_password)
 
     if not user:
         return await error_404()
@@ -124,18 +125,24 @@ async def register(
         jinja: JinjaEnvironment = Depends(get_jinja),
         conf: dict = Depends(get_conf)
 ):
-    if await users_db.email_exists(conn, register.email):
+    if await users_db.email_exists(conn, register.phone):
         return await error_400('User already exists')
 
     code = randint(100000, 999999)
-    await send_registration_email(req, smtp, register.email, code, jinja, conf)
+    # await send_registration_email(req, smtp, register.phone, code, jinja, conf)
+    sms = notisend.SMS('orch.store', '6f52c149c13790fbdae591d295b43366')
+    sms.sendSMS(
+        register.phone,
+        f'Код подтверждения : {code}',
+        sender='sendertest',
 
+    )
     await redis.setex(
-        key=confirm_key(register.email),
+        key=confirm_key(register.phone),
         ttl=DAY,
         value={
             'code': code,
-            'email': register.email,
+            'email': register.phone,
             'name': register.name,
             'password': register.password
         },
@@ -155,16 +162,16 @@ async def recover(
         jinja: JinjaEnvironment = Depends(get_jinja),
         conf: dict = Depends(get_conf)
 ):
-    if await users_db.email_exists(conn, recover.email):
+    if await users_db.email_exists(conn, recover.phone):
         code = randint(100000, 999999)
-        await send_recover_email(req, smtp, recover.email, code, jinja, conf)
+        # await send_recover_email(req, smtp, recover.email, code, jinja, conf)
         password = await generate_password()
         await redis.setex(
-            key=confirm_key(recover.email),
+            key=confirm_key(recover.phone),
             ttl=DAY,
             value={
                 'code': code,
-                'email': recover.email,
+                'phone': recover.phone,
                 'password': password
             },
             conn=cache
@@ -187,12 +194,12 @@ async def confirm(
     code = confirm.code
 
     if session.user.is_authenticated:
-        account = confirm.email
+        account = confirm.phone
         if not account:
             return await error_401()
 
     cache_data = await redis.get(
-        key=confirm_key(confirm.email),
+        key=confirm_key(confirm.phone),
         conn=cache
     )
 
@@ -204,26 +211,26 @@ async def confirm(
 
     password = cache_data['password']
     hashed_password = await get_password_hash(password, conf['salt'])
-    if await users_db.email_exists(conn, confirm.email):
-        await users_db.set_password(conn, confirm.email, hashed_password)
+    if await users_db.email_exists(conn, confirm.phone):
+        await users_db.set_password(conn, confirm.phone, hashed_password)
     else:
         user = await users_db.create_user(
             conn,
-            confirm.email,
+            confirm.phone,
             hashed_password,
             cache_data['name'],
         )
         if not user:
             return await error_400()
 
-    await send_password_email(smtp, confirm.email, password, jinja, conf)
+    # await send_password_email(smtp, confirm.email, password, jinja, conf)
 
     await redis.del_(
-        key=confirm_key(confirm.email),
+        key=confirm_key(confirm.phone),
         conn=cache
     )
 
-    user = await users_db.get_user_by_credentials(conn, confirm.email, hashed_password)
+    user = await users_db.get_user_by_credentials(conn, confirm.phone, hashed_password)
     if user:
         session.set_user(user)
 

@@ -18,7 +18,7 @@ USER_DISPLAY_FIELDS = [
     'id',
     'en',
     'name',
-    'email',
+    'phone',
     'ctime',
     'atime',
     'dtime',
@@ -27,16 +27,16 @@ USER_DISPLAY_FIELDS = [
 
 async def create_user(
         conn: db.Connection,
-        email: str,
+        phone: str,
         password: str,
         username: str,
 ) -> Optional[User]:
     data = {
-        'email': email,
+        'phone': phone,
         'name': username,
     }
     result = await db.create(conn, TABLE, data, fields=USER_DISPLAY_FIELDS)
-    await set_password(conn, email, password)
+    await set_password(conn, phone, password)
     complete: User = db.record_to_model(User, result)
     admin = await check_rules(conn=conn, user_id=complete.id)
     complete.is_admin = True if admin else False
@@ -45,13 +45,13 @@ async def create_user(
 
 async def get_user_by_credentials(
         conn: db.Connection,
-        email: str, password: str
+        phone: str, password: str
 ) -> Optional[User]:
     result = await db.get_by_where(
         conn,
         TABLE,
-        'email=$1 AND password=$2 and en',
-        values=[email, password],
+        'phone=$1 AND password=$2 and en',
+        values=[phone, password],
         fields=USER_DISPLAY_FIELDS
     )
     complete = db.record_to_model(User, result)
@@ -105,12 +105,12 @@ async def check_user_exists(
 
 async def set_password(
         conn: db.Connection,
-        email: str,
+        phone: str,
         password: str
 ) -> Optional[int]:
     data = await conn.fetchrow(
-        f"UPDATE {TABLE} SET password=$2  WHERE email=$1 RETURNING id",
-        email, password
+        f"UPDATE {TABLE} SET password=$2  WHERE phone=$1 RETURNING id",
+        phone, password
     )
     return data['id'] if data else None
 
@@ -134,9 +134,15 @@ async def delete_user(
 
 async def email_exists(
         conn: db.Connection,
-        email: str
+        phone: str
 ) -> bool:
-    user = await db.get_by_where(conn, TABLE, "email=$1 AND en=True", values=[email], fields=['id'])
+    user = await db.get_by_where(
+        conn,
+        TABLE,
+        "phone=$1 AND en=True",
+        values=[phone],
+        fields=['id']
+    )
 
     return True if user else False
 

@@ -14,27 +14,27 @@ class MeSuccessResponse(SuccessResponse):
 
 
 class RegisterModel(BaseModel):
-    email: constr(to_lower=True, strip_whitespace=True)
+    phone: constr(strip_whitespace=True)
     name: constr(strip_whitespace=True)
     password: str
 
 
 class RecoverModel(BaseModel):
-    email: constr(to_lower=True, strip_whitespace=True)
+    phone: constr(strip_whitespace=True)
 
 
 class AuthConfirmModel(BaseModel):
-    email: constr(to_lower=True, strip_whitespace=True)
+    phone: constr(strip_whitespace=True)
     code: int
 
 
 class LoginModel(BaseModel):
-    email: constr(to_lower=True, strip_whitespace=True)
+    phone: constr(strip_whitespace=True)
     password: constr(strip_whitespace=True)
 
 
 class ConfirmModel(BaseModel):
-    email: constr(to_lower=True, strip_whitespace=True)
+    phone: constr(strip_whitespace=True)
     code: int
 
 

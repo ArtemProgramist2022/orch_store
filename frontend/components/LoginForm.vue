@@ -30,12 +30,12 @@
               </div>
               <hr class="auth-form__hr">
               <el-form-item
-                label="Email address"
-                prop="email"
+                label="Номер телефона"
+                prop="phone"
               >
                 <el-input
-                  v-model="form.email"
-                  placeholder="email@example.com"
+                  v-model="form.phone"
+                  placeholder="+79998882233"
                 />
               </el-form-item>
               <el-form-item
@@ -117,14 +117,14 @@ import { ILoginForm } from '~/interfaces/users'
 export default class LoginForm extends Vue {
     @Ref('form') formRef!: ElForm
     form: ILoginForm = {
-      email: '',
+      phone: '',
       password: ''
     }
 
     rules = {
-      email: [
-        { required: true, message: 'Email is required', trigger: 'blur' },
-        { type: 'email', message: 'Incorrect Email', trigger: 'blur' }
+      phone: [
+        { required: true, message: 'Phone is required', trigger: 'blur' },
+        { type: 'phone', message: 'Incorrect Email', trigger: 'blur' }
       ],
       password: [{ required: true, message: 'Password is required', trigger: 'blur' }]
     }

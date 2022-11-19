@@ -1,16 +1,16 @@
 
 export interface ILoginForm {
-    email: string,
+    phone: string,
     password: string
 }
 
 export interface IConfirmForm {
-    email: string,
+    phone: string,
     code: string
 }
 
 export interface IRegisterForm {
-    email: string,
+    phone: string,
     name: string,
     password: string,
     confirm_password: string,
@@ -26,7 +26,7 @@ export interface User {
     id: number,
     en: boolean,
     name: string,
-    email: string,
+    phone: string,
     is_admin: boolean,
     ctime: string |null
     dtime: string | null,
