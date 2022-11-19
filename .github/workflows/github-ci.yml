@@ -11,7 +11,7 @@ jobs:
     steps:
       - run: tmux kill-session -t front || echo "No front session"
       - run: tmux kill-session -t back || echo "No back session"
-      - run: ls
+      - run: ls -la
       - run: pip3 install -r backend/requirements/base.txt
       - run: pip3 install -r backend/requirements/tests.txt
 
