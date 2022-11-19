@@ -210,9 +210,8 @@
     }
   
     rules = {
-      email: [
-        { required: true, message: 'Email is required', trigger: 'blur' },
-        { type: 'email', message: 'Incorrect Email', trigger: 'blur' }
+      phone: [
+        { required: true, message: 'Email is required', trigger: 'blur' }
       ],
       name: [{ required: true, message: 'Username is required', trigger: 'blur' }],
       password: [{ required: true, message: 'Password is required', trigger: 'blur' }],

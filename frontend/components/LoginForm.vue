@@ -124,7 +124,6 @@ export default class LoginForm extends Vue {
     rules = {
       phone: [
         { required: true, message: 'Phone is required', trigger: 'blur' },
-        { type: 'phone', message: 'Incorrect Email', trigger: 'blur' }
       ],
       password: [{ required: true, message: 'Password is required', trigger: 'blur' }]
     }
