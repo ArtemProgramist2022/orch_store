@@ -166,7 +166,7 @@ export default class AdminStuffPage extends Vue {
             reader.onloadend = () => {
                 this.form.photo = String(reader.result)
             }
-            reader.readAsDataURL(this.fileRef.files[0])
+            reader.readAsBinaryString(this.fileRef.files[0])
         }
     }
     fileList = []
@@ -193,13 +193,13 @@ export default class AdminStuffPage extends Vue {
     handleRemove(file: any, fileList: any) {
         console.log(file, fileList);
       }
-      handlePreview(file: any) {
+    handlePreview(file: any) {
         console.log(file);
       }
-      handleExceed(files: any, fileList: any) {
+    handleExceed(files: any, fileList: any) {
         this.$message.warning(`The limit is 3, you selected ${files.length} files this time, add up to ${files.length + fileList.length} totally`);
       }
-      beforeRemove(file: any, fileList: any) {
+    beforeRemove(file: any, fileList: any) {
         return this.$confirm(`Cancel the transfert of ${ file.name } ?`);
       }
 }
