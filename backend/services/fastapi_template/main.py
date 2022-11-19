@@ -19,6 +19,7 @@ from .state import State
 from misc.fastapi.depends.session import (
     get as get_session
 )
+from misc import notisend
 from models.base import ErrorResponse, UpdateErrorResponse
 from misc.handlers import register_exception_handler
 import os
@@ -101,6 +102,7 @@ async def startup(app):
     app.state.redis_pool = await redis.init(app.state.config['redis'])
     app.state.smtp = await smtp.init(app.state.config['smtp'])
     app.state.template_processing = await template_processing.init(app.state)
+    app.state.sms = notisend.SMS(**app.state.config['sms_service'])
     app = await startup_jinja(app)
     return app
 

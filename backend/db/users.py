@@ -184,7 +184,7 @@ async def get_users_for_admin(
         conn: db.Connection,
         en: bool = None,
         username: str = None,
-        email: str = None,
+        phone: str = None,
         page: int = None,
 
 ) -> Optional[List[User]]:
@@ -192,7 +192,7 @@ async def get_users_for_admin(
     where = []
     values = [limit, offset]
     idx = 3
-    where, values, idx = user_filter(where, values, idx, en, username, email)
+    where, values, idx = user_filter(where, values, idx, en, username, phone)
     if where:
         where = f'WHERE {" AND ".join(where)}'
     else:
@@ -212,13 +212,13 @@ async def get_total_for_admin(
         conn: db.Connection,
         en: bool = None,
         username: str = None,
-        email: str = None,
+        phone: str = None,
 
 ) -> int:
     where = []
     values = []
     idx = 1
-    where, values, idx = user_filter(where, values, idx, en, username, email)
+    where, values, idx = user_filter(where, values, idx, en, username, phone)
     if where:
         where = f'WHERE {" AND ".join(where)}'
     else:
@@ -263,7 +263,7 @@ def user_filter(where, values, idx: int, en: bool = None, username: str = None, 
         values.append(f'%{username}%')
         idx += 1
     if email:
-        where.append(f'email LIKE ${idx}')
+        where.append(f'phone LIKE ${idx}')
         values.append(f'%{email}%')
         idx += 1
     return where, values, idx

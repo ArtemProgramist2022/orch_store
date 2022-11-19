@@ -1,7 +1,7 @@
 import asyncio
 from asyncio.queues import Queue
 from fastapi import FastAPI
-from misc import db, redis
+from misc import db, redis, notisend
 
 
 class State(object):
@@ -12,5 +12,6 @@ class State(object):
         self.db_pool: db.Connection = None
         self.redis_pool: redis.Connection = None
         self.app: FastAPI = None
+        self.sms: notisend.SMS = None
         self.template_queue: Queue = Queue()
         self.template_processing: asyncio.Task = None

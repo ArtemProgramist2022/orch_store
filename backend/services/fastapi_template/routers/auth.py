@@ -5,6 +5,7 @@ from fastapi import (
     Depends,
     Request
 )
+from misc.fastapi.depends.notisend import get as get_sms
 from misc import notisend
 from db import users as users_db
 from misc import redis
@@ -123,6 +124,7 @@ async def register(
         cache: RedisConnection = Depends(get_cache),
         smtp: SMTPConnection = Depends(get_smtp),
         jinja: JinjaEnvironment = Depends(get_jinja),
+        sms: notisend.SMS = Depends(get_sms),
         conf: dict = Depends(get_conf)
 ):
     if await users_db.email_exists(conn, register.phone):
@@ -130,12 +132,10 @@ async def register(
 
     code = randint(100000, 999999)
     # await send_registration_email(req, smtp, register.phone, code, jinja, conf)
-    sms = notisend.SMS('orch.store', '6f52c149c13790fbdae591d295b43366')
     sms.sendSMS(
         register.phone,
         f'Код подтверждения : {code}',
         sender='sendertest',
-
     )
     await redis.setex(
         key=confirm_key(register.phone),
@@ -159,12 +159,14 @@ async def recover(
         smtp: SMTPConnection = Depends(get_smtp),
         conn: DbConnection = Depends(get_db),
         cache: RedisConnection = Depends(get_cache),
+        sms: notisend.SMS = Depends(get_sms),
         jinja: JinjaEnvironment = Depends(get_jinja),
         conf: dict = Depends(get_conf)
 ):
     if await users_db.email_exists(conn, recover.phone):
         code = randint(100000, 999999)
         # await send_recover_email(req, smtp, recover.email, code, jinja, conf)
+        sms.sendSMS(recipients=recover.phone, message=f"Код подтверждения: {code}")
         password = await generate_password()
         await redis.setex(
             key=confirm_key(recover.phone),
@@ -188,6 +190,7 @@ async def confirm(
         conn: DbConnection = Depends(get_db),
         cache: RedisConnection = Depends(get_cache),
         smtp: SMTPConnection = Depends(get_smtp),
+        sms: notisend.SMS = Depends(get_sms),
         jinja: JinjaEnvironment = Depends(get_jinja),
         conf: dict = Depends(get_conf)
 ):
@@ -224,7 +227,7 @@ async def confirm(
             return await error_400()
 
     # await send_password_email(smtp, confirm.email, password, jinja, conf)
-
+    sms.sendSMS(confirm.phone, message=f"Логин: {confirm.phone} Пароль: {password}")
     await redis.del_(
         key=confirm_key(confirm.phone),
         conn=cache

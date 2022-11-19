@@ -4,6 +4,10 @@
   "db": {
     "dsn": "postgresql://postgres:postgres@db/orch_store"
   },
+  "sms_service": {
+    "p": "orch.store",
+    "a": "6f52c149c13790fbdae591d295b43366"
+  },
   "redis": {
     "dsn": "redis://redis"
   },

@@ -35,7 +35,7 @@ router = APIRouter(
 async def get_list(
         en: bool = None,
         username: str = None,
-        email: str = None,
+        phone: str = None,
         page: int = 1,
         session: Session = Depends(get_session),
         conn: db.Connection = Depends(get_db),
@@ -47,7 +47,7 @@ async def get_list(
         conn=conn,
         en=en,
         username=username,
-        email=email,
+        phone=phone,
         page=page,
         limit=limit,
     )
@@ -55,7 +55,7 @@ async def get_list(
         conn=conn,
         en=en,
         username=username,
-        email=email,
+        phone=phone,
     )
     if not result:
         return await error_404()
