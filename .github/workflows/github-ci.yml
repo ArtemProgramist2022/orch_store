@@ -6,14 +6,6 @@ on:
   pull_request:
     branches: [main]
 jobs:
-  Tests:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Build compose
-        run: cd backend && docker-compose up --build -d
-      - name: Run tests
-        run: cd backend && docker-compose run fastapi_template pytest .
   Build:
     runs-on: self-hosted
     steps:
