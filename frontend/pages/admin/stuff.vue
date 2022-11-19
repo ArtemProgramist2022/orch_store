@@ -185,7 +185,6 @@ export default class AdminStuffPage extends Vue {
 
     uploadNewStuff(){
       const data = Object.assign({}, this.form)
-      data.photo = data.photo.split(',')[1]
       
       console.log(data.photo)
       
