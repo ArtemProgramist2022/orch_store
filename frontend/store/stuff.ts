@@ -44,9 +44,6 @@ export const actions: ActionTree<IListResponse<IStuff>, any> = {
       const response = await this.$axios.$post(
         '/api/v1/stuff',
         json,
-        {headers:{
-          'Content-Type':'application/json'
-        }}
       )
       commit('addItem', response.data)
     } catch (error) {
