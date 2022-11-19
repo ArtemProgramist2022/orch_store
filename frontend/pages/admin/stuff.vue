@@ -166,7 +166,8 @@ export default class AdminStuffPage extends Vue {
             reader.onloadend = () => {
                 this.form.photo = String(reader.result)
             }
-            reader.readAsBinaryString(this.fileRef.files[0])
+            
+            reader.readAsDataURL(this.fileRef.files[0])
         }
     }
     fileList = []
@@ -184,6 +185,10 @@ export default class AdminStuffPage extends Vue {
 
     uploadNewStuff(){
       const data = Object.assign({}, this.form)
+      data.photo = data.photo.split(',')[1]
+      
+      console.log(data.photo)
+      
       this.addStuffItem(data).then(()=>{
         this.onSuccess()
         this.dialogVisible = false
