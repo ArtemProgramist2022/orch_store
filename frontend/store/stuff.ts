@@ -1,63 +1,64 @@
 import { ActionTree, GetterTree, MutationTree } from 'vuex'
-import { IListResponse } from '../interfaces/responses'
-import { IStuff, IStuffGetParams, INewStuff } from '../interfaces/stuff'
+import { ListResponse } from '../interfaces/responses'
+import { StuffItem } from '../interfaces/stuff'
 
-export const state = (): IListResponse<IStuff> => ({
+export const state = (): ListResponse<StuffItem> => ({
   total: 0,
   limit: 20,
   page: 1,
-  items: [],
-  loading: false
+  items: []
 })
 
-export const mutations: MutationTree<IListResponse<IStuff>> = {
+export const mutations: MutationTree<ListResponse<StuffItem>> = {
   setData (state, data) {
-    state.total = data.total
-    state.limit = data.limit
-    state.page = data.page
-    state.items = data.items
+    state = data
   },
-  changePage (state, data) {
-    state.page = data
+  addItem (state, item){
+    state.items.push(item)
   },
-  addItem( state, data){
-    state.items.unshift(data.data)
+  deleteItem (state, data: StuffItem) {
+    const index = state.items.findIndex((item) => item.id === data.id)
+    if (index === -1) return
+    state.items.splice(index, 1)
   }
 }
 
-export const actions: ActionTree<IListResponse<IStuff>, any> = {
-  async fetchStuff ({ commit, state }, params: IStuffGetParams) {
-    try {
-      const defaultParams = { limit: state.limit, page: state.page }
-      const totalParams = Object.assign({}, { ...defaultParams, ...params })
-      const response = await this.$axios.get(
-        '/api/v1/stuff/',
-        { params: totalParams }
-      )
-      commit('setData', response.data.data)
-    } catch (error) {
-      return error
-    }
+export const actions: ActionTree<ListResponse<StuffItem>, any> = {
+  getStuff ({ commit }) {
+    return new Promise(async (resolve, reject) => {
+      await this.$axios.get('/api/v1/stuff')
+      .then((response) => {
+        commit('setData', response.data)
+        resolve(response.data)
+      })
+      .catch((error) => reject(error))
+    })
   },
-  async addStuffItem({commit}, json: INewStuff){
-    try {
-      const response = await this.$axios.$post(
-        '/api/v1/stuff',
-        json,
-      )
-      commit('addItem', response.data)
-    } catch (error) {
-      
-    }
+  addStuff ({ commit }, data: Omit<StuffItem, 'id'>) {
+    return new Promise(async (resolve, reject) => {
+      await this.$axios.post('/api/v1/stuff', data)
+      .then((response) => {
+        commit('addItem', response.data.data)
+        resolve(response.data.data)
+      })
+      .catch((error) => reject(error))
+    })
   },
-  changePage ({ commit }, page: number) {
-    commit('changePage', page)
-  }
+  deleteStuff ({ commit }, data: Pick<StuffItem, 'id'>) {
+    return new Promise(async (resolve, reject) => {
+      await this.$axios.delete(`/api/v1/stuff/${data.id}`)
+      .then((response) => {
+        commit('deleteItem', response.data.data)
+        resolve(response.data.data)
+      })
+      .catch((error) => reject(error))
+    })
+  },
 }
 
-export const getters: GetterTree<IListResponse<IStuff>, any> = {
+export const getters: GetterTree<ListResponse<StuffItem>, any> = {
   items: state => state.items,
   limit: state => state.limit,
   total: state => state.total,
-  page: state => state.page
+  page: state => state.page,
 }

@@ -1,8 +1,4 @@
-export interface ICategory {
-    id: number,
-    name: string
-}
-
-export interface INewCategory{
-    name: string
+export interface CategoryItem {
+  id: number,
+  name: string
 }

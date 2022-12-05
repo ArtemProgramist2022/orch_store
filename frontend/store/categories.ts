@@ -1,73 +1,76 @@
 import { ActionTree, GetterTree, MutationTree } from 'vuex'
-import { ICategory } from '../interfaces/categories'
+import { CategoryItem } from '../interfaces/categories'
 import { SuccessfulResponse } from '../interfaces/responses'
 
-export const state = (): SuccessfulResponse<Array<ICategory>> => ({
+export const state = (): SuccessfulResponse<CategoryItem[]> => ({
   success: false,
-  data: []
+  items: []
 })
 
-export const mutations: MutationTree<SuccessfulResponse<Array<ICategory>>> = {
+export const mutations: MutationTree<SuccessfulResponse<CategoryItem[]>> = {
   setData (state, data) {
-    state.data = data.data
+    state.items = data.data
     state.success = data.success
   },
-  addItem (state, data){
-    state.data?.push(data.data)
+  addItem (state, item){
+    state.items.push(item)
   },
-  dropCategory (state, data){
-    const filteredItems = state.data?.filter((item: ICategory) => item.id === data.id)[0]
-    let index = -1
-    if (filteredItems) {
-      let finded_index = state.data?.indexOf(filteredItems)
-      if (finded_index){
-        index = finded_index
-      } 
-    }
-    if (index !== -1) {
-      state.data?.splice(index, 1)
-    }
+  editItem (state, data: CategoryItem) {
+    const index = state.items.findIndex((item) => item.id === data.id)
+    if (index === -1) return
+    state.items[index] = data
+  },
+  deleteItem (state, data: CategoryItem) {
+    const index = state.items.findIndex((item) => item.id === data.id)
+    if (index === -1) return
+    state.items.splice(index, 1)
   }
 }
 
-export const actions: ActionTree<SuccessfulResponse<Array<ICategory>>, any> = {
-  async fetchCategories ({ commit }) {
-    try {
-      const response = await this.$axios.get(
-        '/api/v1/categories'
-      )
-      commit('setData', response.data)
-    } catch (error) {
-      return error
-    }
+export const actions: ActionTree<SuccessfulResponse<CategoryItem[]>, any> = {
+  getCategories ({ commit }) {
+    return new Promise(async (resolve, reject) => {
+      await this.$axios.get('/api/v1/categories')
+      .then((response) => {
+        commit('setData', response.data)
+        resolve(response.data)
+      })
+      .catch((error) => reject(error))
+    })
   },
-  async addNewCategory ({ commit}, name:string){
-    try {
-      const response = await this.$axios.post(
-        '/api/v1/categories',
-        {
-          name
-        }
-      )
-      commit('addItem', response.data)
-    }
-    catch (error){
-      return error
-    }
+  addCategory ({ commit }, data: Omit<CategoryItem, 'id'>) {
+    return new Promise(async (resolve, reject) => {
+      await this.$axios.post('/api/v1/categories', data)
+      .then((response) => {
+        commit('addItem', response.data.data)
+        resolve(response.data.data)
+      })
+      .catch((error) => reject(error))
+    })
   },
-  async dropCategory({commit}, category_id: number){
-    try {
-      const response = await this.$axios.delete(
-        `/api/v1/categories/${category_id}`
-      )
-      commit('dropCategory', response.data.data)
-    } catch (error) {
-      
-    }
-  }
+  updateCategory ({ commit }, data: CategoryItem) {
+    return new Promise(async (resolve, reject) => {
+      await this.$axios.post(`/api/v1/categories/${data.id}`, data)
+      .then((response) => {
+        commit('editItem', response.data.data)
+        resolve(response.data.data)
+      })
+      .catch((error) => reject(error))
+    })
+  },
+  deleteCategory ({ commit }, data: Pick<CategoryItem, 'id'>) {
+    return new Promise(async (resolve, reject) => {
+      await this.$axios.delete(`/api/v1/categories/${data.id}`)
+      .then((response) => {
+        commit('deleteItem', response.data.data)
+        resolve(response.data.data)
+      })
+      .catch((error) => reject(error))
+    })
+  },
 }
 
-export const getters: GetterTree<SuccessfulResponse<Array<ICategory>>, any> = {
-  data: state => state.data,
+export const getters: GetterTree<SuccessfulResponse<CategoryItem[]>, any> = {
+  items: state => state.items,
   success: state => state.success
 }

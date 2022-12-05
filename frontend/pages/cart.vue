@@ -26,7 +26,7 @@
 </template>
 <script lang="ts">
 import { Action, Getter, Vue, Component } from "nuxt-property-decorator";
-import {ICartItem} from '@/interfaces/cart'
+import {CartItem} from '@/interfaces/cart'
 
 
 @Component({
@@ -35,11 +35,11 @@ import {ICartItem} from '@/interfaces/cart'
             type: Boolean
         }
     },
-    layout:'mainLayout',
+    layout:'main',
     auth: true
 })
 export default class CartDialog extends Vue{
-    @Getter('cart/data') cartItems!: Array<ICartItem>
+    @Getter('cart/data') cartItems!: CartItem[]
     @Action('cart/fetchCart') fetchCart: any
     @Action('cart/deleteItemFromCart') dropCartItem: any
 
@@ -52,7 +52,7 @@ export default class CartDialog extends Vue{
         
     }
 
-    dropCart(cartItem: ICartItem){
+    dropCart(cartItem: CartItem){
         this.dropCartItem(cartItem.id).then(()=>{})
     }
 }

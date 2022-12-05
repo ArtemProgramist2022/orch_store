@@ -1,289 +1,173 @@
 <template>
-    <el-container
-      direction="vertical"
-      class="auth"
-    >
-      <nuxt-link to="/">
-        <el-button
-          type="primary"
-          size="mini"
-          round
-          class="auth__back"
-        >
-          <i
-            class="el-icon-arrow-left"
-            style="font-size: 23px;"
-          />
-        </el-button>
-      </nuxt-link>
-      <el-row
-        type="flex"
-        class="auth__wrapper"
+  <el-col :span="24" class="flex-center">
+    <el-col :span="12">
+      <h3 class="text-center">Регистрация</h3>
+      <el-form
+        ref="form"
+        :model="form"
+        :rules="rulesForm"
+        label-position="top"
+        size="mini"
+        @submit.native.prevent="submitForm"
       >
-        <el-col
-          class="auth__col auth__col--main"
-          :xl="12"
-          :sm="24"
+        <el-form-item
+          label="Номер телефона"
+          prop="phone"
         >
-          <div class="auth__form-wrapper auth__form-wrapper--register">
-            <el-form
-              ref="form"
-              v-loading="loading"
-              size="small"
-              :model="form"
-              :rules="rules"
-              status-icon
-              class="auth__form auth-form"
-            >
-              <h2 class="auth-form__title">
-                Sign Up
-              </h2>
-              <div class="auth-form__description">
-                Your account details
-              </div>
-              <hr class="auth-form__hr" />
-              <el-row :gutter="20">
-                <el-col
-                  :xs="24"
-                  :sm="12"
-                >
-                  <el-form-item
-                    label="Email address"
-                    prop="email"
-                  >
-                    <el-input
-                      v-model="form.phone"
-                      :disabled="showCode"
-                      placeholder="+79998882233"
-                    />
-                  </el-form-item>
-                </el-col>
-                <el-col
-                  :xs="24"
-                  :sm="12"
-                >
-                  <el-form-item
-                    label="Username"
-                    prop="username"
-                  >
-                    <el-input
-                      v-model="form.name"
-                      :disabled="showCode"
-                      placeholder="Username"
-                    />
-                  </el-form-item>
-                </el-col>
-              </el-row>
-              
-              <el-row :gutter="20">
-                <el-col
-                  :xs="24"
-                  :sm="12"
-                >
-                  <el-form-item
-                    label="Password"
-                    prop="password"
-                  >
-                    <el-input
-                      v-model="form.password"
-                      type="password"
-                      show-password
-                      :disabled="showCode"
-                      placeholder="Password"
-                    />
-                  </el-form-item>
-                </el-col>
-                <el-col
-                  :xs="24"
-                  :sm="12"
-                >
-                  <el-form-item
-                    label="Confirm password"
-                    prop="confirm_password"
-                  >
-                    <el-input
-                      v-model="form.confirm_password"
-                      :disabled="showCode"
-                      type="password"
-                      show-password
-                      placeholder="Confirm password"
-                    />
-                  </el-form-item>
-                </el-col>
-              </el-row>
-              <el-row v-if="showCode">
-                <el-col :span="24">
-                  <el-form-item label="Confirm code">
-                    <el-input
-                      v-model.trim="form.code"
-                      minlength="6"
-                      maxlength="6"
-                      show-word-limit
-                    />
-                  </el-form-item>
-                </el-col>
-              </el-row>
-              <el-form-item style="margin-bottom: 10px;">
-                <template v-if="showCode">
-                  <el-button
-                    class="auth-form__submit-btn"
-                    type="primary"
-                    @click.prevent="confirm"
-                  >
-                    Confirm
-                  </el-button>
-                </template>
-                <template v-else>
-                  <el-button
-                    class="auth-form__submit-btn"
-                    type="primary"
-                    @click.prevent="onSubmit"
-                  >
-                    Sign Up
-                  </el-button>
-                </template>
-              </el-form-item>
-              <el-form-item style="margin-bottom: 0;">
-                <el-row
-                  type="flex"
-                  justify="space-between"
-                >
-                  <el-col
-                    class="auth-form__link"
-                    :span="12"
-                  >
-                    <nuxt-link to="/login">
-                      <el-link
-                        href="#"
-                        :underline="false"
-                        @click.prevent
-                      >
-                        Sign In
-                      </el-link>
-                    </nuxt-link>
-                  </el-col>
-                  <el-col
-                    class="auth-form__link auth-form__link--right"
-                    :span="12"
-                  >
-                    <nuxt-link to="/recover">
-                      <el-link
-                        href="#"
-                        :underline="false"
-                        @click.prevent
-                      >
-                        Forget Password?
-                      </el-link>
-                    </nuxt-link>
-                  </el-col>
-                </el-row>
-              </el-form-item>
-            </el-form>
-          </div>
+          <el-input
+            v-model="form.phone"
+            v-mask="'+7 (###) ### ## ##'"
+            placeholder="+7 (123) 456 78 90"
+          />
+        </el-form-item>
+        <el-form-item
+          label="Логин"
+          prop="name"
+        >
+          <el-input
+            v-model="form.name"
+            placeholder="Логин"
+          />
+        </el-form-item>
+        <el-form-item
+          label="Пароль"
+          prop="password"
+        >
+          <el-input
+            v-model="form.password"
+            placeholder="Пароль"
+            type="password"
+          />
+        </el-form-item>
+        <el-form-item
+          label="Повторите пароль"
+          prop="confirmPassword"
+        >
+          <el-input
+            v-model="form.confirmPassword"
+            placeholder="Подтвердите пароль"
+            type="password"
+          />
+        </el-form-item>
+        <el-col class="flex-center">
+          <el-button
+            type="primary"
+            native-type="submit"
+            size="mini"
+          >
+            Зарегистрироваться
+          </el-button>
         </el-col>
-        <el-col
-          class="auth__col auth__col--image hidden-sm-and-down"
-          :xl="12"
-        />
-      </el-row>
-    </el-container>
-  </template>
+      </el-form>
+      <el-col :span="24" style="padding-top: 15px;">
+        <div class="text-center" style="padding-bottom: 5px;">
+          <el-link
+            :underline="false"
+            @click="$router.push('/login')"
+          >
+            Авторизация
+          </el-link>
+        </div>
+        <div class="text-center">
+          <el-link
+            :underline="false"
+            @click="$router.push('/recover')"
+          >
+            Забыли пароль?
+          </el-link>
+        </div>
+      </el-col>
+    </el-col>
+  </el-col>
+</template>
   
-  <script lang="ts">
-  import { ElForm } from 'element-ui/types/form'
-  import { Component, Vue, Ref } from 'nuxt-property-decorator'
-  import { IRegisterForm } from '~/interfaces/users'
+<script lang="ts">
+import { ElForm } from 'element-ui/types/form'
+import { Component, Vue, Ref, Action } from 'nuxt-property-decorator'
+import { SuccessfulDataResponse } from '~/interfaces/responses'
+import { ConfirmForm, MeForm, RegisterForm } from '~/interfaces/users'
   
-  @Component({
-    transition: 'slide-bottom',
-    auth: 'guest',
-    layout: 'authLayout'
-  })
-  export default class RecoverPage extends Vue {
-    @Ref('form') formRef!: ElForm
-    form: IRegisterForm = {
+@Component({
+  transition: 'slide-bottom',
+  auth: 'guest',
+  layout: 'auth'
+})
+export default class RecoverPage extends Vue {
+  @Ref('form') formRef!: ElForm
+
+  @Action('authUser/register') registerUser!: (data: RegisterForm) => Promise<SuccessfulDataResponse<MeForm | null>>
+  @Action('authUser/confirm') confirmUser!: (data: ConfirmForm) => Promise<SuccessfulDataResponse<MeForm | null>>
+
+  form: RegisterForm = this.getDefaultForm();
+  rulesForm = {
+    phone: [
+      { required: true, message: 'Укажите номер телефона', trigger: 'blur' }
+    ],
+    name: [
+      { required: true, message: 'Укажите логин', trigger: 'blur' }
+    ],
+    password: [
+      { required: true, message: 'Укажите пароль', trigger: 'blur' }
+    ],
+    confirmPassword: [
+      { required: true, message: 'Укажите пароль еще раз', trigger: 'blur' },
+      { validator: this.checkConfirmPassword, trigger: ['change', 'blur'] }
+    ]
+  }
+  showCode = false
+  loading = false
+
+  checkConfirmPassword (_: Object, value: string, callback: Function) {
+    if (value === this.form.password) return callback()
+    return callback(new Error('Пароли не совпадают'))
+  }
+
+  getDefaultForm (): RegisterForm {
+    return {
       phone: '',
       name: '',
       password: '',
-      confirm_password: '',
+      confirmPassword: '',
       code: ''
     }
-  
-    rules = {
-      phone: [
-        { required: true, message: 'Email is required', trigger: 'blur' }
-      ],
-      name: [{ required: true, message: 'Username is required', trigger: 'blur' }],
-      password: [{ required: true, message: 'Password is required', trigger: 'blur' }],
-      confirm_password: [
-        { required: true, message: 'Confirm password is required', trigger: 'blur' },
-        { validator: this.checkConfirmPassword, trigger: ['change', 'blur'] }
-      ]
+  }
+
+  beforeDestroy () {
+    this.form = this.getDefaultForm()
+  }
+
+  confirm () {
+    this.loading = true
+    const data = {
+      phone: this.form.phone,
+      code: this.form.code
     }
-  
-    showCode = false
-    loading = false
-  
-    checkConfirmPassword (_: any, value: string, callback: Function) {
-      if (value === this.form.password) {
-        callback()
-      } else {
-        callback(new Error("Passwords don't match"))
-      }
-    }
-  
-    resetForm () {
-      this.form = {
-        phone: '',
-        name: '',
-        password: '',
-        confirm_password: '',
-        code: ''
-      }
-    }
-  
-    beforeDestroy () {
-      this.resetForm()
-    }
-  
-    confirm () {
-      const data = {
-        email: this.form.phone,
-        code: this.form.code
-      }
-      if (data.email.length && Number(data.code) && data.code.length === 6) {
-        this.loading = true
-        this.$axios.post('/api/v1/auth/confirm', data).then((response) => {
-          this.$message.success('You have been successfully registered')
-          if (response.data.data) {
-            this.$auth.setUser(response.data.data.me)
-            this.$auth.setUserToken(response.data.data.token)
-          }
-        }).finally(() => {
-          this.loading = false
-        })
-      }
-    }
-  
-    register () {
-      console.log('click')
-      this.loading = true
-      this.$axios.post('/api/v1/auth/register', this.form).then(() => {
-        this.$message.success('The confirmation code has been sent to your email')
-        this.showCode = true
+    this.confirmUser(data)
+    .then((response) => {
+        this.$message.success('Вы были успешно зарегистрированы')
+        if (response.data) {
+          this.$auth.setUser(response.data.me)
+          this.$auth.setUserToken(response.data.token)
+        }
       }).finally(() => {
         this.loading = false
       })
-    }
-  
-    onSubmit () {
-      console.log('click submit')
-      this.formRef.validate((valid) => {
-        if (valid) {
-          this.register()
-        }
-      })
-    }
   }
-  </script>
+
+  register () {
+    this.loading = true
+    this.registerUser(this.form)
+    .then(() => {
+      this.$message.success('Код для подтверждения был отправлен на вашу почту')
+      this.showCode = true
+    }).finally(() => {
+      this.loading = false
+    })
+  }
+
+  submitForm () {
+    this.formRef.validate((valid) => valid && this.register())
+  }
+}
+</script>
   

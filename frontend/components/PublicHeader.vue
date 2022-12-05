@@ -1,13 +1,14 @@
 <template>
-  <div class="public-header">
-    <nuxt-link
+  <div>
+  <!-- <div class="public-header"> -->
+    <!-- <nuxt-link
       to="/"
       class="public-header__logo"
     >
       <strong>Orch</strong>.store
     
-    </nuxt-link>
-    <div>
+    </nuxt-link> -->
+    <!-- <div>
       <nuxt-link v-if="$auth.loggedIn" to="/cart" >
         <el-button>Корзина<span class="el-icon-s-goods"></span></el-button>
       
@@ -21,7 +22,7 @@
       </nuxt-link>
       <el-button v-if="$auth.loggedIn" @click="$auth.logout()">Выйти</el-button>
 
-    </div>
+    </div> -->
   </div>
 </template>
 <script lang="ts">

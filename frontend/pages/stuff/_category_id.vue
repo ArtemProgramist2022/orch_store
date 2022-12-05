@@ -30,7 +30,7 @@ import { Vue, Action, Getter, Component } from 'nuxt-property-decorator'
 import { IStuff } from '~/interfaces/stuff'
 
 @Component({
-  layout: 'mainLayout',
+  layout: 'main',
   auth: false
 })
 export default class StuffPage extends Vue {

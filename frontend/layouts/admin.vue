@@ -38,12 +38,12 @@
   
   }
   .public-layout__header {
-    background: #fff;
+    /* background: #fff;
     padding: 0 10% 0 10%;
     box-shadow: 0 0 15px 0 rgba(0, 0, 0, .1);
     border-radius: 0 0 25px 25px;
     vertical-align: middle;
-    height: 150px;
+    height: 150px; */
   }
   .admin-layout__header {
     background: #fff;

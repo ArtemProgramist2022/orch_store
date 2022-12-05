@@ -1,76 +1,76 @@
 import { ActionTree, GetterTree, MutationTree } from 'vuex'
 import { SuccessfulResponse } from '../interfaces/responses'
-import { ICartItem, INewCartItem, IUpdateCartItem } from '@/interfaces/cart'
+import { CartItem } from '@/interfaces/cart'
 
-export const state = (): SuccessfulResponse<Array<ICartItem>> => ({
+export const state = (): SuccessfulResponse<CartItem[]> => ({
   success: false,
-  data: []
+  items: []
 })
 
-export const mutations: MutationTree<SuccessfulResponse<Array<ICartItem>>> = {
+export const mutations: MutationTree<SuccessfulResponse<CartItem[]>> = {
   setData (state, data) {
-    state.data = data.data
+    state.items = data.data
     state.success = data.success
   },
-  addItem (state, data) {
-    state.data?.push(data.data)
-    state.success = data.success
+  addItem (state, item){
+    state.items.push(item)
   },
-  updateItem (state, item: ICartItem) {
-
+  editItem (state, data: CartItem) {
+    const index = state.items.findIndex((item) => item.id === data.id)
+    if (index === -1) return
+    state.items[index] = data
   },
-  dropItem (state, data: ICartItem) {
-    const filteredItems = state.data?.filter((item: ICartItem) => item.id === data.id)[0]
-    let index = -1
-    if (filteredItems) {
-      let finded_index = state.data?.indexOf(filteredItems)
-      if (finded_index){
-        index = finded_index
-      } 
-    }
-    if (index !== -1) {
-      state.data?.splice(index, 1)
-    }
-
+  deleteItem (state, data: CartItem) {
+    const index = state.items.findIndex((item) => item.id === data.id)
+    if (index === -1) return
+    state.items.splice(index, 1)
   }
 }
 
-export const actions: ActionTree<SuccessfulResponse<Array<ICartItem>>, any> = {
-  async fetchCart ({ commit }) {
-    try {
-      const response = await this.$axios.get(
-        '/api/v1/cart/'
-      )
-      commit('setData', response.data)
-      return response
-    } catch (error) {
-      return error
-    }
+export const actions: ActionTree<SuccessfulResponse<CartItem[]>, any> = {
+  getCart ({ commit }) {
+    return new Promise(async (resolve, reject) => {
+      await this.$axios.get('/api/v1/cart')
+      .then((response) => {
+        commit('setData', response.data)
+        resolve(response.data)
+      })
+      .catch((error) => reject(error))
+    })
   },
-  async addStuffToCart ({ commit }, data: INewCartItem) {
-    try {
-      const response = await this.$axios.post(
-        '/api/v1/cart/',
-        data
-      )
-      commit('addItem', response.data)
-    } catch (error) {
-
-    }
+  addCart ({ commit }, data: Pick<CartItem, 'stuff_id' | 'stuff_count'>) {
+    return new Promise(async (resolve, reject) => {
+      await this.$axios.post('/api/v1/cart', data)
+      .then((response) => {
+        commit('addItem', response.data.data)
+        resolve(response.data.data)
+      })
+      .catch((error) => reject(error))
+    })
   },
-  async deleteItemFromCart({commit}, cart_id: number){
-    try {
-      const response = await this.$axios.$delete(
-        `/api/v1/cart/${cart_id}`
-      )
-      commit('dropItem', response.data)
-    } catch (error) {
-      
-    }
-  }
+  updateCart ({ commit }, data: Pick<CartItem, 'stuff_count' | 'id'>) {
+    return new Promise(async (resolve, reject) => {
+      await this.$axios.post(`/api/v1/cart/${data.id}`, data)
+      .then((response) => {
+        commit('editItem', response.data.data)
+        resolve(response.data.data)
+      })
+      .catch((error) => reject(error))
+    })
+  },
+  deleteCart ({ commit }, data: Pick<CartItem, 'id'>) {
+    return new Promise(async (resolve, reject) => {
+      await this.$axios.delete(`/api/v1/cart/${data.id}`)
+      .then((response) => {
+        commit('deleteItem', response.data.data)
+        resolve(response.data.data)
+      })
+      .catch((error) => reject(error))
+    })
+  },
 }
 
-export const getters: GetterTree<SuccessfulResponse<Array<ICartItem>>, any> = {
-  data: state => state.data,
+export const getters: GetterTree<SuccessfulResponse<CartItem[]>, any> = {
+  items: state => state.items,
   success: state => state.success
 }

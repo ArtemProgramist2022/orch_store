@@ -1,87 +1,63 @@
 <template>
-  <el-container direction="vertical">
-    <ul class="stuff-grid">
-      <li v-for="item in stuff" :key="item.id" class="stuff-wrapper">
-        <el-card class="stuff-page__card">
-          
-            <img class="stuff-image" :src="item?.stuff_link">
-          
-          <span>{{item.id}}</span>
-          <span>{{ item.name }}</span>
-          <span>{{ item.cost }}</span>
-          <el-button @click="addToCart(item, 1)">
-            В корзину
-          </el-button>
-        </el-card>
-      </li>
-    </ul>
-
-  </el-container>
+  <div>
+    <el-carousel trigger="click" height="65vh">
+      <el-carousel-item v-for="item in 4" :key="item">
+      </el-carousel-item>
+    </el-carousel>
+    <div class="stuff-catalog"> 
+      <div
+        v-for="stuff in 6"
+        :key="`stuff-${stuff}`"
+        class="stuff-item"
+      >
+        <el-image class="flex-center" style="width: 100%; border-radius: 8px; height: 200px; background-color: #c0c4cc;">
+          <div slot="error" class="image-slot">
+            <i class="el-icon-picture-outline"></i>
+          </div>
+        </el-image>
+        <div>description</div>
+        <div>category</div>
+        <div>count</div>
+        <div>cost</div>
+        <el-button
+          type="primary"
+          size="mini"
+        >
+          В корзину
+        </el-button>
+      </div>
+    </div>
+  </div>
 </template>
 <script lang="ts">
-import { Component, Action, Getter, Vue } from 'nuxt-property-decorator'
-import { IStuff } from '~/interfaces/stuff';
+import { Component, Vue } from 'nuxt-property-decorator'
 
 @Component({
-  layout: 'mainLayout',
-  auth: false
+  layout: 'main',
+  auth: false,
+  transition: 'slide-bottom'
 })
-export default class Index extends Vue {
-  @Getter('stuff/items') stuff!: Array<IStuff>
-    @Getter('stuff/page') page!: number
-    @Getter('stuff/total') total!: number
-    @Getter('stuff/limit') limit!: number
-
-    @Action('stuff/fetchStuff') fetchStuff: any
-    @Action('stuff/changePage') changePage: any
-    @Action('cart/addStuffToCart') addStuffToCart: any
-    async fetch () {
-      await this.fetchStuff({
-        page: this.page,
-        limit: this.limit,
-        
-      })
-    }
-// <infinite-loading v-if="stuff.length" spinner="spiral" @infinite="infiniteScroll"></infinite-loading>
-
-    infiniteScroll(){
-      setTimeout(()=>{
-        this.changePage(this.page++)
-        this.fetchStuff({
-            page: this.page
-          }
-        )
-      }, 500)
-    }
-    
-    addToCart (item: IStuff, count: number) {
-      this.addStuffToCart({
-        stuff_id: item.id,
-        stuff_count: count
-      }).then(() => {
-
-      }).catch((error: any) => {})
-    }
-}
+export default class Index extends Vue {}
 
 </script>
 <style>
+.el-carousel__item {
+  background: url('~/assets/imgs/sale.jpeg') center;
+}
 
-.stuff-grid {
-  margin-top: 50px;
+.stuff-catalog {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 30px;
 }
-.stuff-image {
-  width: 100%;
-  display: block;
-}
-.stuff-page__card{
-  width: 250px;
-  height: 300px;
-  border-radius: 20px;
-}
-.stuff-wrapper {
-  display: block;
-  float: left;
-  margin: 20px;
+
+.stuff-item {
+  width: 300px;
+  height: 400px;
+  text-align: center;
+  border: 1px solid #696969;
+  border-radius: 8px;
+  margin: 0 10px 10px 0;
 }
 </style>

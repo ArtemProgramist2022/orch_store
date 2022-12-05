@@ -1,66 +1,71 @@
 import { ActionTree, GetterTree, MutationTree } from 'vuex'
-import { IConfirmForm, IRegisterForm, IMeForm, ILoginForm } from '~/interfaces/users'
-import { SuccessfulResponse } from '~/interfaces/responses'
+import { ConfirmForm, RegisterForm, MeForm, LoginForm } from '~/interfaces/users'
+import { SuccessfulDataResponse } from '~/interfaces/responses'
 
-export const state = (): SuccessfulResponse<IMeForm> => ({
+export const state = (): SuccessfulDataResponse<MeForm | null> => ({
   success: true,
-  data: undefined
+  data: null
 })
 
-export const mutations: MutationTree<SuccessfulResponse<IMeForm>> = {
+export const mutations: MutationTree<SuccessfulDataResponse<MeForm | null>> = {
   setData (state, data) {
     state.data = data.data
     state.success = data.success
   }
 }
 
-export const actions: ActionTree<SuccessfulResponse<IMeForm>, any> = {
-  async register ({ commit }, data: IRegisterForm) {
-    try {
-      const response = await this.$axios.post(
-        '/api/v1/auth/register',
-        data
-      )
-      commit('setData', response.data)
-      return response
-    } catch (error) {
-
-    }
+export const actions: ActionTree<SuccessfulDataResponse<MeForm | null>, any> = {
+  register ({ commit }, data: RegisterForm) {
+    return new Promise((resolve, reject) => {
+      this.$axios.post('/api/v1/auth/register', data)
+      .then((response) => {
+        commit('setData', response.data)
+        resolve(response.data)
+      })
+      .catch((error) => {
+        reject(error)
+      })
+    })
   },
-  async recover ({ commit }, data: IRegisterForm) {
-    try {
-      const response = await this.$axios.post(
-        '/api/v1/auth/recover',
-        data
-      )
-      commit('setData', response.data)
-      return response
-    } catch (error) {
-    }
+  recover ({ commit }, data: RegisterForm) {
+    return new Promise((resolve, reject) => {
+      this.$axios.post('/api/v1/auth/recover', data)
+      .then((response) => {
+        commit('setData', response.data)
+        resolve(response.data)
+      })
+      .catch((error) => {
+        reject(error)
+      })
+    })
   },
-  async confirm ({ commit }, data: IConfirmForm) {
-    try {
-      const response = await this.$axios.post(
-        '/api/v1/auth/confirm',
-        data
-      )
-      commit('setData', response.data)
-      return response
-    } catch (error) {
-    }
+  confirm ({ commit }, data: ConfirmForm) {
+    return new Promise((resolve, reject) => {
+      this.$axios.post('/api/v1/auth/confirm', data)
+      .then((response) => {
+        commit('setData', response.data)
+        resolve(response.data)
+      })
+      .catch((error) => {
+        reject(error)
+      })
+    })
   },
-  async login ({ commit }, data: ILoginForm) {
-    try {
-      const response = await this.$axios.post(
-        '/api/v1/auth/login',
-        data
-      )
-      commit('setData', response.data)
-      return response
-    } catch (error) {}
+  login ({ commit }, data: LoginForm) {
+    return new Promise((resolve, reject) => {
+      this.$axios.post('/api/v1/auth/login', data)
+      .then((response) => {
+        commit('setData', response.data)
+        resolve(response.data)
+      })
+      .catch((error) => {
+        reject(error)
+      })
+    })
   }
 }
 
-export const getters: GetterTree<SuccessfulResponse<IMeForm>, any> = {
-  data: state => state.data
+export const getters: GetterTree<SuccessfulDataResponse<MeForm | null>, any> = {
+  data: state => state.data,
+  success: state => state.success
 }

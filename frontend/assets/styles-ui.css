@@ -1,0 +1,25 @@
+.cursor-pointer {
+  cursor: pointer
+}
+
+.text-decoration-none {
+  text-decoration: none;
+}
+
+.color-inherit {
+  color: inherit;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.text-center {
+  text-align: center;
+}

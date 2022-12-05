@@ -1,6 +1,6 @@
 <template>
   <div class="categories-block">
-    <div v-if="categories">
+    <!-- <div v-if="categories">
       <ul>
         <li class="categories-title">
           Категории
@@ -17,7 +17,7 @@
     </div>
     <div v-else>
       NO CATEGORIES
-    </div>
+    </div> -->
   </div>
 </template>
 

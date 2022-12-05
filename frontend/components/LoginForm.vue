@@ -1,6 +1,5 @@
 <template>
-  
-    <el-container
+    <!-- <el-container
       direction="vertical"
       class="auth"
     >
@@ -97,57 +96,99 @@
             </el-form>
           </div>
         </el-col>
-        <el-col
-          class="auth__col auth__col--image hidden-sm-and-down"
-          :xl="12"
-        />
       </el-row>
-    </el-container>
-  
+    </el-container> -->
+  <el-col :span="24" class="flex-center">
+    <el-col :span="12">
+      <h3 class="text-center">Авторизация</h3>
+      <el-form
+        ref="form"
+        :model="form"
+        :rules="rulesForm"
+        label-position="top"
+        size="mini"
+        @submit.native.prevent="submitForm"
+      >
+        <el-form-item
+          label="Номер телефона"
+          prop="phone"
+        >
+          <el-input
+            v-model="form.phone"
+            v-mask="'+7 (###) ### ## ##'"
+            placeholder="+7 (123) 456 78 90"
+          />
+        </el-form-item>
+        <el-form-item
+          label="Пароль"
+          prop="password"
+        >
+          <el-input
+            v-model="form.password"
+            placeholder="Пароль"
+          />
+        </el-form-item>
+        <el-col class="flex-center">
+          <el-button
+            type="primary"
+            native-type="submit"
+            size="mini"
+          >
+            Войти
+          </el-button>
+        </el-col>
+      </el-form>
+      <el-col :span="24" style="padding-top: 15px;">
+        <div class="text-center" style="padding-bottom: 5px;">
+          <el-link
+            :underline="false"
+            @click="$router.push('/signup')"
+          >
+            Создать аккаунт
+          </el-link>
+        </div>
+        <div class="text-center">
+          <el-link :underline="false">Забыли пароль?</el-link>
+        </div>
+      </el-col>
+    </el-col>
+  </el-col>
 </template>
 <script lang="ts">
 
-import { Vue, Action, Getter, Component, Ref } from 'nuxt-property-decorator'
+import { Vue, Component, Ref } from 'nuxt-property-decorator'
 import { ElForm } from 'element-ui/types/form'
-import { ILoginForm } from '~/interfaces/users'
+import { LoginForm } from '~/interfaces/users'
 
-@Component({
-  
-})
-export default class LoginForm extends Vue {
-    @Ref('form') formRef!: ElForm
-    form: ILoginForm = {
-      phone: '',
-      password: ''
+@Component({})
+export default class IndexLoginForm extends Vue {
+  @Ref('form') formRef!: ElForm
+
+  form: LoginForm = {
+    phone: '',
+    password: ''
+  }
+  rulesForm = {
+    phone: [
+      { required: true, message: 'Укажите номер телефона', trigger: 'blur' },
+    ],
+    password: [
+      { required: true, message: 'Укажите пароль', trigger: 'blur' }
+    ]
+  }
+  loading = false
+
+  login () {
+    this.loading = true
+    const data = {
+      data: this.form
     }
+    this.$auth.loginWith('customStrategy', data)
+    .finally(() => this.loading = false)
+  }
 
-    rules = {
-      phone: [
-        { required: true, message: 'Phone is required', trigger: 'blur' },
-      ],
-      password: [{ required: true, message: 'Password is required', trigger: 'blur' }]
-    }
-
-    loading = false
-    async login () {
-      this.loading = true
-      try {
-        await this.$auth.loginWith('customStrategy', { data: this.form })
-      } catch (error) {
-
-      }
-      this.loading = false
-    }
-
-    onSubmit () {
-      this.formRef.validate((valid) => {
-        if (valid) {
-          this.login()
-        }
-      })
-    }
+  submitForm () {
+    this.formRef.validate((valid) => valid && this.login())
+  }
 }
-
 </script>
-<style>
-</style>
