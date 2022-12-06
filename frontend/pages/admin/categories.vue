@@ -17,7 +17,7 @@
 </template>
 <script lang="ts">
 import { Vue, Action, Getter, Component, Ref } from "nuxt-property-decorator";
-import { ICategory, INewCategory } from "@/interfaces/categories";
+import { CategoryItem } from "@/interfaces/categories";
 import { ElForm } from 'element-ui/types/form'
 
 @Component({
@@ -26,14 +26,14 @@ import { ElForm } from 'element-ui/types/form'
     auth: true
 })
 export default class AdminCategoryPage extends Vue{
-    @Getter('categories/data') categories! : Array<ICategory>
+    @Getter('categories/data') categories! : Array<CategoryItem>
     
     @Action('categories/addNewCategory') addCategory : any
     @Action('categories/fetchCategories') fetchCategories : any
     @Action('categories/dropCategory') dropCategory: any
 
     @Ref('form') formRef!: ElForm
-    form: INewCategory = {
+    form: Omit<CategoryItem, 'id'> = {
         name: ''
     }
 

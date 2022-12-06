@@ -18,6 +18,7 @@
             v-model="form.phone"
             v-mask="'+7 (###) ### ## ##'"
             placeholder="+7 (123) 456 78 90"
+            :disabled="showCode"
           />
         </el-form-item>
         <el-form-item
@@ -27,6 +28,7 @@
           <el-input
             v-model="form.name"
             placeholder="Логин"
+            :disabled="showCode"
           />
         </el-form-item>
         <el-form-item
@@ -36,7 +38,8 @@
           <el-input
             v-model="form.password"
             placeholder="Пароль"
-            type="password"
+            show-password
+            :disabled="showCode"
           />
         </el-form-item>
         <el-form-item
@@ -46,11 +49,31 @@
           <el-input
             v-model="form.confirmPassword"
             placeholder="Подтвердите пароль"
-            type="password"
+            show-password
+            :disabled="showCode"
+          />
+        </el-form-item>
+        <el-form-item
+          v-if="showCode"
+          label="Код подтверждения"
+          prop="code"
+        >
+          <el-input
+            v-model="form.code"
+            placeholder="Код подтверждения"
           />
         </el-form-item>
         <el-col class="flex-center">
           <el-button
+            v-if="!showCode"
+            type="primary"
+            size="mini"
+            @click="sendCode"
+          >
+            Выслать код подтверждения
+          </el-button>
+          <el-button
+            v-else
             type="primary"
             native-type="submit"
             size="mini"
@@ -112,6 +135,9 @@ export default class RecoverPage extends Vue {
     confirmPassword: [
       { required: true, message: 'Укажите пароль еще раз', trigger: 'blur' },
       { validator: this.checkConfirmPassword, trigger: ['change', 'blur'] }
+    ],
+    code: [
+      { required: true, message: 'Укажите код подтверждения', trigger: 'blur' },
     ]
   }
   showCode = false
@@ -158,7 +184,7 @@ export default class RecoverPage extends Vue {
     this.loading = true
     this.registerUser(this.form)
     .then(() => {
-      this.$message.success('Код для подтверждения был отправлен на вашу почту')
+      this.$message.success('Код для подтверждения был отправлен на ваш телефон')
       this.showCode = true
     }).finally(() => {
       this.loading = false
@@ -166,7 +192,14 @@ export default class RecoverPage extends Vue {
   }
 
   submitForm () {
-    this.formRef.validate((valid) => valid && this.register())
+    this.formRef.validate((valid) => valid && this.confirm())
+  }
+
+  sendCode () {
+    this.formRef.validate((valid) => {
+      if (!valid) return;
+      this.register()
+    })
   }
 }
 </script>

@@ -27,7 +27,7 @@
 </template>
 <script lang="ts">
 import { Vue, Action, Getter, Component } from 'nuxt-property-decorator'
-import { IStuff } from '~/interfaces/stuff'
+import { StuffItem } from '~/interfaces/stuff'
 
 @Component({
   layout: 'main',
@@ -36,7 +36,7 @@ import { IStuff } from '~/interfaces/stuff'
 export default class StuffPage extends Vue {
   category_id: number = Number(this.$route.params.category_id)
 
-    @Getter('stuff/items') stuff!: Array<IStuff>
+    @Getter('stuff/items') stuff!: Array<StuffItem>
     @Getter('stuff/page') page!: number
     @Getter('stuff/total') total!: number
     @Getter('stuff/limit') limit!: number
@@ -86,7 +86,7 @@ export default class StuffPage extends Vue {
       })
     }
 
-    addToCart (item: IStuff, count: number) {
+    addToCart (item: StuffItem, count: number) {
       this.addStuffToCart({
         stuff_id: item.id,
         stuff_count: count
