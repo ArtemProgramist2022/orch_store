@@ -135,7 +135,7 @@ async def register(
     sms.sendSMS(
         register.phone,
         f'Код подтверждения : {code}',
-        sender='sendertest',
+        sender='orch.store',
     )
     await redis.setex(
         key=confirm_key(register.phone),
@@ -166,7 +166,7 @@ async def recover(
     if await users_db.email_exists(conn, recover.phone):
         code = randint(100000, 999999)
         # await send_recover_email(req, smtp, recover.email, code, jinja, conf)
-        sms.sendSMS(recipients=recover.phone, message=f"Код подтверждения: {code}")
+        sms.sendSMS(recipients=recover.phone, message=f"Код подтверждения: {code}", sender='orch.store')
         password = await generate_password()
         await redis.setex(
             key=confirm_key(recover.phone),
