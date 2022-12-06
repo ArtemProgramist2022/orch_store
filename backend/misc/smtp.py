@@ -33,6 +33,11 @@ class SMTP(object):
         )
 
         await conn.connect()
+        await conn.login(
+            username='orch-store',
+            password='gujjzaalaabwesyy'
+        )
+
         res = await conn.send_message(message)
         await conn.quit()
         return res

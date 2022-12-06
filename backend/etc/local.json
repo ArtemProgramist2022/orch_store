@@ -13,10 +13,10 @@
   },
   "smtp": {
     "transport": {
-      "hostname": "mailhog",
-      "port": 1025
+      "hostname": "smtp.yandex.ru",
+      "port": 465
     },
-    "sender": "noreply@template.ru"
+    "sender": "orch-store@yandex.ru"
   },
   "folders": {
     "stuff": "./media/stuff",
