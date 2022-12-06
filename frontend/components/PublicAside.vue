@@ -23,7 +23,7 @@
 
 <script lang="ts">
 import { Component, Vue, Action, Getter } from 'nuxt-property-decorator'
-import { ICategory } from '../interfaces/categories'
+import { CategoryItem } from '../interfaces/categories'
 
   @Component({
     components: {
@@ -31,7 +31,7 @@ import { ICategory } from '../interfaces/categories'
     }
   })
 export default class PublicAside extends Vue {
-    @Getter('categories/data') categories!: Array<ICategory>
+    @Getter('categories/data') categories!: Array<CategoryItem>
     @Getter('categories/success') success!: boolean
 
     @Action('categories/fetchCategories') fetchCategories: any

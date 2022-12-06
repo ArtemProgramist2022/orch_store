@@ -10,10 +10,13 @@
       </div>
       <h1 class="layout-header__name cursor-pointer" @click="$router.push('/')">orch.store</h1>
       <div>
-        <fa-icon
-          :icon="['fas', 'user']"
-          class="cursor-pointer"
-        />
+        <nuxt-link :to="'/login'" style="color: black;">
+          <fa-icon
+            :icon="['fas', 'user']"
+            class="cursor-pointer"
+
+          />
+        </nuxt-link>
         <fa-icon
           :icon="['fas', 'heart']"
           class="cursor-pointer"

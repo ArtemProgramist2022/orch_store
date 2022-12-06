@@ -113,9 +113,9 @@
 </template>
 <script lang="ts">
 import { Vue, Getter, Action, Component, Ref, Emit } from "nuxt-property-decorator";
-import { INewStuff, IStuff, IStuffGetParams } from "@/interfaces/stuff";
+import { NewStuffItem, StuffItem } from "@/interfaces/stuff";
 import { ElForm } from "element-ui/types/form";
-import { ICategory } from "~/interfaces/categories";
+import { CategoryItem } from "~/interfaces/categories";
 
 
 @Component({
@@ -128,11 +128,11 @@ export default class AdminStuffPage extends Vue {
     @Action('stuff/addStuffItem') addStuffItem: any
     @Action('categories/fetchCategories') fetchCategories: any
 
-    @Getter('stuff/items') stuffItems?: Array<IStuff>
+    @Getter('stuff/items') stuffItems?: Array<StuffItem>
     @Getter('stuff/limit') stuffLimit?: Number
     @Getter('stuff/total') stuffTotal?: Number
     @Getter('stuff/page') stuffPage?: Number
-    @Getter('categories/data') categories?: Array<ICategory>
+    @Getter('categories/data') categories?: Array<CategoryItem>
 
 
     @Ref('form') formRef!: ElForm
@@ -141,13 +141,13 @@ export default class AdminStuffPage extends Vue {
     @Emit()
     onSuccess(){}
 
-    form: INewStuff = {
-        name: '',
-        description: '',
-        cost: 0.00,
-        count_on_warehouse: 0,
-        category_id: 0,
-        photo: ''
+    form: NewStuffItem = {
+      name: '',
+      description: '',
+      cost: 0.00,
+      count_on_warehouse: 0,
+      category_id: 0,
+      photo: ''
     }
 
     rules = {

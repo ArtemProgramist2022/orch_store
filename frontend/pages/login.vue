@@ -27,6 +27,7 @@
           <el-input
             v-model="form.password"
             placeholder="Пароль"
+            show-password
           />
         </el-form-item>
         <el-col class="flex-center">

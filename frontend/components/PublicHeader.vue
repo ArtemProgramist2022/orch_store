@@ -29,7 +29,7 @@
 import { Component, Vue, Action, Getter } from 'nuxt-property-decorator'
 
 import LoginForm from '~/components/LoginForm.vue'
-import { ICartItem } from '~/interfaces/cart'
+import { CartItem } from '~/interfaces/cart'
 
 
 @Component({
@@ -38,7 +38,7 @@ import { ICartItem } from '~/interfaces/cart'
   }
 })
 export default class PublicHeader extends Vue {
-  @Getter('cart/data') cartItems!: Array<ICartItem>
+  @Getter('cart/data') cartItems!: Array<CartItem>
   @Action('cart/fetchCart') fetchCart: any
 
 

@@ -24,9 +24,9 @@ export const mutations: MutationTree<ListResponse<StuffItem>> = {
 }
 
 export const actions: ActionTree<ListResponse<StuffItem>, any> = {
-  getStuff ({ commit }) {
+  getStuff ({ commit }, params) {
     return new Promise(async (resolve, reject) => {
-      await this.$axios.get('/api/v1/stuff')
+      await this.$axios.get('/api/v1/stuff', { params })
       .then((response) => {
         commit('setData', response.data)
         resolve(response.data)

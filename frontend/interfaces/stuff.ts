@@ -1,4 +1,5 @@
 import { CategoryItem } from "./categories"
+import { GetParams } from "./common"
 
 export interface StuffItem {
   id: number
@@ -11,8 +12,10 @@ export interface StuffItem {
   stuff_link?: string
 }
 
-export interface StuffGetParams {
-  page?: number,
-  limit?: number,
-  category_id: number
+export interface NewStuffItem extends Omit<StuffItem, 'id' | 'category' | 'stuff_link'> {
+  photo: string
+}
+
+export interface StuffGetParams extends Partial<GetParams> {
+  category_id: number | string
 }
