@@ -14,47 +14,47 @@ class MeSuccessResponse(SuccessResponse):
 
 
 class RegisterModel(BaseModel):
-    phone: constr(strip_whitespace=True)
+    email: constr(strip_whitespace=True)
     name: constr(strip_whitespace=True)
     password: str
 
 
 class RecoverModel(BaseModel):
-    phone: constr(strip_whitespace=True)
+    email: constr(strip_whitespace=True)
 
 
 class AuthConfirmModel(BaseModel):
-    phone: constr(strip_whitespace=True)
+    email: constr(strip_whitespace=True)
     code: int
 
 
 class LoginModel(BaseModel):
-    phone: constr(strip_whitespace=True)
+    email: constr(strip_whitespace=True)
     password: constr(strip_whitespace=True)
 
 
 class ConfirmModel(BaseModel):
-    phone: constr(strip_whitespace=True)
+    email: constr(strip_whitespace=True)
     code: int
 
 
 EMAIL_REGEX = r'[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}'
-PHONE_REGEX = r'[0-9]{4,}'
+email_REGEX = r'[0-9]{4,}'
 
 
 def is_valid_email(data: str) -> bool:
     return re.match(EMAIL_REGEX, data)
 
 
-def is_valid_phone(data: str) -> bool:
-    return re.match(PHONE_REGEX, data)
+def is_valid_email(data: str) -> bool:
+    return re.match(email_REGEX, data)
 
 
 def clean_email(data: str) -> str:
     return data.strip()
 
 
-def clean_phone(data: str) -> str:
+def clean_email(data: str) -> str:
     return data \
         .replace(' ', '') \
         .replace('+', '') \

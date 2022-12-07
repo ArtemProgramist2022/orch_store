@@ -14,7 +14,11 @@
   "smtp": {
     "transport": {
       "hostname": "smtp.yandex.ru",
-      "port": 465
+      "port": 465,
+      "username":"orch-store@yandex.ru",
+      "password":"gujjzaalaabwesyy",
+      "use_tls": true,
+      "start_tls": false
     },
     "sender": "orch-store@yandex.ru"
   },

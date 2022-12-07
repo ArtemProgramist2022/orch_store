@@ -7,7 +7,7 @@ from typing import (
     List
 )
 from misc.fastapi.depends.notisend import get as get_sms
-from services.fastapi_template.depends.admin_area import check_rule
+from services.orch_store.depends.admin_area import check_rule
 from db import order as orders_db
 from misc.db import Connection
 from misc.session import Session
@@ -67,7 +67,7 @@ async def create_order(
     )
     if result:
         sms.sendSMS(
-            recipients=session.user.phone,
+            recipients=session.user.email,
             message=f"Номер заказа: {result.id} Сумма")
     return orders.OrderSuccessResponse(
         data=result

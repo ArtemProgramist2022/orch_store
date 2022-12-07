@@ -14,7 +14,7 @@ class BaseUser(BaseModel):
     id: int = 0
     en: Optional[bool]
     name: Optional[str] = ''
-    phone: Optional[str] = ''
+    email: Optional[str] = ''
     is_admin: Optional[bool] = False
     ctime: Optional[datetime] = Field(None, nullable=True)
     atime: Optional[datetime] = Field(None, nullable=True)
@@ -36,7 +36,7 @@ class User(BaseUser):
 class NewUser(BaseModel):
     en: Optional[bool]
     name: Optional[str]
-    phone: Optional[str]
+    email: Optional[str]
     atime: Optional[datetime]
     dtime: Optional[datetime]
 

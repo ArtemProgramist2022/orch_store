@@ -23,7 +23,7 @@ from misc import notisend
 from models.base import ErrorResponse, UpdateErrorResponse
 from misc.handlers import register_exception_handler
 import os
-from . import template_processing
+from . import processing
 
 logger = logging.getLogger(__name__)
 
@@ -43,7 +43,7 @@ def main(args, config):
         config=config
     )
     app = FastAPI(
-        title='Fastapi template REST API',
+        title='orch.store REST API',
         debug=config.get('debug', False),
         root_path=root_path,
         responses=responses(),
@@ -101,7 +101,7 @@ async def startup(app):
     app.state.db_pool = await db.init(app.state.config['db'])
     app.state.redis_pool = await redis.init(app.state.config['redis'])
     app.state.smtp = await smtp.init(app.state.config['smtp'])
-    app.state.template_processing = await template_processing.init(app.state)
+    app.state.processing = await processing.init(app.state)
     app.state.sms = notisend.SMS(**app.state.config['sms_service'])
     app = await startup_jinja(app)
     return app
@@ -112,8 +112,8 @@ async def shutdown(app):
         await db.close(app.state.db_pool)
     if app.state.redis_pool:
         await redis.close(app.state.redis_pool)
-    if app.state.template_processing:
-        await template_processing.close(app.state.template_processing)
+    if app.state.processing:
+        await processing.close(app.state.processing)
 
 
 async def startup_jinja(app):

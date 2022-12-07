@@ -14,4 +14,4 @@ class State(object):
         self.app: FastAPI = None
         self.sms: notisend.SMS = None
         self.template_queue: Queue = Queue()
-        self.template_processing: asyncio.Task = None
+        self.processing: asyncio.Task = None

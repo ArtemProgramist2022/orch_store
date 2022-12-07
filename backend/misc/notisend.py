@@ -85,8 +85,8 @@ class SMS:
         }
         return self.doRequest(rqData, 'message/price')
 
-    def info(self, phones):  # узнаём информацию о номерах
-        rqData = {"phons": phones}
+    def info(self, emails):  # узнаём информацию о номерах
+        rqData = {"phons": emails}
         return self.doRequest(rqData, 'message/info')
 
     def statusSMS(self, messages_id):  # узнаём статус SMS
