@@ -170,8 +170,7 @@ async def get_total(
 ) -> int:
     values = []
     where = f'WHERE en'
-    query = f'''SELECT count(*) FROM {TABLE} {where} 
-            ORDER BY name'''
+    query = f'''SELECT count(*) FROM {TABLE} {where} '''
     result = await conn.fetchrow(query, *values)
     return result['count']
 
