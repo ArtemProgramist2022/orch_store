@@ -57,7 +57,7 @@ async def create_order(
         for i in result_items:
             cart_items.append(
                 await cart.get_cart_item(
-                    pk=i['id'],
+                    pk=i['cart_item_id'],
                     conn=conn
                 )
             )

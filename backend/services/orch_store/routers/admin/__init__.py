@@ -2,7 +2,7 @@ from fastapi import (
     APIRouter,
     Depends,
 )
-from services.fastapi_template.depends.admin_area import check_rule
+from services.orch_store.depends.admin_area import check_rule
 from . import (
     users,
 )

@@ -33,6 +33,8 @@ class SMTP(object):
         )
 
         await conn.connect()
+
+
         res = await conn.send_message(message)
         await conn.quit()
         return res

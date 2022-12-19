@@ -4,7 +4,7 @@ from fastapi import (
     Form
 )
 from misc import handlers,config
-from services.fastapi_template.depends.admin_area import check_rule
+from services.orch_store.depends.admin_area import check_rule
 from db import stuff as stuff_db
 from models import stuff as stuff_models
 from misc.db import (

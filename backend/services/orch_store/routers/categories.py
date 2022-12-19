@@ -2,7 +2,7 @@ from fastapi import (
     APIRouter,
     Depends
 )
-from services.fastapi_template.depends.admin_area import check_rule
+from services.orch_store.depends.admin_area import check_rule
 from models import categories as cat_models
 from db import categories as cat_db
 from misc.db import Connection

@@ -18,7 +18,7 @@ USER_DISPLAY_FIELDS = [
     'id',
     'en',
     'name',
-    'phone',
+    'email',
     'ctime',
     'atime',
     'dtime',
@@ -27,31 +27,28 @@ USER_DISPLAY_FIELDS = [
 
 async def create_user(
         conn: db.Connection,
-        phone: str,
+        email: str,
         password: str,
         username: str,
 ) -> Optional[User]:
     data = {
-        'phone': phone,
+        'email': email,
         'name': username,
     }
     result = await db.create(conn, TABLE, data, fields=USER_DISPLAY_FIELDS)
-    await set_password(conn, phone, password)
+    await set_password(conn, email, password)
     complete: User = db.record_to_model(User, result)
     admin = await check_rules(conn=conn, user_id=complete.id)
     complete.is_admin = True if admin else False
     return complete
 
 
-async def get_user_by_credentials(
-        conn: db.Connection,
-        phone: str, password: str
-) -> Optional[User]:
+async def get_user_by_credentials(conn: db.Connection, email: str, password: str) -> Optional[User]:
     result = await db.get_by_where(
         conn,
         TABLE,
-        'phone=$1 AND password=$2 and en',
-        values=[phone, password],
+        'email=$1 AND password=$2 and en',
+        values=[email, password],
         fields=USER_DISPLAY_FIELDS
     )
     complete = db.record_to_model(User, result)
@@ -105,12 +102,12 @@ async def check_user_exists(
 
 async def set_password(
         conn: db.Connection,
-        phone: str,
+        email: str,
         password: str
 ) -> Optional[int]:
     data = await conn.fetchrow(
-        f"UPDATE {TABLE} SET password=$2  WHERE phone=$1 RETURNING id",
-        phone, password
+        f"UPDATE {TABLE} SET password=$2  WHERE email=$1 RETURNING id",
+        email, password
     )
     return data['id'] if data else None
 
@@ -134,13 +131,13 @@ async def delete_user(
 
 async def email_exists(
         conn: db.Connection,
-        phone: str
+        email: str
 ) -> bool:
     user = await db.get_by_where(
         conn,
         TABLE,
-        "phone=$1 AND en=True",
-        values=[phone],
+        "email=$1 AND en=True",
+        values=[email],
         fields=['id']
     )
 
@@ -173,8 +170,7 @@ async def get_total(
 ) -> int:
     values = []
     where = f'WHERE en'
-    query = f'''SELECT count(*) FROM {TABLE} {where} 
-            ORDER BY name'''
+    query = f'''SELECT count(*) FROM {TABLE} {where} '''
     result = await conn.fetchrow(query, *values)
     return result['count']
 
@@ -184,7 +180,7 @@ async def get_users_for_admin(
         conn: db.Connection,
         en: bool = None,
         username: str = None,
-        phone: str = None,
+        email: str = None,
         page: int = None,
 
 ) -> Optional[List[User]]:
@@ -192,7 +188,7 @@ async def get_users_for_admin(
     where = []
     values = [limit, offset]
     idx = 3
-    where, values, idx = user_filter(where, values, idx, en, username, phone)
+    where, values, idx = user_filter(where, values, idx, en, username, email)
     if where:
         where = f'WHERE {" AND ".join(where)}'
     else:
@@ -212,13 +208,13 @@ async def get_total_for_admin(
         conn: db.Connection,
         en: bool = None,
         username: str = None,
-        phone: str = None,
+        email: str = None,
 
 ) -> int:
     where = []
     values = []
     idx = 1
-    where, values, idx = user_filter(where, values, idx, en, username, phone)
+    where, values, idx = user_filter(where, values, idx, en, username, email)
     if where:
         where = f'WHERE {" AND ".join(where)}'
     else:
@@ -263,7 +259,7 @@ def user_filter(where, values, idx: int, en: bool = None, username: str = None, 
         values.append(f'%{username}%')
         idx += 1
     if email:
-        where.append(f'phone LIKE ${idx}')
+        where.append(f'email LIKE ${idx}')
         values.append(f'%{email}%')
         idx += 1
     return where, values, idx

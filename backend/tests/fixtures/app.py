@@ -1,6 +1,6 @@
 import pytest
 from asgi_lifespan import LifespanManager
-from services.fastapi_template.main import factory
+from services.orch_store.main import factory
 from misc import db, config
 from misc.ctrl import CONFIG_ENV_KEY
 from async_asgi_testclient import TestClient

@@ -93,7 +93,7 @@ async def login(
         conf: dict = Depends(get_conf)
 ):
     hashed_password = await get_password_hash(auth.password, conf['salt'])
-    user = await users_db.get_user_by_credentials(conn, auth.phone, hashed_password)
+    user = await users_db.get_user_by_credentials(conn, auth.email, hashed_password)
 
     if not user:
         return await error_404()
@@ -127,22 +127,22 @@ async def register(
         sms: notisend.SMS = Depends(get_sms),
         conf: dict = Depends(get_conf)
 ):
-    if await users_db.email_exists(conn, register.phone):
+    if await users_db.email_exists(conn, register.email):
         return await error_400('User already exists')
 
     code = randint(100000, 999999)
-    # await send_registration_email(req, smtp, register.phone, code, jinja, conf)
-    sms.sendSMS(
-        register.phone,
-        f'Код подтверждения : {code}',
-        sender='sendertest',
-    )
+    await send_registration_email(req, smtp, register.email, code, jinja, conf)
+    #sms.sendSMS(
+    #    register.email,
+    #    f'Код подтверждения : {code}',
+    #    sender='orch.store',
+    #)
     await redis.setex(
-        key=confirm_key(register.phone),
+        key=confirm_key(register.email),
         ttl=DAY,
         value={
             'code': code,
-            'email': register.phone,
+            'email': register.email,
             'name': register.name,
             'password': register.password
         },
@@ -163,17 +163,17 @@ async def recover(
         jinja: JinjaEnvironment = Depends(get_jinja),
         conf: dict = Depends(get_conf)
 ):
-    if await users_db.email_exists(conn, recover.phone):
+    if await users_db.email_exists(conn, recover.email):
         code = randint(100000, 999999)
-        # await send_recover_email(req, smtp, recover.email, code, jinja, conf)
-        sms.sendSMS(recipients=recover.phone, message=f"Код подтверждения: {code}")
+        await send_recover_email(req, smtp, recover.email, code, jinja, conf)
+        #sms.sendSMS(recipients=recover.email, message=f"Код подтверждения: {code}", sender='orch.store')
         password = await generate_password()
         await redis.setex(
-            key=confirm_key(recover.phone),
+            key=confirm_key(recover.email),
             ttl=DAY,
             value={
                 'code': code,
-                'phone': recover.phone,
+                'email': recover.email,
                 'password': password
             },
             conn=cache
@@ -197,12 +197,12 @@ async def confirm(
     code = confirm.code
 
     if session.user.is_authenticated:
-        account = confirm.phone
+        account = confirm.email
         if not account:
             return await error_401()
 
     cache_data = await redis.get(
-        key=confirm_key(confirm.phone),
+        key=confirm_key(confirm.email),
         conn=cache
     )
 
@@ -214,26 +214,26 @@ async def confirm(
 
     password = cache_data['password']
     hashed_password = await get_password_hash(password, conf['salt'])
-    if await users_db.email_exists(conn, confirm.phone):
-        await users_db.set_password(conn, confirm.phone, hashed_password)
+    if await users_db.email_exists(conn, confirm.email):
+        await users_db.set_password(conn, confirm.email, hashed_password)
     else:
         user = await users_db.create_user(
             conn,
-            confirm.phone,
+            confirm.email,
             hashed_password,
             cache_data['name'],
         )
         if not user:
             return await error_400()
 
-    # await send_password_email(smtp, confirm.email, password, jinja, conf)
-    sms.sendSMS(confirm.phone, message=f"Логин: {confirm.phone} Пароль: {password}")
+    await send_password_email(smtp, confirm.email, password, jinja, conf)
+    #sms.sendSMS(confirm.email, message=f"Логин: {confirm.email} Пароль: {password}")
     await redis.del_(
-        key=confirm_key(confirm.phone),
+        key=confirm_key(confirm.email),
         conn=cache
     )
 
-    user = await users_db.get_user_by_credentials(conn, confirm.phone, hashed_password)
+    user = await users_db.get_user_by_credentials(conn, confirm.email, hashed_password)
     if user:
         session.set_user(user)
 
