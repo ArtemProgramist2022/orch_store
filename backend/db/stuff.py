@@ -81,7 +81,10 @@ async def add_stuff_item(
     )
     complete_result: Stuff = record_to_model(Stuff, result)
     query = None
-    if new_stuff.photo is not None or new_stuff.photo != "":
+    logger.info(f"{new_stuff}")
+    if new_stuff.photo is None:
+        return complete_result
+    elif new_stuff.photo is not None or new_stuff.photo != "":
         try:
             abs_filepath, filepath = await write_stuff_image(
                 post_id=result['id'],
@@ -95,7 +98,7 @@ async def add_stuff_item(
                 f"{stuff_link_base}/{filepath}",
                 result['id']
             )
-        except DataURIError as e:
+        except Exception as e:
             logger.info(f"{e=}")
     if query is not None:
         complete_result.stuff_link = query['stuff_link']

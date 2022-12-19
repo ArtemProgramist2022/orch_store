@@ -5,5 +5,5 @@ app = factory()
 
 if __name__ == '__main__':
     uvicorn.run(
-        'orch_store:app', host='0.0.0.0', port=8010, reload=True, debug=True, log_config='etc/logging.conf'
+        'run_store:app', host='0.0.0.0', port=8010, reload=True, debug=True, log_config='etc/logging.conf'
     )
