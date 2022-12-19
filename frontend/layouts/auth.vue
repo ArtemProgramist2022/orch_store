@@ -24,6 +24,7 @@
   border-top: 15px solid #C21807;
   border-bottom: 1px solid black;
   padding: 15px;
+  margin-bottom: 15px;
 }
 
 .auth-layout-header__name {
