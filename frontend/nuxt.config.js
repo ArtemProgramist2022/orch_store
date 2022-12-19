@@ -70,8 +70,8 @@ export default {
 
   auth: {
     redirect: {
-      login: '/auth/login',
-      logout: '/auth/login',
+      login: '/login',
+      logout: '/login',
       home: '/'
     },
     strategies: {
