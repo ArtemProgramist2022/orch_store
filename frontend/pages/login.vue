@@ -95,6 +95,9 @@ export default class IndexLogin extends Vue {
       data: this.form
     }
     this.$auth.loginWith('customStrategy', data)
+    .then(() => {
+      this.$router.push('/')
+    })
     .finally(() => this.loading = false)
   }
 

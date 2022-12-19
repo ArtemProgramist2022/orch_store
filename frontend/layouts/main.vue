@@ -36,6 +36,9 @@
                 Панель админа
               </nuxt-link>
             </el-dropdown-item>
+            <el-dropdown-item icon="el-icon-close">
+              <div @click="$auth.logout()" style="display: inline-block">Выйти</div>
+            </el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
       </div>

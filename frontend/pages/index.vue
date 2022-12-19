@@ -1,7 +1,7 @@
 <template>
   <div style="width: 100%">
     <div>
-      <el-carousel trigger="click" height="65vh">
+      <el-carousel trigger="click" height="65vh" style="border-radius: 10px">
         <el-carousel-item v-for="item in 4" :key="item">
         </el-carousel-item>
       </el-carousel>
@@ -74,9 +74,8 @@ export default class IndexPage extends Vue {
   width: 300px;
   height: 400px;
   text-align: center;
-  border: 1px solid #696969;
   border-radius: 8px;
-  margin: 0 15px 15px 0;
+  margin: 0 25px 15px 0;
   color: #303133;
 }
 </style>
