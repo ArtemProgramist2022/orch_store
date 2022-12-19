@@ -1,4 +1,5 @@
 import { ActionTree, GetterTree, MutationTree } from 'vuex'
+import { GetParams } from '~/interfaces/common'
 import { ListResponse } from '../interfaces/responses'
 import { StuffItem } from '../interfaces/stuff'
 
@@ -11,7 +12,10 @@ export const state = (): ListResponse<StuffItem> => ({
 
 export const mutations: MutationTree<ListResponse<StuffItem>> = {
   setData (state, data) {
-    state = data
+    state.items = data.data.items
+    state.limit = data.data.limit
+    state.total = data.data.total
+    state.page = data.data.page
   },
   addItem (state, item){
     state.items.push(item)
@@ -24,19 +28,19 @@ export const mutations: MutationTree<ListResponse<StuffItem>> = {
 }
 
 export const actions: ActionTree<ListResponse<StuffItem>, any> = {
-  getStuff ({ commit }, params) {
+  getStuff ({ commit }, params?: Partial<GetParams> & { category_id?: string }) {
     return new Promise(async (resolve, reject) => {
-      await this.$axios.get('/api/v1/stuff', { params })
+      await this.$axios.get('/api/v1/stuff/', { params })
       .then((response) => {
         commit('setData', response.data)
-        resolve(response.data)
+        resolve(response.data.data)
       })
       .catch((error) => reject(error))
     })
   },
   addStuff ({ commit }, data: Omit<StuffItem, 'id'>) {
     return new Promise(async (resolve, reject) => {
-      await this.$axios.post('/api/v1/stuff', data)
+      await this.$axios.post('/api/v1/stuff/', data)
       .then((response) => {
         commit('addItem', response.data.data)
         resolve(response.data.data)

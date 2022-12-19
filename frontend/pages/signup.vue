@@ -11,13 +11,12 @@
         @submit.native.prevent="submitForm"
       >
         <el-form-item
-          label="Номер телефона"
-          prop="phone"
+          label="Email"
+          prop="email"
         >
           <el-input
-            v-model="form.phone"
-            v-mask="'+7 (###) ### ## ##'"
-            placeholder="+7 (123) 456 78 90"
+            v-model="form.email"
+            placeholder="Укажите email"
             :disabled="showCode"
           />
         </el-form-item>
@@ -27,7 +26,7 @@
         >
           <el-input
             v-model="form.name"
-            placeholder="Логин"
+            placeholder="Укажите логин"
             :disabled="showCode"
           />
         </el-form-item>
@@ -37,7 +36,7 @@
         >
           <el-input
             v-model="form.password"
-            placeholder="Пароль"
+            placeholder="Укажите пароль"
             show-password
             :disabled="showCode"
           />
@@ -109,6 +108,7 @@ import { ElForm } from 'element-ui/types/form'
 import { Component, Vue, Ref, Action } from 'nuxt-property-decorator'
 import { SuccessfulDataResponse } from '~/interfaces/responses'
 import { ConfirmForm, MeForm, RegisterForm } from '~/interfaces/users'
+import { validateEmail } from '~/utils/validate'
   
 @Component({
   transition: 'slide-bottom',
@@ -123,8 +123,8 @@ export default class RecoverPage extends Vue {
 
   form: RegisterForm = this.getDefaultForm();
   rulesForm = {
-    phone: [
-      { required: true, message: 'Укажите номер телефона', trigger: 'blur' }
+    email: [
+      { required: true, validator: this.validateEmail, trigger: 'blur' }
     ],
     name: [
       { required: true, message: 'Укажите логин', trigger: 'blur' }
@@ -150,7 +150,7 @@ export default class RecoverPage extends Vue {
 
   getDefaultForm (): RegisterForm {
     return {
-      phone: '',
+      email: '',
       name: '',
       password: '',
       confirmPassword: '',
@@ -162,10 +162,14 @@ export default class RecoverPage extends Vue {
     this.form = this.getDefaultForm()
   }
 
+  validateEmail (_rule: Object, value: string, callback: Function) {
+    validateEmail(value, callback)
+  }
+
   confirm () {
     this.loading = true
     const data = {
-      phone: this.form.phone,
+      email: this.form.email,
       code: this.form.code
     }
     this.confirmUser(data)

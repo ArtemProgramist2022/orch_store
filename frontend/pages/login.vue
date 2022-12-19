@@ -11,13 +11,12 @@
         @submit.native.prevent="submitForm"
       >
         <el-form-item
-          label="Номер телефона"
-          prop="phone"
+          label="Email"
+          prop="email"
         >
           <el-input
-            v-model="form.phone"
-            v-mask="'+7 (###) ### ## ##'"
-            placeholder="+7 (123) 456 78 90"
+            v-model="form.email"
+            placeholder="Укажите email"
           />
         </el-form-item>
         <el-form-item
@@ -26,7 +25,7 @@
         >
           <el-input
             v-model="form.password"
-            placeholder="Пароль"
+            placeholder="Укажите пароль"
             show-password
           />
         </el-form-item>
@@ -66,6 +65,7 @@
 import { Component, Vue, Ref } from 'nuxt-property-decorator'
 import { ElForm } from 'element-ui/types/form'
 import { LoginForm } from '~/interfaces/users'
+import { validateEmail } from '~/utils/validate'
 
 @Component({
   auth: 'guest',
@@ -76,12 +76,12 @@ export default class IndexLogin extends Vue {
   @Ref('form') formRef!: ElForm
 
   form: LoginForm = {
-    phone: '',
+    email: '',
     password: ''
   }
   rulesForm = {
-    phone: [
-      { required: true, message: 'Укажите номер телефона', trigger: 'blur' },
+    email: [
+      { required: true, validator: this.validateEmail, trigger: 'blur' },
     ],
     password: [
       { required: true, message: 'Укажите пароль', trigger: 'blur' }
@@ -100,6 +100,10 @@ export default class IndexLogin extends Vue {
 
   submitForm () {
     this.formRef.validate((valid) => valid && this.login())
+  }
+
+  validateEmail (_rule: Object, value: string, callback: Function) {
+    validateEmail(value, callback)
   }
 }
 </script>

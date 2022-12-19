@@ -7,7 +7,7 @@ export default {
   },
   ssr: true,
   render: {
-    ssr:true
+    ssr: true
   },
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -35,7 +35,6 @@ export default {
     '@/plugins/element-ui',
     '@/plugins/fontawesome',
     '@/plugins/infiniteLoading',
-    '@/plugins/v-mask'
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -71,21 +70,30 @@ export default {
 
   auth: {
     redirect: {
-      login: '/login',
-      logout: '/',
+      login: '/auth/login',
+      logout: '/auth/login',
       home: '/'
     },
     strategies: {
+      local: {
+        user: {
+          property: 'data.me',
+          autoFetch: true
+        },
+        endpoints: {
+          login: { url: '/api/v1/auth/login', method: 'post' },
+          logout: { url: '/api/v1/auth/logout', method: 'post' },
+          user: { url: '/api/v1/auth/me', method: 'get' }
+        }
+      },
       customStrategy: {
         scheme: '~/schemes/customStrategy',
         token: {
-          property: 'data.token',
-          required: true,
-          maxAge: 86400,
-          global: true
+          property: '',
+          required: false,
+          maxAge: 86400
         },
         user: {
-          property: 'data.me',
           autoFetch: true
         },
         endpoints: {

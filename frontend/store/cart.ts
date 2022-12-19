@@ -33,7 +33,7 @@ export const actions: ActionTree<SuccessfulResponse<CartItem[]>, any> = {
       await this.$axios.get('/api/v1/cart')
       .then((response) => {
         commit('setData', response.data)
-        resolve(response.data)
+        resolve(response.data.data)
       })
       .catch((error) => reject(error))
     })

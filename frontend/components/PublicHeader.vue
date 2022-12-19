@@ -27,16 +27,10 @@
 </template>
 <script lang="ts">
 import { Component, Vue, Action, Getter } from 'nuxt-property-decorator'
-
-import LoginForm from '~/components/LoginForm.vue'
 import { CartItem } from '~/interfaces/cart'
 
 
-@Component({
-  components: {
-    LoginForm,
-  }
-})
+@Component({})
 export default class PublicHeader extends Vue {
   @Getter('cart/data') cartItems!: Array<CartItem>
   @Action('cart/fetchCart') fetchCart: any

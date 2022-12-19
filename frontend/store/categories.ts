@@ -4,7 +4,8 @@ import { SuccessfulResponse } from '../interfaces/responses'
 
 export const state = (): SuccessfulResponse<CategoryItem[]> => ({
   success: false,
-  items: []
+  items: [],
+  loading: false
 })
 
 export const mutations: MutationTree<SuccessfulResponse<CategoryItem[]>> = {
@@ -18,13 +19,16 @@ export const mutations: MutationTree<SuccessfulResponse<CategoryItem[]>> = {
   editItem (state, data: CategoryItem) {
     const index = state.items.findIndex((item) => item.id === data.id)
     if (index === -1) return
-    state.items[index] = data
+    state.items.splice(index, 1, data)
   },
   deleteItem (state, data: CategoryItem) {
     const index = state.items.findIndex((item) => item.id === data.id)
     if (index === -1) return
     state.items.splice(index, 1)
-  }
+  },
+  changeLoading (state, status: boolean) {
+    state.loading = status
+  },
 }
 
 export const actions: ActionTree<SuccessfulResponse<CategoryItem[]>, any> = {
@@ -33,7 +37,7 @@ export const actions: ActionTree<SuccessfulResponse<CategoryItem[]>, any> = {
       await this.$axios.get('/api/v1/categories')
       .then((response) => {
         commit('setData', response.data)
-        resolve(response.data)
+        resolve(response.data.data)
       })
       .catch((error) => reject(error))
     })
@@ -68,9 +72,13 @@ export const actions: ActionTree<SuccessfulResponse<CategoryItem[]>, any> = {
       .catch((error) => reject(error))
     })
   },
+  changeLoading ({ commit }, status) {
+    commit('changeLoading', status)
+  }
 }
 
 export const getters: GetterTree<SuccessfulResponse<CategoryItem[]>, any> = {
   items: state => state.items,
-  success: state => state.success
+  success: state => state.success,
+  loading: state => state.loading,
 }

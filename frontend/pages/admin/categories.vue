@@ -1,79 +1,168 @@
 <template>
-    <ul class="categories-list">
-        <el-form :inline="true" :model="form" :rules="rules" ref="form" class="demo-form-inline">
-  <el-form-item label="Новая категория" prop="name">
-    <el-input v-model="form.name"  placeholder="Название"></el-input>
-  </el-form-item>
-  
-  <el-form-item>
-    <el-button type="primary" @click="onSubmit">Добавить</el-button>
-  </el-form-item>
-</el-form>
-        <li v-for="category in categories" :key="category.id" class="categories-list__item">
-            <span class="categories-list__item__title">{{category.name}}</span>
-            <el-button class="el-icon-delete-solid categories-list__item__button" @click="removeItem(category.id)"></el-button>
-        </li>
-    </ul>
+  <div>
+    <el-table
+      :data="categories"
+      style="max-height: 65vh"
+      v-loading="loading"
+      >
+      <el-table-column
+        prop="name"
+        label="Наименование"
+      />
+      <el-table-column width="150">
+        <template slot-scope="scope">
+          <el-button
+            type="primary"
+            size="mini"
+            icon="el-icon-edit"
+            @click="changeFormState(scope.row)"
+          ></el-button>
+          <el-popconfirm
+            title="Подтвердите удаление"
+            @confirm="deleteCategory(scope.row.id)"
+            confirm-button-type="danger"
+            confirm-button-text="Удалить"
+          >
+            <el-button
+              slot="reference"
+              type="danger"
+              size="mini"
+              icon="el-icon-delete"
+            ></el-button>
+          </el-popconfirm>
+        </template>
+      </el-table-column>
+    </el-table>
+    <el-col :span="24" style="text-align: right; margin-top: 5px">
+      <el-button
+          type="primary"
+          size="mini"
+          icon="el-icon-plus"
+          @click="changeFormState"
+      >
+          Создать категорию
+      </el-button>
+    </el-col>
+    <el-dialog
+      :title="form.id ? 'Редактирование категории' : 'Новая категория'"
+      :visible.sync="showForm"
+    >
+      <el-form
+        ref="form"
+        :model="form"
+        :rules="formRules"
+        size="mini"
+        label-position="top"
+        @submit.prevent.native="updateCategory()"
+        v-loading="loading"
+      >
+        <el-form-item
+          prop="name"
+          label="Наименование"
+        >
+          <el-input
+            v-model="form.name"
+            placeholder="Укажите наименование"
+          />
+        </el-form-item>
+        <el-form-item>
+          <div class="flex-center">
+            <el-button
+              type="primary"
+              native-type="submit"
+            >
+              {{ form.id ? 'Редактировать' : 'Создать' }}
+            </el-button>
+            <el-button
+              @click="showForm = false"
+            >
+              Отменить
+            </el-button>
+          </div>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
+  </div>
 </template>
+
 <script lang="ts">
-import { Vue, Action, Getter, Component, Ref } from "nuxt-property-decorator";
-import { CategoryItem } from "@/interfaces/categories";
-import { ElForm } from 'element-ui/types/form'
+import { ElForm } from 'element-ui/types/form';
+import { Component, Vue, Action, Getter, Ref } from 'nuxt-property-decorator'
+import { CategoryItem } from '~/interfaces/categories';
 
 @Component({
-    layout: 'adminLayout',
-    middleware: ['check_role'],
-    auth: true
+  layout: 'admin',
+  auth: true,
+  transition: 'slide-bottom'
 })
-export default class AdminCategoryPage extends Vue{
-    @Getter('categories/data') categories! : Array<CategoryItem>
-    
-    @Action('categories/addNewCategory') addCategory : any
-    @Action('categories/fetchCategories') fetchCategories : any
-    @Action('categories/dropCategory') dropCategory: any
+export default class CategoriesAdminIndex extends Vue {
 
-    @Ref('form') formRef!: ElForm
-    form: Omit<CategoryItem, 'id'> = {
-        name: ''
+  @Ref('form') formRef!: ElForm
+
+  @Getter('categories/items') categories!: CategoryItem[]
+  @Getter('categories/loading') loading!: boolean
+
+  @Action('categories/getCategories') getCategories!: () => Promise<CategoryItem[]>;
+  @Action('categories/addCategory') addCategoryState!: (params: Omit<CategoryItem, 'id'>) => Promise<CategoryItem>;
+  @Action('categories/updateCategory') updateCategoryState!: (params: CategoryItem) => Promise<CategoryItem>;
+  @Action('categories/deleteCategory') deleteCategoryState!: (params: Pick<CategoryItem, 'id'>) => Promise<CategoryItem[]>;
+  @Action('categories/changeLoading') changeLoading!: (status: boolean) => void;
+
+  showForm = false
+  form: CategoryItem = this.getDefaultForm()
+  formRules = {
+    name: [
+      { required: true, message: 'Укажите наименование', trigger: 'blur' }
+    ]
+  }
+
+  mounted () {
+    this.changeLoading(true)
+    this.getCategories()
+    .finally(() => this.changeLoading(false))
+  }
+
+  getDefaultForm (): CategoryItem {
+    return {
+      id: null,
+      name: ''
     }
+  }
 
-    rules = {
-        name: [
-            {required: true, message: 'Это обязательное поле',trigger:'blur'},
-            {min: 3, max: 55, message: 'Ограничение от 3 до 55 знаков', trigger: 'blur'}
-        ]
+  changeFormState (category?: CategoryItem) {
+    this.showForm = true;
+    if (category) this.form = {
+      ...category
     }
+  }
 
-    async fetch(){
-        await this.fetchCategories()
-    }
-
-    removeItem(category_id: number){
-        this.dropCategory(category_id).then(()=>{
-            this.fetchCategories().then(()=>{})
+  updateCategory () {
+    this.formRef.validate((valid) => {
+      if (!valid) return;
+      this.changeLoading(true)
+      Promise.all([
+        this.form.id
+        ? this.updateCategoryState(this.form)
+        : this.addCategoryState({
+          name: this.form.name
         })
-    }
-    onSubmit(){
-        this.formRef.validate((valid) => {
-            if (valid){
-                this.addCategory(this.form.name).then(()=>{})
-            }
-        })
-    }
+      ])
+      .then(() => {
+        this.showForm = false
+        this.getDefaultForm()
+      })
+      .finally(() => {
+        this.changeLoading(false)
+      })
+    })
+  }
+
+  deleteCategory (id: number) {
+    this.changeLoading(true)
+    this.deleteCategoryState({ id })
+    .finally(() => {
+      this.changeLoading(false)
+    })
+  }
 }
-
 </script>
-<style>
-    .categories-list{
-        width: 300px;
-    }
-    .categories-list__item{
-        display: flex;
-    align-items: center;
-    justify-content: space-between;
-    }
-    .categories-list__item__button{
-        color: red;
-    }
-
-</style>

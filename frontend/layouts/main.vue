@@ -5,26 +5,42 @@
         <fa-icon
           :icon="['fas', 'search']"
           class="cursor-pointer"
+          style="font-size: 20px"
           @click="changeMenuState(true)"
         />
       </div>
       <h1 class="layout-header__name cursor-pointer" @click="$router.push('/')">orch.store</h1>
       <div>
-        <nuxt-link :to="'/login'" style="color: black;">
+        <nuxt-link
+          v-if="!this.$auth.user?.id"
+          :to="'/login'"
+          style="color: black;"
+        >
           <fa-icon
             :icon="['fas', 'user']"
             class="cursor-pointer"
-
+            style="font-size: 20px"
           />
         </nuxt-link>
-        <fa-icon
-          :icon="['fas', 'heart']"
-          class="cursor-pointer"
-          style="font-size: 18px; color: #fcc7c3"
-        />
+        <el-dropdown v-else trigger="click">
+          <span class="cursor-pointer">
+            {{ this.$auth.user?.name }}<i class="el-icon-arrow-down el-icon--right"></i>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item icon="el-icon-user">Профиль</el-dropdown-item>
+            <el-dropdown-item
+              v-if="this.$auth.user.is_admin"
+              icon="el-icon-s-custom"
+            >
+              <nuxt-link :to="`${routes.users}`" class="text-decoration-none color-inherit">
+                Панель админа
+              </nuxt-link>
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
       </div>
     </el-header>
-    <el-col :span="24">
+    <el-col :span="24" class="layout__nuxt">
       <nuxt />
     </el-col>
     <el-footer class="layout__footer layout-footer">
@@ -101,6 +117,7 @@
 <script lang="ts">
 import { Component, Vue, Action, Getter, Watch } from 'nuxt-property-decorator'
 import { CategoryItem } from '~/interfaces/categories'
+import { adminRoutes } from '~/utils/routes'
 
 @Component({})
 export default class MainLayout extends Vue {
@@ -114,6 +131,7 @@ export default class MainLayout extends Vue {
     this.setSearchCategories(this.categories)
   }
 
+  routes = adminRoutes
   rate = 4.5
   showMenu = false
   searchCategoriesItems: CategoryItem[] = []
@@ -152,18 +170,17 @@ export default class MainLayout extends Vue {
   --layout-menu-padding: 15px;
 }
 
+.layout__nuxt {
+  padding: 10px 20px;
+}
+
 .layout__header {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 999;
   display: flex;
   justify-content: space-between;
   align-items: center;
   height: 120px !important;
   background: rgba(255, 255, 255, .85);
-  border-top: 15px solid #C21807;
+  border-top: 3px solid #C21807;
   border-bottom: 1px solid black;
   padding: 15px;
 }
@@ -241,6 +258,7 @@ export default class MainLayout extends Vue {
 
 .layout-menu__catalog-header {
   color: #c21807;
+  padding: 10px 0px 5px 0px;
 }
 
 .layout-menu__catalog {

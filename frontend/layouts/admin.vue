@@ -1,72 +1,70 @@
 <template>
-    <el-container>
-      <el-header class="public-layout__header">
-        <PublicHeader />
-      </el-header>
-      <el-header class="admin-layout__header">
-        <nuxt-link to="/admin/users">
-            <el-button>
-                Пользователи
-            </el-button>
+  <el-container class="layout">
+    <el-header class="layout__header layout-header">
+      <h1 class="layout-header__name cursor-pointer" @click="$router.push('/')">orch.store</h1>
+      <div>
+        <nuxt-link
+          v-if="!this.$auth.user?.id"
+          :to="'/login'"
+          style="color: black;"
+        >
+          <fa-icon
+            :icon="['fas', 'user']"
+            class="cursor-pointer"
+            style="font-size: 20px"
+          />
         </nuxt-link>
-        <nuxt-link to="/admin/stuff">
-            <el-button>
-                Товары
-            </el-button>
-        </nuxt-link>
-        <nuxt-link to="/admin/categories">
-            <el-button>
-                Категории
-            </el-button>
-        </nuxt-link>
-        <nuxt-link to="/admin/orders">
-            <el-button>
-                Заказы
-            </el-button>
-        </nuxt-link>
-      </el-header>
-      <el-container direction="horizontal" >
-        <nuxt />
-        </el-container>
-      <el-footer class="public-layout__footer" ></el-footer>
-    </el-container>
+        <el-dropdown v-else trigger="click">
+          <span class="cursor-pointer">
+            {{ this.$auth.user?.name }}<i class="el-icon-arrow-down el-icon--right"></i>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item icon="el-icon-user">Профиль</el-dropdown-item>
+            <el-dropdown-item
+              v-if="this.$auth.user.is_admin"
+              icon="el-icon-s-custom"
+            >
+              <nuxt-link :to="`${routes.users}`" class="text-decoration-none color-inherit">
+                Панель админа
+              </nuxt-link>
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
+    </el-header>
+    <el-col :span="24" class="layout__nuxt">
+      <el-tabs v-model="activeTabAdmin" @tab-click="clickTabAdmin">
+        <el-tab-pane label="Пользователи" :name="routes.users">
+        </el-tab-pane>
+        <el-tab-pane label="Товары" :name="routes.stuff">
+        </el-tab-pane>
+        <el-tab-pane label="Категории" :name="routes.categories">
+        </el-tab-pane>
+        <el-tab-pane label="Заказы" :name="routes.orders">
+        </el-tab-pane>
+      </el-tabs>
+      <nuxt />
+    </el-col>
+  </el-container>
 </template>
 
-  <style>
-  .container {
-    padding: 0 10% 0 10%;
-  
+<script lang="ts">
+import { Component, Vue, Watch } from 'nuxt-property-decorator'
+import { adminRoutes } from '~/utils/routes'
+
+@Component({})
+export default class IndexLayoutAdmin extends Vue {
+  activeTabAdmin = this.$route.path
+  routes = adminRoutes
+
+  @Watch('$route.path')
+  watchActiveTabAdmin () {
+    this.activeTabAdmin = this.$route.path
   }
-  .public-layout__header {
-    /* background: #fff;
-    padding: 0 10% 0 10%;
-    box-shadow: 0 0 15px 0 rgba(0, 0, 0, .1);
-    border-radius: 0 0 25px 25px;
-    vertical-align: middle;
-    height: 150px; */
+
+  clickTabAdmin () {
+    this.$router.push(this.activeTabAdmin)
   }
-  .admin-layout__header {
-    background: #fff;
-    padding: 15px 10% 15px 10%;
-    
-    align-items: center;
-    justify-content:center;
-    
-  }
-  .public-layout__main {
-      padding: 0;
-      min-height: 100vh;
-  
-    }
-  
-  .public-layout__footer {
-    height: auto !important;
-    padding: 0;
-    background: #f5f5f8;
-  }
-  body {
-    margin: 0;
-  }
-  
-  </style>
-  
+
+}
+</script>
