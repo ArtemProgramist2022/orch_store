@@ -1,6 +1,6 @@
 export default {
   // Target: https://go.nuxtjs.dev/config-target
-  target: 'server',
+  target: 'static',
   server: {
     port: 3000,
     host: 'localhost'
@@ -31,14 +31,14 @@ export default {
     '@/assets/layout.scss',
     '@/assets/main.scss',
     '@/assets/auth.scss',
-    '@/assets/variables.scss',
+    '@/assets/variables.scss'
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     '@/plugins/element-ui',
     '@/plugins/fontawesome',
-    '@/plugins/infiniteLoading',
+    '@/plugins/infiniteLoading'
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -47,7 +47,7 @@ export default {
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
     // https://go.nuxtjs.dev/typescript
-    '@nuxt/typescript-build',
+    '@nuxt/typescript-build'
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -57,7 +57,7 @@ export default {
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
     '@nuxtjs/auth-next',
-    '@nuxtjs/proxy',
+    '@nuxtjs/proxy'
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
