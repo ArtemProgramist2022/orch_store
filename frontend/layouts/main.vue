@@ -64,15 +64,16 @@
 
 <script lang="ts">
 import { Component, Vue, Action, Getter, Watch } from 'nuxt-property-decorator'
-import { CreateElement } from 'vue/types/umd'
 import { isAuth, isAdmin } from '~/utils/auth'
 import { CategoryItem } from '~/interfaces/categories'
 import { adminRoutes } from '~/utils/routes'
+import { CreateElement } from 'vue/types/umd';
 
 @Component({
   transition: 'slide-bottom'
 })
 export default class MainLayout extends Vue {
+
   @Getter('categories/items') categories!: CategoryItem[]
 
   @Action('categories/getCategories') getCategories!: () => Promise<CategoryItem[]>
@@ -87,7 +88,7 @@ export default class MainLayout extends Vue {
     const category = this.categories.find((category) => {
       return category.id === +this.$route.params.category_id
     })
-    if (!category) { return }
+    if (!category) return
     this.clickTreeCategories(category)
   }
 
@@ -95,14 +96,12 @@ export default class MainLayout extends Vue {
     children: 'children',
     label: 'name'
   }
-
-  treeData = [
+  treeData: { name: string, children: CategoryItem[] }[] = [
     {
       name: 'Все категории',
       children: this.categories
     }
   ]
-
   adminRoutes = adminRoutes
 
   isAuth () {
@@ -117,22 +116,22 @@ export default class MainLayout extends Vue {
     this.getCategories()
   }
 
-  clickTreeCategories (node: typeof this.treeData | CategoryItem) {
+  clickTreeCategories (node: { name: string, children: CategoryItem[] }[] | CategoryItem) { // typeof this.treeData - some problem with build
     if (!Object.hasOwnProperty.call(node, 'children')) {
       this.categories.forEach((category) => {
         if ((document.querySelector(`#node-id-${category.id}`) as HTMLElement)) {
-          (document.querySelector(`#node-id-${category.id}`) as HTMLElement).style.color = ''
+          (document.querySelector(`#node-id-${category.id}`) as HTMLElement).style.color = ""
         }
-      })
+      });
       if ((document.querySelector(`#node-id-${(node as CategoryItem).id}`) as HTMLElement)) {
-        (document.querySelector(`#node-id-${(node as CategoryItem).id}`) as HTMLElement).style.color = '#409EFF'
+        (document.querySelector(`#node-id-${(node as CategoryItem).id}`) as HTMLElement).style.color="#409EFF"
       }
       this.$router.push(`/category/${(node as CategoryItem).id}`)
     } else {
       const category = this.categories.find((category) => {
         return category.id === +this.$route.params.category_id
       })
-      if (!category) { return }
+      if (!category) return
       setTimeout(() => {
         if ((document.querySelector(`#node-id-${category.id}`) as HTMLElement)) {
           (document.querySelector(`#node-id-${category.id}`) as HTMLElement).style.color="#409EFF"
