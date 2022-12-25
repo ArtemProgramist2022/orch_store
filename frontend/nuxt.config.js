@@ -1,6 +1,6 @@
 export default {
   // Target: https://go.nuxtjs.dev/config-target
-  target: 'static',
+  target: 'server',
   server: {
     port: 3000,
     host: 'localhost'
@@ -119,6 +119,9 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-    transpile: [/^element-ui/]
+    transpile: [
+      /^element-ui/,
+      'defu'
+    ]
   }
 }
