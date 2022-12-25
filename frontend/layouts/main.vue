@@ -96,7 +96,7 @@ export default class MainLayout extends Vue {
     children: 'children',
     label: 'name'
   }
-  treeData = [
+  treeData: { name: string, children: CategoryItem[] }[] = [
     {
       name: 'Все категории',
       children: this.categories
@@ -116,7 +116,7 @@ export default class MainLayout extends Vue {
     this.getCategories()
   }
 
-  clickTreeCategories (node: typeof this.treeData | CategoryItem) {
+  clickTreeCategories (node: { name: string, children: CategoryItem[] }[] | CategoryItem) { // typeof this.treeData - some problem with build
     if (!Object.hasOwnProperty.call(node, 'children')) {
       this.categories.forEach((category) => {
         if ((document.querySelector(`#node-id-${category.id}`) as HTMLElement)) {
