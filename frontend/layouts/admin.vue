@@ -1,72 +1,95 @@
 <template>
   <el-container class="layout">
     <el-header class="layout__header layout-header">
-      <h1 class="layout-header__name cursor-pointer" @click="$router.push('/')">orch.store</h1>
-      <div>
-        <nuxt-link
-          v-if="!this.$auth.user?.id"
-          :to="'/login'"
-          style="color: black;"
-        >
-          <fa-icon
-            :icon="['fas', 'user']"
-            class="cursor-pointer"
-            style="font-size: 20px"
-          />
+      <h1 class="layout-header__name">
+        <nuxt-link :to="'/'" class="text-decoration-none" style="color: #303133">
+          orch.store
         </nuxt-link>
-        <el-dropdown v-else trigger="click">
-          <span class="cursor-pointer">
-            {{ this.$auth.user?.name }}<i class="el-icon-arrow-down el-icon--right"></i>
-          </span>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item icon="el-icon-user">Профиль</el-dropdown-item>
-            <el-dropdown-item
-              v-if="this.$auth.user.is_admin"
-              icon="el-icon-s-custom"
-            >
-              <nuxt-link :to="`${routes.users}`" class="text-decoration-none color-inherit">
-                Панель админа
-              </nuxt-link>
-            </el-dropdown-item>
-            <el-dropdown-item icon="el-icon-close">
-              <div @click="$auth.logout()" style="display: inline-block">Выйти</div>
-            </el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
+      </h1>
+      <div class="layout-header__profile layout-header-profile">
+        <nuxt-link v-if="isAdmin()" :to="`${routes.users}`">
+          <el-button size="mini" class="layout-header-profile__admin-panel">
+            Панель админа
+          </el-button>
+        </nuxt-link>
+        <nuxt-link v-if="!isAuth()" :to="`/signup`">
+          <el-button size="mini" class="layout-header-profile__register">
+            Зарегистрироваться
+          </el-button>
+        </nuxt-link>
+        <nuxt-link :to="`/login`">
+          <el-button size="mini" class="layout-header-profile__login">
+            {{ isAuth() ? 'Профиль' : 'Войти'}}
+          </el-button>
+        </nuxt-link>
+        <div v-if="isAuth()">
+          <el-avatar :size="40" :src="'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'"></el-avatar>
+        </div>
       </div>
     </el-header>
-    <el-col :span="24" class="layout__nuxt">
-      <el-tabs v-model="activeTabAdmin" @tab-click="clickTabAdmin">
-        <el-tab-pane label="Пользователи" :name="routes.users">
-        </el-tab-pane>
-        <el-tab-pane label="Товары" :name="routes.stuff">
-        </el-tab-pane>
-        <el-tab-pane label="Категории" :name="routes.categories">
-        </el-tab-pane>
-        <el-tab-pane label="Заказы" :name="routes.orders">
-        </el-tab-pane>
-      </el-tabs>
-      <nuxt />
+    <div class="categories">
+      <nuxt-link
+        v-for="category in categories"
+        :key="category.id"
+        :class="{
+          'categories__category-item': true,
+          'category-item': true,
+          'category-item--active': activeTabAdmin === category.id
+        }"
+        :to="`${category.id}`"
+      >
+        <span class="category-item__name">
+          {{ category.name }}
+        </span>
+      </nuxt-link>
+    </div>
+    <el-col class="layout__content layout-content">
+      <el-col class="layout-nuxt" :span="24">
+        <nuxt />
+      </el-col>
     </el-col>
   </el-container>
 </template>
 
 <script lang="ts">
 import { Component, Vue, Watch } from 'nuxt-property-decorator'
+import { isAuth, isAdmin } from '~/utils/auth'
 import { adminRoutes } from '~/utils/routes'
 
 @Component({})
 export default class IndexLayoutAdmin extends Vue {
   activeTabAdmin = this.$route.path
   routes = adminRoutes
+  categories = [
+    {
+      id: this.routes.users,
+      name: 'Пользователи',
+    },
+    {
+      id: this.routes.categories,
+      name: 'Категории',
+    },
+    {
+      id: this.routes.stuff,
+      name: 'Товары',
+    },
+    {
+      id: this.routes.orders,
+      name: 'Заказы',
+    }
+  ]
 
   @Watch('$route.path')
   watchActiveTabAdmin () {
     this.activeTabAdmin = this.$route.path
   }
 
-  clickTabAdmin () {
-    this.$router.push(this.activeTabAdmin)
+  isAuth () {
+    return isAuth(this.$auth.user)
+  }
+
+  isAdmin () {
+    return isAdmin(this.$auth.user)
   }
 
 }

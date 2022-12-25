@@ -1,6 +1,8 @@
+export const adminPrefix = 'admin';
+
 export const adminRoutes = {
-  users: '/admin/users',
-  categories: '/admin/categories',
-  stuff: '/admin/stuff',
-  orders: '/admin/orders',
+  users: `/${adminPrefix}/users`,
+  categories: `/${adminPrefix}/categories`,
+  stuff: `/${adminPrefix}/stuff`,
+  orders: `/${adminPrefix}/orders`,
 }

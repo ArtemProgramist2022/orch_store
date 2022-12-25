@@ -1,9 +1,9 @@
 <template>
   <div>
     <el-table
-      :data="stuffs"
-      style="max-height: 65vh"
+      :data="stuff"
       v-loading="loading"
+      class="table-with-overflow-only-body-max-height"
     >
       <el-table-column>
         <template slot-scope="scope">
@@ -38,7 +38,7 @@
         label="Категория"
       >
         <template slot-scope="scope">
-          {{ scope.row.category.name }}
+          {{ getCategory(scope.row) || '&mdash;' }}
         </template>
       </el-table-column>
       <el-table-column
@@ -194,7 +194,7 @@ export default class StuffAdminIndex extends Vue {
 
   @Ref('form') formRef!: ElForm
 
-  @Getter('stuff/items') stuffs!: StuffItem[]
+  @Getter('stuff/items') stuff!: StuffItem[]
 
   @Getter('categories/items') categories!: CategoryItem[]
 
@@ -248,6 +248,7 @@ export default class StuffAdminIndex extends Vue {
       .finally(() => {
         this.formLoading = false
         this.loading = false
+        this.showForm = false
       })
     })
   }
@@ -278,10 +279,18 @@ export default class StuffAdminIndex extends Vue {
     this.deleteStuff({ id })
     .finally(() => this.loading = false)
   }
+
+  getCategory (item: StuffItem) {
+    return item.category?.name
+  }
 }
 </script>
 
 <style>
+.el-table__body-wrapper {
+  max-height: calc(100vh - 80px);
+  overflow: auto;
+}
 .photo-uploader .el-upload {
   border: 1px dashed #d9d9d9;
   border-radius: 6px;

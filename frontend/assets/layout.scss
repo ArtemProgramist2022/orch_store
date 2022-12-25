@@ -1,0 +1,88 @@
+@use 'variables';
+
+.layout {
+  &__header {
+    height: 80px !important;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .layout-header {
+    &__name {
+      font-size: 36px;
+      line-height: 36px;
+      font-weight: 500;
+    }
+
+    &__profile {
+      display: flex;
+      align-items: center;
+    }
+
+    .layout-header-profile {
+      &__login {
+        margin: 0 16px 0 21px;
+      }
+    }
+  }
+
+  &__content {
+    display: flex;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .layout-content {
+    &__menu {
+      padding-right: 30px;
+    }
+  }
+
+  .layout-nuxt {
+    box-shadow: variables.$shadow-dark;
+    padding: 16px;
+  }
+  
+  .layout-auth-nuxt {
+    width: 100vw;
+    height: calc(100vh - 80px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .categories {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 44px;
+
+    &__category-item {
+      width: 144px;
+      height: 28px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 4px 4px 0px 0px;
+      border: 1px solid variables.$border-extralight;
+      margin: 0px 8px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .category-item {
+      color: variables.$secondary-text;
+
+      &__name {
+        font-size: 14px;
+        line-height: 20px;
+        letter-spacing: 0.018em;
+      }
+
+      &--active {
+        color: variables.$primary !important;
+      }
+    }
+  }
+}

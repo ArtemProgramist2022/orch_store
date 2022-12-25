@@ -2,8 +2,8 @@
   <div>
     <el-table
       :data="orders"
-      style="max-height: 65vh"
       v-loading="loading"
+      class="table-with-overflow-only-body-max-height"
       >
       <el-table-column
         prop="delivery_address"

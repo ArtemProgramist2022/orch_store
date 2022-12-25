@@ -1,128 +1,77 @@
 <template>
   <el-container class="layout">
     <el-header class="layout__header layout-header">
-      <div>
-        <fa-icon
-          :icon="['fas', 'search']"
-          class="cursor-pointer"
-          style="font-size: 20px"
-          @click="changeMenuState(true)"
-        />
-      </div>
-      <h1 class="layout-header__name cursor-pointer" @click="$router.push('/')">orch.store</h1>
-      <div>
-        <nuxt-link
-          v-if="!this.$auth.user?.id"
-          :to="'/login'"
-          style="color: black;"
-        >
-          <fa-icon
-            :icon="['fas', 'user']"
-            class="cursor-pointer"
-            style="font-size: 20px"
-          />
+      <h1 class="layout-header__name">
+        <nuxt-link :to="'/'" class="text-decoration-none" style="color: #303133">
+          orch.store
         </nuxt-link>
-        <el-dropdown v-else trigger="click">
-          <span class="cursor-pointer">
-            {{ this.$auth.user?.name }}<i class="el-icon-arrow-down el-icon--right"></i>
-          </span>
-          <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item icon="el-icon-user">Профиль</el-dropdown-item>
-            <el-dropdown-item
-              v-if="this.$auth.user.is_admin"
-              icon="el-icon-s-custom"
-            >
-              <nuxt-link :to="`${routes.users}`" class="text-decoration-none color-inherit">
-                Панель админа
-              </nuxt-link>
-            </el-dropdown-item>
-            <el-dropdown-item icon="el-icon-close">
-              <div @click="$auth.logout()" style="display: inline-block">Выйти</div>
-            </el-dropdown-item>
-          </el-dropdown-menu>
-        </el-dropdown>
+      </h1>
+      <div class="layout-header__profile layout-header-profile">
+        <nuxt-link v-if="isAdmin()" :to="`${adminRoutes.users}`">
+          <el-button size="mini" class="layout-header-profile__admin-panel">
+            Панель админа
+          </el-button>
+        </nuxt-link>
+        <nuxt-link v-if="!isAuth()" :to="`/signup`">
+          <el-button size="mini" class="layout-header-profile__register">
+            Зарегистрироваться
+          </el-button>
+        </nuxt-link>
+        <nuxt-link :to="`/login`">
+          <el-button size="mini" class="layout-header-profile__login">
+            {{ isAuth() ? 'Профиль' : 'Войти'}}
+          </el-button>
+        </nuxt-link>
+        <div v-if="isAuth()">
+          <el-avatar :size="40" :src="'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'"></el-avatar>
+        </div>
       </div>
     </el-header>
-    <el-col :span="24" class="layout__nuxt">
-      <nuxt />
-    </el-col>
-    <el-footer class="layout__footer layout-footer">
-      <div class="layout-footer__reviews">
-        <el-rate
-          v-model="rate"
-          disabled
-          text-color="#FDD017"
-        />
-        <span style="color: #696969">Наши отзывы</span>
-      </div>
-      <div>
-        <span style="color: #696969">связь</span>
-        8-999-939-93-23
-      </div>
-    </el-footer>
-    <div
-      :class="{
-        'layout-menu__wrapper': true,
-        'layout-menu__wrapper--show': showMenu
-      }"
-      @click="changeMenuState(false)"
-    ></div>
-    <div
-      :class="{
-        layout__menu: true,
-        'layout-menu': true,
-        'layout-menu--show': showMenu
-      }"
-    >
-      <el-input
-        v-model="searchCaterogiesValue"
-        placeholder="Поиск"
-        @input="searchCategories"
-        clearable
-      />
-      <h3 class="layout-menu__catalog-header">Каталог</h3>
-      <div class="layout-menu__catalog menu-catalog">
-        <div
-          v-for="category in searchCategoriesItems"
-          :key="category.id"
-          class="menu-catalog__item"
-        >
-          <nuxt-link
-            class="menu-catalog__item-link"
-            :to="`/category/${category.id}`"
-          >
-            {{ category.name }}
-          </nuxt-link>
-        </div>
-        <div
-          v-if="!searchCategoriesItems.length"
-        >
-          <p class="menu-catalog__item--no-categories">
-            Нет категорий
-          </p>
-        </div>
-      </div>
-      <div class="extra-catalog">
-        <div class="extra-catalog__item">
-          <nuxt-link
-            to="/login"
-            class="text-decoration-none color-inherit"
-          >
-            Войти
-          </nuxt-link>
-      </div>
-        <div class="extra-catalog__item">Нужна помощь?</div>
-      </div>
+    <div class="categories">
+      <nuxt-link
+        v-for="category in categories.filter((_, index) => index <= 6)"
+        :key="category.id"
+        :class="{
+          'categories__category-item': true,
+          'category-item': true,
+          'category-item--active': category.id === +$route.params.category_id
+        }"
+        :to="`/category/${category.id}`"
+      >
+        <span class="category-item__name">
+          {{ category.name }}
+        </span>
+      </nuxt-link>
     </div>
+    <el-col class="layout__content layout-content">
+      <el-col
+        class="layout-content__menu"
+        :span="6"
+      >
+        <el-tree
+          :data="treeData"
+          :props="treeProps"
+          @node-click="clickTreeCategories"
+          :render-content="renderContentTree"
+        />
+      </el-col>
+      <el-col class="layout-nuxt" :span="18">
+        <nuxt />
+      </el-col>
+    </el-col>
   </el-container>
 </template>
 
 <script lang="ts">
 import { Component, Vue, Action, Getter, Watch } from 'nuxt-property-decorator'
+import { isAuth, isAdmin } from '~/utils/auth'
 import { CategoryItem } from '~/interfaces/categories'
 import { adminRoutes } from '~/utils/routes'
+import { CreateElement } from 'vue/types/umd';
 
-@Component({})
+@Component({
+  transition: 'slide-bottom'
+})
 export default class MainLayout extends Vue {
 
   @Getter('categories/items') categories!: CategoryItem[]
@@ -130,176 +79,76 @@ export default class MainLayout extends Vue {
   @Action('categories/getCategories') getCategories!: () => Promise<CategoryItem[]>
 
   @Watch('categories')
-  watchSearchCategories () {
-    this.setSearchCategories(this.categories)
+  watchCategories () {
+    this.treeData[0].children = this.categories
   }
 
-  routes = adminRoutes
-  rate = 4.5
-  showMenu = false
-  searchCategoriesItems: CategoryItem[] = []
-  searchCaterogiesValue = ''
+  @Watch('$route.path')
+  watchRoutePath () {
+    const category = this.categories.find((category) => {
+      return category.id === +this.$route.params.category_id
+    })
+    if (!category) return
+    this.clickTreeCategories(category)
+  }
+
+  treeProps = {
+    children: 'children',
+    label: 'name'
+  }
+  treeData = [
+    {
+      name: 'Все категории',
+      children: this.categories
+    }
+  ]
+  adminRoutes = adminRoutes
+
+  isAuth () {
+    return isAuth(this.$auth.user)
+  }
+
+  isAdmin () {
+    return isAdmin(this.$auth.user)
+  }
 
   mounted () {
     this.getCategories()
   }
 
-  changeMenuState (status: boolean) {
-    this.showMenu = status
-  }
-
-  searchCategories () {
-    if (!this.searchCaterogiesValue)  {
-      this.setSearchCategories(this.categories)
-      return
+  clickTreeCategories (node: typeof this.treeData | CategoryItem) {
+    if (!Object.hasOwnProperty.call(node, 'children')) {
+      this.categories.forEach((category) => {
+        if ((document.querySelector(`#node-id-${category.id}`) as HTMLElement)) {
+          (document.querySelector(`#node-id-${category.id}`) as HTMLElement).style.color = ""
+        }
+      });
+      if ((document.querySelector(`#node-id-${(node as CategoryItem).id}`) as HTMLElement)) {
+        (document.querySelector(`#node-id-${(node as CategoryItem).id}`) as HTMLElement).style.color="#409EFF"
+      }
+      this.$router.push(`/category/${(node as CategoryItem).id}`)
+    } else {
+      const category = this.categories.find((category) => {
+        return category.id === +this.$route.params.category_id
+      })
+      if (!category) return
+      setTimeout(() => {
+        if ((document.querySelector(`#node-id-${category.id}`) as HTMLElement)) {
+          (document.querySelector(`#node-id-${category.id}`) as HTMLElement).style.color="#409EFF"
+        }
+      })
     }
-    const filteredCategories = this.searchCategoriesItems.filter((category) => category.name.includes(this.searchCaterogiesValue))
-    this.setSearchCategories(filteredCategories)
   }
 
-  setSearchCategories (categories: CategoryItem[]) {
-    this.searchCategoriesItems = categories
-  }
-
-  changeCategoriesSearch (category: CategoryItem) {
-    console.log(category);
+  renderContentTree (h: CreateElement, { data }: { data: CategoryItem }) {
+    let btn = h('span', {
+      props: { type: 'success' },
+      domProps: {
+        innerHTML: data.name,
+        id: "node-id-" + data.id
+      }
+    })
+    return btn
   }
 }
 </script>
-
-<style>
-:root {
-  --layout-menu-width: 300px;
-  --layout-menu-padding: 15px;
-}
-
-.layout__nuxt {
-  padding: 10px 20px;
-}
-
-.layout__header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 120px !important;
-  background: rgba(255, 255, 255, .85);
-  border-top: 3px solid #C21807;
-  border-bottom: 1px solid black;
-  padding: 15px;
-}
-
-.layout-header__name {
-  position: relative;
-  border-right: 3px solid black;
-  border-left: 3px solid black;
-  padding: 0 15px;
-  margin: 0;
-  font-size: 26px;
-}
-
-.layout-header__name::after, .layout-header__name::before {
-  content: '';
-  display: block;
-  position: absolute;
-  bottom: 0;
-  width: 2px;
-  height: 20px;
-  background: black;
-}
-
-.layout-header__name::after {
-  right: -10px;
-}
-
-.layout-header__name::before {
-  left: -10px;
-}
-
-.layout__footer {
-  height: 75px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-top: 2px solid #C21807;
-}
-
-.layout-footer__reviews {
-  display: flex;
-  justify-content: center;
-}
-
-.layout-menu__wrapper {
-  position: fixed;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  z-index: 1000;
-  background: rgba(0, 0, 0, .5);
-  transform: translateX(-100%);
-}
-
-.layout-menu__wrapper--show {
-  transform: translateX(0);
-}
-
-.layout__menu {
-  width: var(--layout-menu-width);
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: calc((var(--layout-menu-width) + var(--layout-menu-padding) * 2) * -1);
-  z-index: 1001;
-  padding: var(--layout-menu-padding);
-  background-color: #f5f5f5;
-  transition: left 250ms;
-}
-
-.layout-menu--show {
-  left: 0;
-}
-
-.layout-menu__catalog-header {
-  color: #c21807;
-  padding: 10px 0px 5px 0px;
-}
-
-.layout-menu__catalog {
-  padding-left: var(--layout-menu-padding);
-  font-size: 18px;
-  padding-bottom: 20px;
-}
-
-.menu-catalog__item {
-  padding: 5px 0 5px 10px;
-  cursor: pointer;
-  transition: scale 250ms;
-}
-
-.menu-catalog__item:hover {
-  scale: 1.1;
-}
-
-.menu-catalog__item-link {
-  color: #696969;
-  font-size: 16px;
-  text-decoration: none;
-}
-
-.menu-catalog__item--no-categories {
-  color: #696969;
-  font-size: 16px;
-}
-
-.extra-catalog {
-  padding: 5px 0 0 10px;
-  border-top: 1px solid #696969;
-}
-
-.extra-catalog__item {
-  color: #696969;
-  padding-bottom: 5px;
-  cursor: pointer;
-}
-
-</style>

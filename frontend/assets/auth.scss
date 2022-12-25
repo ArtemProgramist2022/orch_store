@@ -1,0 +1,12 @@
+@use 'variables';
+
+.auth-page {
+  display: flex;
+  justify-content: center;
+
+  &__name {
+    text-align: center;
+    font-size: 18px;
+    color: variables.$primary-text;
+  }
+}

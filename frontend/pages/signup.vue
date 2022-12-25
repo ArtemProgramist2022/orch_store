@@ -1,7 +1,7 @@
 <template>
-  <el-col :span="24" class="flex-center">
+  <el-col :span="24" class="auth-page">
     <el-col :span="12">
-      <h3 class="text-center">Регистрация</h3>
+      <h3 class="auth-page__name">Регистрация</h3>
       <el-form
         ref="form"
         :model="form"
@@ -82,7 +82,7 @@
         </el-col>
       </el-form>
       <el-col :span="24" style="padding-top: 15px;">
-        <div class="text-center" style="padding-bottom: 5px;">
+        <div class="text-center" style="padding-bottom: 10px;">
           <el-link
             :underline="false"
             @click="$router.push('/login')"

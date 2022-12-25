@@ -2,6 +2,7 @@
 
 :root * {
   box-sizing: border-box;
+	--primary: '#303133';
 }
 
 /* css reset */
@@ -52,8 +53,12 @@ table {
 
 /* === */
 
-.el-input, .el-input-number, .el-autocomplete, .el-select {
+.el-input, .el-input-number, .el-autocomplete, .el-select, .el-image {
   width: 100%;
+}
+
+.el-image {
+	height: 100%;
 }
 
 .slide-bottom-enter-active,
@@ -78,4 +83,13 @@ table {
 
 .el-tabs__item:hover {
 	color: #c21807;
+}
+
+/* el-table */
+
+.table-with-overflow-only-body-max-height {
+	.el-table__body-wrapper {
+		max-height: 70vh;
+		overflow: auto;
+	}
 }
