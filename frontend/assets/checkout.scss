@@ -1,0 +1,40 @@
+@use 'variables';
+
+.checkout-page {
+  &__header {
+    color: variables.$primary-text;
+    font-size: 24px;
+    text-align: center;
+    margin-bottom: 12px;
+  }
+
+  &__main {
+    display: flex;
+    justify-content: center;
+  }
+
+  &__checkout {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  &__stuff {
+    display: flex;
+  }
+
+  &__stuff-item {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 125px;
+    height: 100px;
+    border-radius: 4px;
+    margin-right: 6px;
+  }
+
+  &__stuff-cost {
+    color: variables.$placeholder;
+  }
+}

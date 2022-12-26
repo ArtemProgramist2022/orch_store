@@ -207,13 +207,7 @@ export default class StuffAdminIndex extends Vue {
   loading = false
   formLoading = false
   showForm = false
-  form: NewStuffItem = {
-    name: '',
-    description: '',
-    cost: 0,
-    count_on_warehouse: 0,
-    category_id: null
-  }
+  form: NewStuffItem = this.getDefaultForm()
   formRules = {
     name: [
       { required: true, message: 'Укажите наименование', trigger: 'blur' }
@@ -239,6 +233,16 @@ export default class StuffAdminIndex extends Vue {
     .finally(() => this.loading = false)
   }
 
+  getDefaultForm () {
+    return {
+      name: '',
+      description: '',
+      cost: 0,
+      count_on_warehouse: 0,
+      category_id: null
+    }
+  }
+
   updateStuff () {
     this.formRef.validate((valid) => {
       if (!valid) return
@@ -256,6 +260,7 @@ export default class StuffAdminIndex extends Vue {
   changeFormState () {
     this.formLoading = true
     this.showForm = true
+    this.form = this.getDefaultForm()
     this.getCategories()
     .finally(() => this.formLoading = false)
   }
@@ -285,43 +290,3 @@ export default class StuffAdminIndex extends Vue {
   }
 }
 </script>
-
-<style>
-.el-table__body-wrapper {
-  max-height: calc(100vh - 80px);
-  overflow: auto;
-}
-.photo-uploader .el-upload {
-  border: 1px dashed #d9d9d9;
-  border-radius: 6px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-}
-.photo-uploader .el-upload:hover {
-  border-color: #409EFF;
-}
-.photo-uploader-icon {
-  font-size: 28px;
-  color: #8c939d;
-  width: 178px;
-  height: 178px;
-  line-height: 178px;
-  text-align: center;
-}
-.photo-upload {
-  width: 178px;
-  height: 178px;
-  display: block;
-}
-
-.image-slot {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  background: #f5f7fa;
-  color: #909399;
-}
-</style>

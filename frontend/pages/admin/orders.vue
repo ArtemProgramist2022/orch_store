@@ -9,30 +9,33 @@
         prop="delivery_address"
         label="Адрес доставки"
       />
-      <el-table-column
-        prop="delivery_date"
-        label="Дата доставки"
-      />
-      <el-table-column
-        prop="delivery_time"
-        label="Время доставки"
-      />
-      <el-table-column
-        prop="status"
-        label="Статус"
-      />
+      <el-table-column label="Дата доставки">
+        <template slot-scope="scope">
+          {{ scope.row.delivery_date || '&mdash;' }}
+        </template>
+      </el-table-column>
+      <el-table-column label="Время доставки">
+        <template slot-scope="scope">
+          {{ scope.row.delivery_time || '&mdash;' }}
+        </template>
+      </el-table-column>
+      <el-table-column label="Статус">
+        <template slot-scope="scope">
+          {{ getOrderStatus(scope.row.status) || '&mdash;' }}
+        </template>
+      </el-table-column>
       <el-table-column
         label="Пользователь"
       >
         <template slot-scope="scope">
-          {{ scope.row.user }}
+          {{ scope.row.user.name }}
         </template>
       </el-table-column>
       <el-table-column
         label="Товары"
       >
         <template slot-scope="scope">
-          {{ scope.row.items }}
+          <span>{{ scope.row.items.length ? getStuffOrder(scope.row.items) : '&mdash;' }}</span>
         </template>
       </el-table-column>
       <el-table-column width="150">
@@ -104,7 +107,9 @@
 <script lang="ts">
 import { ElForm } from 'element-ui/types/form';
 import { Component, Vue, Action, Getter, Ref } from 'nuxt-property-decorator'
-import { Order } from '~/interfaces/orders';
+import { CartItem } from '~/interfaces/cart';
+import { Order, OrderStatus, OrderStatusRU } from '~/interfaces/orders';
+import { StuffItem } from '~/interfaces/stuff';
 
 @Component({
   layout: 'admin',
@@ -154,7 +159,7 @@ export default class CategoriesAdminIndex extends Vue {
         dtime: null,
         atime: null
       },
-      status: '',
+      status: OrderStatus.WAIT_PAID,
     }
   }
 
@@ -178,6 +183,14 @@ export default class CategoriesAdminIndex extends Vue {
         this.loading = false
       })
     })
+  }
+
+  getOrderStatus (status: OrderStatus) {
+    return OrderStatusRU[status]
+  }
+
+  getStuffOrder (items: CartItem[]) {
+    return items.map((item) => ' ' + item.stuff?.name || '').toString()
   }
 }
 </script>

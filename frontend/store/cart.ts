@@ -18,7 +18,7 @@ export const mutations: MutationTree<SuccessfulResponse<CartItem[]>> = {
   editItem (state, data: CartItem) {
     const index = state.items.findIndex((item) => item.id === data.id)
     if (index === -1) return
-    state.items[index] = data
+    state.items.splice(index, 1, data)
   },
   deleteItem (state, data: CartItem) {
     const index = state.items.findIndex((item) => item.id === data.id)
@@ -30,7 +30,7 @@ export const mutations: MutationTree<SuccessfulResponse<CartItem[]>> = {
 export const actions: ActionTree<SuccessfulResponse<CartItem[]>, any> = {
   getCart ({ commit }) {
     return new Promise(async (resolve, reject) => {
-      await this.$axios.get('/api/v1/cart')
+      await this.$axios.get('/api/v1/cart/')
       .then((response) => {
         commit('setData', response.data)
         resolve(response.data.data)
@@ -38,9 +38,9 @@ export const actions: ActionTree<SuccessfulResponse<CartItem[]>, any> = {
       .catch((error) => reject(error))
     })
   },
-  addCart ({ commit }, data: Pick<CartItem, 'stuff_id' | 'stuff_count'>) {
+  addItemToCart ({ commit }, data: Pick<CartItem, 'stuff_id' | 'stuff_count'>) {
     return new Promise(async (resolve, reject) => {
-      await this.$axios.post('/api/v1/cart', data)
+      await this.$axios.post('/api/v1/cart/', data)
       .then((response) => {
         commit('addItem', response.data.data)
         resolve(response.data.data)
@@ -48,7 +48,7 @@ export const actions: ActionTree<SuccessfulResponse<CartItem[]>, any> = {
       .catch((error) => reject(error))
     })
   },
-  updateCart ({ commit }, data: Pick<CartItem, 'stuff_count' | 'id'>) {
+  updateCountItemInCart ({ commit }, data: Pick<CartItem, 'stuff_count' | 'id'>) {
     return new Promise(async (resolve, reject) => {
       await this.$axios.post(`/api/v1/cart/${data.id}`, data)
       .then((response) => {
@@ -58,7 +58,7 @@ export const actions: ActionTree<SuccessfulResponse<CartItem[]>, any> = {
       .catch((error) => reject(error))
     })
   },
-  deleteCart ({ commit }, data: Pick<CartItem, 'id'>) {
+  deleteItemFromCart ({ commit }, data: Pick<CartItem, 'id'>) {
     return new Promise(async (resolve, reject) => {
       await this.$axios.delete(`/api/v1/cart/${data.id}`)
       .then((response) => {

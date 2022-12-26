@@ -18,7 +18,7 @@ export const mutations: MutationTree<SuccessfulResponse<Order[]>> = {
   editItem (state, data: Order) {
     const index = state.items.findIndex((item) => item.id === data.id)
     if (index === -1) return
-    state.items[index] = data
+    state.items.splice(index, 1, data)
   }
 }
 
@@ -33,7 +33,7 @@ export const actions: ActionTree<SuccessfulResponse<Order[]>, any> = {
       .catch((error) => reject(error))
     })
   },
-  addOrder ({ commit }, data: Omit<Order, 'id'>) {
+  addOrder ({ commit }, data: Pick<Order, 'delivery_address'> & { items: number[] }) {
     return new Promise(async (resolve, reject) => {
       await this.$axios.post('/api/v1/orders/', data)
       .then((response) => {

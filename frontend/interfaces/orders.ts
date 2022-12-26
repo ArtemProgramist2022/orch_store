@@ -11,7 +11,7 @@ export interface Order {
   items: CartItem[];
   user_id: number | null;
   user: User;
-  status: string;
+  status: OrderStatus;
 }
 
 export interface OrderGetParams {
@@ -25,4 +25,11 @@ export enum OrderStatus {
   PAID = 'paid',
   DELIVERY = 'delivery',
   DONE = 'done'
+}
+
+export enum OrderStatusRU {
+  wait_paid = 'Ожидает оплаты',
+  paid = 'Оплачено',
+  delivery = 'Доставка',
+  done = 'Доставлено'
 }

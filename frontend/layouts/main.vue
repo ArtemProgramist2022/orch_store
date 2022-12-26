@@ -1,32 +1,6 @@
 <template>
-  <el-container class="layout">
-    <el-header class="layout__header layout-header">
-      <h1 class="layout-header__name">
-        <nuxt-link :to="'/'" class="text-decoration-none" style="color: #303133">
-          orch.store
-        </nuxt-link>
-      </h1>
-      <div class="layout-header__profile layout-header-profile">
-        <nuxt-link v-if="isAdmin()" :to="`${adminRoutes.users}`">
-          <el-button size="mini" class="layout-header-profile__admin-panel">
-            Панель админа
-          </el-button>
-        </nuxt-link>
-        <nuxt-link v-if="!isAuth()" :to="`/signup`">
-          <el-button size="mini" class="layout-header-profile__register">
-            Зарегистрироваться
-          </el-button>
-        </nuxt-link>
-        <nuxt-link :to="`/login`">
-          <el-button size="mini" class="layout-header-profile__login">
-            {{ isAuth() ? 'Профиль' : 'Войти'}}
-          </el-button>
-        </nuxt-link>
-        <div v-if="isAuth()">
-          <el-avatar :size="40" :src="'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'"></el-avatar>
-        </div>
-      </div>
-    </el-header>
+  <div class="layout">
+    <LayoutHeader />
     <div class="categories">
       <nuxt-link
         v-for="category in categories.filter((_, index) => index <= 6)"
@@ -43,23 +17,25 @@
         </span>
       </nuxt-link>
     </div>
-    <el-col class="layout__content layout-content">
-      <el-col
-        class="layout-content__menu"
-        :span="6"
-      >
-        <el-tree
-          :data="treeData"
-          :props="treeProps"
-          @node-click="clickTreeCategories"
-          :render-content="renderContentTree"
-        />
-      </el-col>
-      <el-col class="layout-nuxt" :span="18">
-        <nuxt />
+    <el-col :span="24" class="flex-center">
+      <el-col class="layout__content layout-content">
+        <el-col
+          class="layout-content__menu"
+          :span="6"
+        >
+          <el-tree
+            :data="treeData"
+            :props="treeProps"
+            @node-click="clickTreeCategories"
+            :render-content="renderContentTree"
+          />
+        </el-col>
+        <el-col class="layout-nuxt" :span="18">
+          <nuxt />
+        </el-col>
       </el-col>
     </el-col>
-  </el-container>
+  </div>
 </template>
 
 <script lang="ts">
@@ -68,9 +44,13 @@ import { isAuth, isAdmin } from '~/utils/auth'
 import { CategoryItem } from '~/interfaces/categories'
 import { adminRoutes } from '~/utils/routes'
 import { CreateElement } from 'vue/types/umd';
+import LayoutHeader from '~/components/LayoutHeader.vue'
 
 @Component({
-  transition: 'slide-bottom'
+  transition: 'slide-bottom',
+  components: {
+    LayoutHeader,
+  }
 })
 export default class MainLayout extends Vue {
 

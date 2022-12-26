@@ -7,9 +7,8 @@
         </nuxt-link>
       </h1>
     </el-header>
-    <el-col class="layout__content layout-content layout-nuxt layout-auth-nuxt" :span="24">
+    <el-col class="layout__content layout-content layout-nuxt" :span="24">
       <nuxt />
     </el-col>
   </el-container>
 </template>
-  

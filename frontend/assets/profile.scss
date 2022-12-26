@@ -1,0 +1,17 @@
+@use 'variables';
+
+.profile-page {
+  width: 100%;
+  text-align: center;
+
+  &__name {
+    font-size: 24px;
+    color: variables.$primary-text;
+    margin-bottom: 16px;
+  }
+
+  &__item {
+    color: variables.$regular-text;
+    margin-bottom: 6px;
+  }
+}

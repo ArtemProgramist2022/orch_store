@@ -31,6 +31,9 @@ export default {
     '@/assets/layout.scss',
     '@/assets/main.scss',
     '@/assets/auth.scss',
+    '@/assets/cart.scss',
+    '@/assets/checkout.scss',
+    '@/assets/profile.scss',
     '@/assets/variables.scss',
   ],
 

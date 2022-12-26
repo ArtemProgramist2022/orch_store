@@ -16,7 +16,7 @@ import Stuff from '~/components/Stuff.vue'
   transition: 'slide-bottom',
   components: {
     Stuff
-  }
+  },
 })
 export default class IndexPage extends Vue {
   @Getter('stuff/items') stuff!: StuffItem[]

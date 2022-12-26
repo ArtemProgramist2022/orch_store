@@ -13,6 +13,7 @@
       font-size: 36px;
       line-height: 36px;
       font-weight: 500;
+      color: variables.$primary-text;
     }
 
     &__profile {
@@ -22,7 +23,11 @@
 
     .layout-header-profile {
       &__login {
-        margin: 0 16px 0 21px;
+        margin: 0 16px 0 25px;
+      }
+
+      &__admin-panel, &__cart {
+        margin-left: 25px;
       }
     }
   }
