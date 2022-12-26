@@ -41,7 +41,7 @@ export default {
   plugins: [
     '@/plugins/element-ui',
     '@/plugins/fontawesome',
-    '@/plugins/infiniteLoading',
+    '@/plugins/infiniteLoading'
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -50,7 +50,7 @@ export default {
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
     // https://go.nuxtjs.dev/typescript
-    '@nuxt/typescript-build',
+    '@nuxt/typescript-build'
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -60,7 +60,7 @@ export default {
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
     '@nuxtjs/auth-next',
-    '@nuxtjs/proxy',
+    '@nuxtjs/proxy'
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
@@ -122,6 +122,9 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
-    transpile: [/^element-ui/]
+    transpile: [
+      /^element-ui/,
+      'defu'
+    ]
   }
 }
