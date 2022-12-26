@@ -5,7 +5,7 @@ from misc.db import (
     record_to_model_list,
     record_to_model
 )
-from models import orders
+from models import orders, cart as cart_models
 from db import (
     users,
     cart
@@ -100,12 +100,24 @@ async def get_orders_list(
     if data:
         for item in data:
             item.user = await users.get_user(pk=item.user_id, conn=conn)
-            item.items.append(
-                await cart.get_cart_item(
-                    pk=item.id,
-                    conn=conn
-                )
-            )
+            item.items = await get_orders_cart_items(order_id=item.id, conn=conn)
+    return data
+
+
+async def get_orders_cart_items(
+        order_id: int,
+        conn: Connection
+) -> Optional[List[cart_models.CartItem]]:
+    result = await conn.fetch(
+        f"""
+        SELECT * FROM orders_cart_items WHERE order_id = $1
+        """,
+        order_id
+    )
+    data = []
+    if result:
+        for i in result:
+            data.append(await cart.get_cart_item(i['cart_item_id'], conn=conn))
     return data
 
 
