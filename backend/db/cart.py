@@ -83,7 +83,7 @@ async def delete_stuff_from_cart(
 ) -> cart.CartItem:
     result = await conn.fetchrow(
         f"""
-        UPDATE TABLE {TABLE}
+        UPDATE {TABLE}
         set en = false
         WHERE id = $1
         RETURNING *
