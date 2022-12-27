@@ -7,7 +7,7 @@
         :key="order.id"
         :order="order"
       />
-      <el-empty v-if="!order.length" description="Нет заказов"></el-empty>
+      <el-empty v-if="!orders.length" description="Нет заказов"></el-empty>
     </div>
   </div>
 </template>
