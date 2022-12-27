@@ -1,8 +1,23 @@
-@import url('~/assets/styles-ui.css');
+@use 'variables';
 
 :root * {
   box-sizing: border-box;
 	word-break: break-word;
+}
+
+.page__header, .page__header-3 {
+  color: variables.$primary-text;
+}
+
+.page__header {
+  font-size: 24px;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.page__header-h3 {
+  margin-bottom: 12px;
+  font-size: 20px;
 }
 
 /* css reset */

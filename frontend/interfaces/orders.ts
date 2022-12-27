@@ -1,5 +1,4 @@
 import { CartItem } from "./cart";
-import { StuffItem } from "./stuff";
 import { User } from "./users";
 
 export interface Order {
@@ -12,6 +11,18 @@ export interface Order {
   user_id: number | null;
   user: User;
   status: OrderStatus;
+}
+
+export interface AddOrder {
+  delivery_address: string;
+  items: number[];
+}
+
+export interface UpdateOrder {
+  delivery_date: string;
+  delivery_time: string;
+  status: OrderStatus;
+  id: number
 }
 
 export interface OrderGetParams {

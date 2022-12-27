@@ -33,7 +33,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-col :span="24" style="text-align: right; margin-top: 5px">
+    <el-col :span="24" style="text-align: right; margin-top: 6px">
       <el-button
           type="primary"
           size="mini"

@@ -1,5 +1,6 @@
+import { Message } from 'element-ui'
 import { ActionTree, GetterTree, MutationTree } from 'vuex'
-import { Order } from '../interfaces/orders'
+import { AddOrder, Order, OrderGetParams, UpdateOrder } from '../interfaces/orders'
 import { SuccessfulResponse } from '../interfaces/responses'
 
 export const state = (): SuccessfulResponse<Order[]> => ({
@@ -23,9 +24,9 @@ export const mutations: MutationTree<SuccessfulResponse<Order[]>> = {
 }
 
 export const actions: ActionTree<SuccessfulResponse<Order[]>, any> = {
-  getOrders ({ commit }) {
+  getOrders ({ commit }, params?: OrderGetParams) {
     return new Promise(async (resolve, reject) => {
-      await this.$axios.get('/api/v1/orders/')
+      await this.$axios.get('/api/v1/orders/', { params })
       .then((response) => {
         commit('setData', response.data)
         resolve(response.data.data)
@@ -33,24 +34,32 @@ export const actions: ActionTree<SuccessfulResponse<Order[]>, any> = {
       .catch((error) => reject(error))
     })
   },
-  addOrder ({ commit }, data: Pick<Order, 'delivery_address'> & { items: number[] }) {
+  addOrder ({ commit }, data: AddOrder) {
     return new Promise(async (resolve, reject) => {
       await this.$axios.post('/api/v1/orders/', data)
       .then((response) => {
         commit('addItem', response.data.data)
+        Message.success('Заказ успешно создан')
         resolve(response.data.data)
       })
-      .catch((error) => reject(error))
+      .catch((error) => {
+        Message.error('Произошла ошибка при создании заказа')
+        reject(error)
+      })
     })
   },
-  updateOrder ({ commit }, data: Order) {
+  updateOrder ({ commit }, data: UpdateOrder) {
     return new Promise(async (resolve, reject) => {
       await this.$axios.post(`/api/v1/orders/${data.id}`, data)
       .then((response) => {
         commit('editItem', response.data.data)
+        Message.success('Заказ успешно обновлен')
         resolve(response.data.data)
       })
-      .catch((error) => reject(error))
+      .catch((error) => {
+        Message.error('Произошла ошибка при обновлении заказа')
+        reject(error)
+      })
     })
   },
 }

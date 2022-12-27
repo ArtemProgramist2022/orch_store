@@ -7,7 +7,7 @@
     </h1>
     <div class="layout-header__profile layout-header-profile">
       <nuxt-link v-if="isAuth()" :to="`/orders`">
-        <el-badge :value="cart.length" :max="10">
+        <el-badge :value="orders.length" :max="10">
           <el-button size="mini" class="layout-header-profile__orders">
             Заказы
           </el-button>
@@ -43,8 +43,9 @@
 </template>
 
 <script lang="ts">
-import { Action, Component, Getter, Vue, Watch } from 'nuxt-property-decorator'
+import { Action, Component, Getter, Vue } from 'nuxt-property-decorator'
 import { CartItem } from '~/interfaces/cart'
+import { Order, OrderGetParams } from '~/interfaces/orders'
 import { isAuth, isAdmin } from '~/utils/auth'
 import { adminRoutes } from '~/utils/routes'
 
@@ -53,12 +54,20 @@ export default class LayoutHeader extends Vue {
 
   @Getter('cart/items') cart!: CartItem[]
 
+  @Getter('orders/items') orders!: Order[]
+
   @Action('cart/getCart') getCart!: () => Promise<CartItem[]>
+
+  @Action('orders/getOrders') getOrders!: (params?: OrderGetParams) => Promise<Order[]>
 
   adminRoutes = adminRoutes
 
   mounted () {
+    const orderParams = {
+      user_id: this.$auth.user?.id as string
+    }
     this.getCart()
+    this.getOrders(orderParams)
   }
 
   isAuth () {

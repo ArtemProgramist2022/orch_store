@@ -48,7 +48,7 @@
             width="150"
           >
             <template slot-scope="scope">
-              {{ getCostItem(scope.row) }} {{ '&#8381;' }}
+              {{ getCostItem(scope.row) }} <span v-html="getRuble()"></span>
             </template>
           </el-table-column>
           <el-table-column width="75">
@@ -80,7 +80,7 @@
           Оформить заказ
         </el-button>
         <h4 class="cart-page__total-cost">
-          Общая стоимость: {{ getTotalCost() }} {{ '&#8381;' }}
+          Общая стоимость: {{ totalCost }} {{ '&#8381;' }}
         </h4>
       </el-col>
     </div>
@@ -92,7 +92,8 @@ import { Message } from 'element-ui'
 import { ElTable } from 'element-ui/types/table'
 import { Component, Getter, Action, Vue, Watch, Ref } from 'nuxt-property-decorator'
 import { CartItem } from '~/interfaces/cart'
-import { Order } from '~/interfaces/orders'
+import { getTotalCost } from '~/utils/cart'
+import { getRuble } from '~/utils/helpers'
 
 @Component({
   layout: 'main',
@@ -113,6 +114,10 @@ export default class CartPage extends Vue {
   @Watch('cart')
   watchCart () {
     this.allSelectionTable()
+  }
+
+  get totalCost () {
+    return getTotalCost(this.selection)
   }
 
   mounted () {
@@ -154,8 +159,8 @@ export default class CartPage extends Vue {
     return item.stuff_count * (item.stuff?.cost || 0)
   }
 
-  getTotalCost () {
-    return this.selection.reduce((total, item) => total + (item.stuff_count * (item.stuff?.cost || 0)), 0)
+  getRuble () {
+    return getRuble()
   }
 }
 </script>

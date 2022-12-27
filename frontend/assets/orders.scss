@@ -1,0 +1,63 @@
+@use 'variables';
+
+$height-order-item: 200px;
+$height-order-item-header: 75px;
+
+.order-item {
+  width: 100%;
+  height: $height-order-item;
+  border: 1px solid variables.$border-extralight;
+  border-radius: 4px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: all .175s;
+
+  &:hover {
+    box-shadow: variables.$shadow-indigo;
+    border: transparent;
+  }
+
+  &__header {
+    height: $height-order-item-header;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: variables.$border-extralight;
+    padding: 0 16px;
+  }
+
+  &__main {
+    height: calc($height-order-item - $height-order-item-header);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 16px;
+  }
+
+  &__status {
+    display: flex;
+    align-items: center;
+  }
+
+  &__status-text {
+    margin-right: 6px;
+  }
+
+  &__stuff {
+    height: 100px;
+    display: flex;
+    align-items: center;
+  }
+
+  &__stuff-item {
+    width: 100px;
+    height: inherit;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-right: 6px;
+  }
+
+  &__stuff-item:last-child {
+    margin-right: 0px;
+  }
+}

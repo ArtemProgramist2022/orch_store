@@ -38,7 +38,7 @@
           <span>{{ scope.row.items.length ? getStuffOrder(scope.row.items) : '&mdash;' }}</span>
         </template>
       </el-table-column>
-      <el-table-column width="150">
+      <el-table-column width="75">
         <template slot-scope="scope">
           <el-button
             type="primary"
@@ -46,19 +46,6 @@
             icon="el-icon-edit"
             @click="changeFormState(scope.row)"
           ></el-button>
-          <el-popconfirm
-            title="Подтвердите удаление"
-            @confirm="deleteItem(scope.row.id)"
-            confirm-button-type="danger"
-            confirm-button-text="Удалить"
-          >
-            <el-button
-              slot="reference"
-              type="danger"
-              size="mini"
-              icon="el-icon-delete"
-            ></el-button>
-          </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
@@ -76,13 +63,33 @@
         v-loading="loading"
       >
         <el-form-item
-          prop="name"
-          label="Адрес доставки"
+          prop="delivery_date"
+          label="Дата и время доставки"
         >
-          <el-input
-            v-model="form.name"
-            placeholder="Укажите наименование"
+          <el-date-picker
+            :value="getDeliveryDate()"
+            type="datetime"
+            placeholder="Укажите дату и время"
+            format="dd.MM.yyyy HH:MM:SS"
+            value-format="yyyy-MM-dd HH:MM:SS"
+            @input="changeDeliveryDate"
+            style="width: 100%"
           />
+        </el-form-item>
+        <el-form-item
+          prop="status"
+          label="Статус"
+        >
+          <el-select
+            v-model="form.status"
+          >
+            <el-option
+              v-for="item in getStatuses()"
+              :key="item[0]"
+              :label="item[1]"
+              :value="item[0]"
+            />
+          </el-select>
         </el-form-item>
         <el-form-item>
           <div class="flex-center">
@@ -108,13 +115,14 @@
 import { ElForm } from 'element-ui/types/form';
 import { Component, Vue, Action, Getter, Ref } from 'nuxt-property-decorator'
 import { CartItem } from '~/interfaces/cart';
-import { Order, OrderStatus, OrderStatusRU } from '~/interfaces/orders';
+import { GetParams } from '~/interfaces/common';
+import { Order, OrderStatus, OrderStatusRU, UpdateOrder } from '~/interfaces/orders';
 import { StuffItem } from '~/interfaces/stuff';
 
 @Component({
   layout: 'admin',
   auth: true,
-  transition: 'slide-bottom'
+  transition: 'slide-bottom',
 })
 export default class CategoriesAdminIndex extends Vue {
 
@@ -122,15 +130,23 @@ export default class CategoriesAdminIndex extends Vue {
 
   @Getter('orders/items') orders!: Order[]
 
+  @Getter('stuff/items') stuff!: StuffItem[]
+
   @Action('orders/getOrders') getOrders!: () => Promise<Order[]>;
-  @Action('orders/updateOrder') updateOrder!: (params: Order) => Promise<Order>;
+  @Action('orders/updateOrder') updateOrder!: (params: UpdateOrder) => Promise<Order>;
+
+  @Action('stuff/getStuff') getStuff!: (params?: Partial<GetParams> & { category_id?: string }) => Promise<StuffItem[]>;
 
   loading = false
+  stuffLoading = false
   showForm = false
-  form: Order = this.getDefaultForm()
+  form: Omit<Order, 'items'> & { items: number[] } = this.getDefaultForm()
   formRules = {
-    name: [
-      { required: true, message: 'Укажите наименование', trigger: 'blur' }
+    delivery_date: [
+      { required: true, message: 'Укажите дату и время', trigger: 'blur' }
+    ],
+    status: [
+      { required: true, message: 'Укажите статус', trigger: 'change' }
     ]
   }
 
@@ -140,7 +156,7 @@ export default class CategoriesAdminIndex extends Vue {
     .finally(() => this.loading = false)
   }
 
-  getDefaultForm (): Order {
+  getDefaultForm () {
     return {
       id: 0,
       en: false,
@@ -163,11 +179,13 @@ export default class CategoriesAdminIndex extends Vue {
     }
   }
 
-  changeFormState (order?: Order) {
+  changeFormState (order: Order) {
     this.showForm = true;
-    if (order) this.form = {
-      ...order
+    this.form = {
+      ...order,
+      items: order.items.map((item) => item.id)
     }
+    this.getStuffSelect('')
   }
 
   updateItem () {
@@ -185,8 +203,40 @@ export default class CategoriesAdminIndex extends Vue {
     })
   }
 
+  changeDeliveryDate (value: string) {
+    const dividedValue = value.split(' ')
+    const date = dividedValue[0]
+    const time = dividedValue[1]
+    this.form.delivery_date = date
+    this.form.delivery_time = time
+  }
+
+  getStuffSelect (query: string) {
+    this.stuffLoading = true;
+    setTimeout(() => {
+      this.getStuff()
+      .finally(() => {
+        this.stuffLoading = false;
+      })
+    }, 200);
+  }
+
+  getDeliveryDate () {
+    if (this.form.delivery_date && this.form.delivery_time) {
+      return this.form.delivery_date + ' ' + this.form.delivery_time
+    } else if (this.form.delivery_date) {
+      return this.form.delivery_date
+    } else if (this.form.delivery_time) {
+      return this.form.delivery_time
+    } else return ''
+  }
+
   getOrderStatus (status: OrderStatus) {
     return OrderStatusRU[status]
+  }
+
+  getStatuses () {
+    return Object.entries(OrderStatusRU)
   }
 
   getStuffOrder (items: CartItem[]) {

@@ -62,6 +62,7 @@ import { ElForm } from 'element-ui/types/form'
 import { Component, Getter, Action, Ref, Vue, Watch } from 'nuxt-property-decorator'
 import { CartItem } from '~/interfaces/cart'
 import { Order } from '~/interfaces/orders'
+import { getTotalCost } from '~/utils/cart'
 
 @Component({
   layout: 'main',
@@ -103,6 +104,9 @@ export default class CheckoutPage extends Vue {
         items: this.form.items.map((item) => item.id)
       }
       this.addOrder(params)
+      .then((response) => {
+        this.$router.push(`/orders/${response.id}`)
+      })
     })
   }
 
@@ -111,7 +115,7 @@ export default class CheckoutPage extends Vue {
   }
 
   getTotalCost () {
-    return this.cart.reduce((total, item) => total + (item.stuff_count * (item.stuff?.cost || 0)), 0)
+    return getTotalCost(this.cart)
   }
 }
 </script>

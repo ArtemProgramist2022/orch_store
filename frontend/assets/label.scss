@@ -1,0 +1,13 @@
+@use 'variables';
+
+.label {
+  min-width: 50px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  padding: 0 6px;
+  border-radius: 4px;
+  @include variables.setBg(attr(data-variant));
+}

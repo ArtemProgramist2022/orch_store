@@ -17,10 +17,11 @@
     }
 
     .stuff-item {
+      transition: all .175s;
+
       &:hover {
         box-shadow: variables.$shadow-indigo;
         border-radius: 8px;
-        transition: all .175s;
       }
 
       &__logo {

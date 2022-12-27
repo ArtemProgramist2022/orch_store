@@ -62,7 +62,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-col :span="24" style="text-align: right; margin-top: 5px">
+    <el-col :span="24" style="text-align: right; margin-top: 6px">
       <el-button
         type="primary"
         size="mini"
@@ -72,6 +72,14 @@
         Создать товар
       </el-button>
     </el-col>
+    <div style="margin-top: 16px">
+      <pagination
+        :currentPage="page"
+        :total="total"
+        :limit="limit"
+        @change-page="changePage"
+      />
+    </div>
     <el-dialog
       title="Новый товар"
       :visible.sync="showForm"
@@ -184,17 +192,24 @@ import { GetParams } from '~/interfaces/common';
 import { ListResponse } from '~/interfaces/responses';
 import { NewStuffItem, StuffItem } from '~/interfaces/stuff';
 import getBase64 from '~/utils/base64'
+import Pagination from '~/components/Pagination.vue'
 
 @Component({
   layout: 'admin',
   auth: true,
-  transition: 'slide-bottom'
+  transition: 'slide-bottom',
+  components: {
+    Pagination
+  }
 })
 export default class StuffAdminIndex extends Vue {
 
   @Ref('form') formRef!: ElForm
 
   @Getter('stuff/items') stuff!: StuffItem[]
+  @Getter('stuff/total') total!: number
+  @Getter('stuff/limit') limit!: number
+  @Getter('stuff/page') page!: number
 
   @Getter('categories/items') categories!: CategoryItem[]
 
@@ -241,6 +256,12 @@ export default class StuffAdminIndex extends Vue {
       count_on_warehouse: 0,
       category_id: null
     }
+  }
+
+  changePage (page: number) {
+    this.getStuff({
+      page
+    })
   }
 
   updateStuff () {

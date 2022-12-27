@@ -1,3 +1,4 @@
+import { Message } from 'element-ui'
 import { ActionTree, GetterTree, MutationTree } from 'vuex'
 import { GetParams } from '~/interfaces/common'
 import { ListResponse } from '../interfaces/responses'
@@ -43,9 +44,13 @@ export const actions: ActionTree<ListResponse<StuffItem>, any> = {
       await this.$axios.post('/api/v1/stuff/', data)
       .then((response) => {
         commit('addItem', response.data.data)
+        Message.success('Товар успешно создан')
         resolve(response.data.data)
       })
-      .catch((error) => reject(error))
+      .catch((error) => {
+        Message.error('Произошла ошибка при создании товара')
+        reject(error)
+      })
     })
   },
   deleteStuff ({ commit }, data: Pick<StuffItem, 'id'>) {
@@ -53,9 +58,13 @@ export const actions: ActionTree<ListResponse<StuffItem>, any> = {
       await this.$axios.delete(`/api/v1/stuff/${data.id}`)
       .then((response) => {
         commit('deleteItem', response.data.data)
+        Message.success('Товар успешно удален')
         resolve(response.data.data)
       })
-      .catch((error) => reject(error))
+      .catch((error) => {
+        Message.error('Произошла ошибка при удалении товара')
+        reject(error)
+      })
     })
   },
 }
