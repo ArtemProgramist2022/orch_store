@@ -57,7 +57,7 @@ async def get_orders(
     return await handlers.error_401()
 
 
-@router.post('/{order_id}', response_model=orders.OrderSuccessResponse)
+@router.get('/{order_id}', response_model=orders.OrderSuccessResponse)
 async def get_order(
         order_id: int,
         conn: Connection = Depends(get_db),
