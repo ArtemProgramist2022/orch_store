@@ -1,0 +1,43 @@
+{% extends "common.html" %}
+
+{% block meta_title %}Новый заказ{% endblock %}
+
+{% block header %}<b>Вы создали заказ. Пожалуйста оплатите.</b>{% endblock %}
+
+{% block body %}
+<table>
+    <tr>
+        <th>Наименование</th>
+        <th>Цена за 1шт</th>
+        <th>Количество</th>
+        <th>Сумма</th>
+    </tr>
+    {% if order %}
+        {% for i in order.items %}
+            <tr>
+                <td>
+                    {{ i.stuff.name }}
+                </td>
+                <td>
+                    {{ i.stuff.cost}}
+                </td>
+                <td>
+                    {{ i.stuff_count }}
+                </td>
+                <td>
+                    {{ i.stuff_count * i.stuff.cost }}
+                </td>
+            </tr>
+        {% endfor %}
+        <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>{{ final_sum }}</td>
+    </tr>
+    {% endif %}
+
+</table>
+
+
+{% endblock %}

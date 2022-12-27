@@ -126,4 +126,33 @@ async def update_order(
         model: orders.UpdateOrder,
         conn: Connection
 ) -> Optional[orders.Order]:
-    pass
+
+    data = model.dict()
+    updates = []
+    params = [order_id]
+    idx = 2
+
+    for i in data:
+        if data[i] is not None:
+            updates.append(f"{i} = ${idx}")
+            params.append(data[i])
+            idx += 1
+    result = await conn.fetchrow(
+        f"""
+        UPDATE {TABLE} {"SET " + " , ".join(updates) if updates else ""}
+        WHERE id = $1
+        RETURNING *
+        """,
+        *params
+    )
+    result_data: orders.Order = record_to_model(orders.Order, result)
+    if result_data:
+        result_data.user = await users.get_user(
+            conn=conn,
+            pk=result_data.user_id
+        )
+        result_data.items = await get_orders_cart_items(
+            order_id=result_data.id,
+            conn=conn
+        )
+    return result_data
