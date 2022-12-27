@@ -123,7 +123,13 @@ async def get_stuff_item(
         pk
     )
 
-    return record_to_model(Stuff, result)
+    data: Stuff = record_to_model(Stuff, result)
+    if data:
+        data.category = await categories.get_category(
+            pk=data.category_id,
+            conn=conn
+        )
+    return data
 
 
 async def update_stuff_item(

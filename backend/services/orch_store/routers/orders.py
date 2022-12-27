@@ -57,6 +57,24 @@ async def get_orders(
     return await handlers.error_401()
 
 
+@router.post('/{order_id}', response_model=orders.OrderSuccessResponse)
+async def get_order(
+        order_id: int,
+        conn: Connection = Depends(get_db),
+        session: Session = Depends(get_session)
+):
+    if session.user.is_authenticated is False:
+        return await handlers.error_401()
+
+    result = await orders_db.get_order(
+        order_id=order_id,
+        conn=conn
+    )
+    return orders.OrderSuccessResponse(
+        data=result
+    )
+
+
 @router.post('/', response_model=orders.OrderSuccessResponse)
 async def create_order(
         model: orders.NewOrder,
@@ -129,7 +147,7 @@ def check_user(
 
 async def send_new_order_message(
         smtp: SMTP,
-        email:str,
+        email: str,
         jinja: JinjaEnv,
         conf: dict,
         order: orders.Order,
@@ -148,5 +166,3 @@ async def send_new_order_message(
     )
     msg.attach(part)
     await send(smtp=smtp, message=msg)
-
-
