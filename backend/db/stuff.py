@@ -42,7 +42,7 @@ async def get_stuff_list(
 
     if stuff_name is not None:
         params.append(stuff_name)
-        wheres.append(f" name ILIKE ${idx}")
+        wheres.append(f" name ILIKE %${idx}%")
         idx += 1
     result = await conn.fetch(
         f"""
