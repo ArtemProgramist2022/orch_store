@@ -80,6 +80,10 @@ async def get_order(
     )
     result: orders.Order = record_to_model(orders.Order, query)
     if result:
+        result.user = await users.get_user(
+            conn=conn,
+            pk=result.user_id
+        )
         result.items = await get_orders_cart_items(
             result.id,
             conn
