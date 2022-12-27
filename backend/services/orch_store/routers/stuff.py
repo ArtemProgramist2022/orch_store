@@ -26,6 +26,7 @@ router = APIRouter(
 @router.get('/', response_model=stuff_models.StuffListSuccessResponse)
 async def get_stuff_list(
         category_id: int = None,
+        stuff_name: str = None,
         page: int = 1,
         limit: int = 20,
         conn: Connection = Depends(get_db)
@@ -38,10 +39,12 @@ async def get_stuff_list(
                 category_id=category_id,
                 page=page,
                 limit=limit,
+                stuff_name=stuff_name,
                 conn=conn
             ),
             total=await stuff_db.get_total(
                 category_id=category_id,
+                stuff_name=stuff_name,
                 conn=conn
             ),
             limit=limit,

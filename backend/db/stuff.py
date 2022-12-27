@@ -26,6 +26,7 @@ TABLE = "stuff"
 
 async def get_stuff_list(
         category_id: int,
+        stuff_name: str,
         page: int,
         limit: int,
         conn: Connection
@@ -37,6 +38,11 @@ async def get_stuff_list(
     if category_id:
         params.append(category_id)
         wheres.append(f" category_id = ${idx} ")
+        idx += 1
+
+    if stuff_name is not None:
+        params.append(stuff_name)
+        wheres.append(f" name ILIKE ${idx}")
         idx += 1
     result = await conn.fetch(
         f"""
@@ -152,16 +158,25 @@ async def update_stuff_item(
 
 async def get_total(
         category_id: int,
+        stuff_name: str,
         conn: Connection
 ) -> int:
     values = []
+    wheres = []
+    idx = 1
     if category_id:
         values.append(category_id)
+        wheres.append(f"category_id = ${idx}")
+        idx += 1
+    if stuff_name is not None:
+        values.append(stuff_name)
+        wheres.append(f" name ILIKE ${idx}")
+        idx += 1
     result = await conn.fetchrow(
         f"""
         SELECT count(*)
         FROM {TABLE}
-        {"WHERE category_id = $1" if category_id else ''}
+        {"WHERE " + " AND ".join(wheres) if wheres else ''}
         """,
         *values
     )
