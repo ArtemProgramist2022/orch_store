@@ -111,11 +111,11 @@ import { ConfirmForm, MeForm, RegisterForm } from '~/interfaces/users'
 import { validateEmail } from '~/utils/validate'
   
 @Component({
-  transition: 'slide-bottom',
   auth: 'guest',
-  layout: 'auth'
+  layout: 'auth',
+  transition: 'slide-bottom',
 })
-export default class RecoverPage extends Vue {
+export default class SignupPage extends Vue {
   @Ref('form') formRef!: ElForm
 
   @Action('authUser/register') registerUser!: (data: RegisterForm) => Promise<SuccessfulDataResponse<MeForm | null>>
@@ -174,7 +174,6 @@ export default class RecoverPage extends Vue {
     }
     this.confirmUser(data)
     .then((response) => {
-        this.$message.success('Вы были успешно зарегистрированы')
         if (response.data) {
           this.$auth.setUser(response.data.me)
           this.$auth.setUserToken(response.data.token)
@@ -188,7 +187,6 @@ export default class RecoverPage extends Vue {
     this.loading = true
     this.registerUser(this.form)
     .then(() => {
-      this.$message.success('Код для подтверждения был отправлен на ваш телефон')
       this.showCode = true
     }).finally(() => {
       this.loading = false

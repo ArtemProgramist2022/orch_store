@@ -10,10 +10,7 @@
     <div class="order-item__main">
       <div class="order-item__status">
         <span class="order-item__status-text">Статус заказа:</span>
-        <Label
-          :title="getOrderStatus(order.status)"
-          :variant="getVariant(order.status)"
-        />
+        <Label :title="order.status" />
       </div>
       <div class="order-item__stuff">
         <div
@@ -61,17 +58,6 @@ export default class OrderItem extends Vue {
 
   getRuble () {
     return getRuble()
-  }
-
-  getOrderStatus (status: OrderStatus) {
-    return OrderStatusRU[status]
-  }
-
-  getVariant (status: OrderStatus) {
-    return status === OrderStatus.WAIT_PAID ? 'warning'
-    : status === OrderStatus.PAID ? 'primary'
-    : status === OrderStatus.DELIVERY ? 'info'
-    : 'success'
   }
 
   goToOrder (id: string) {

@@ -38,6 +38,8 @@
             <template slot-scope="scope">
               <el-input-number
                 :value="scope.row.stuff_count"
+                :min="0"
+                :max="scope.row.stuff && scope.row.stuff.count_on_warehouse"
                 size="mini"
                 @change="changeCountStuffInCart($event, scope.row.id)"
               />

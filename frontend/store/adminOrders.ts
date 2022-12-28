@@ -34,15 +34,6 @@ export const actions: ActionTree<SuccessfulResponse<Order[]>, any> = {
       .catch((error) => reject(error))
     })
   },
-  getOrder (_, params: { id: string }) {
-    return new Promise(async (resolve, reject) => {
-      await this.$axios.get(`/api/v1/orders/${params.id}`)
-      .then((response) => {
-        resolve(response.data.data)
-      })
-      .catch((error) => reject(error))
-    })
-  },
   addOrder ({ commit }, data: AddOrder) {
     return new Promise(async (resolve, reject) => {
       await this.$axios.post('/api/v1/orders/', data)

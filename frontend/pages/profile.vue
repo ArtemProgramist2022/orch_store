@@ -24,6 +24,7 @@
     <el-col class="profile-page__actions">
       <el-button
         size="mini"
+        @click="changeRecoverFormState()"
       >
         Сменить пароль
       </el-button>
@@ -35,13 +36,72 @@
         Выйти
       </el-button>
     </el-col>
+    <el-dialog
+      title="Смена пароля"
+      :visible.sync="showRecoverForm"
+    >
+      <el-form
+        ref="recoverForm"
+        :model="recoverForm"
+        :rules="recoverRules"
+        size="mini"
+        label-position="top"
+        @submit.native.prevent="!showCode ? sendCode() : submitRecoverForm()"
+      >
+        <el-form-item
+          label="Email"
+          prop="email"
+        >
+          <el-input
+            v-model="recoverForm.email"
+            placeholder="Укажите email"
+            :disabled="showCode"
+          />
+        </el-form-item>
+        <el-form-item
+          v-if="showCode"
+          label="Код подтверждения"
+          prop="code"
+        >
+          <el-input
+            v-model="recoverForm.code"
+            placeholder="Код подтверждения"
+          />
+        </el-form-item>
+        <el-form-item>
+          <el-col class="flex-center">
+            <el-button
+              v-if="!showCode"
+              type="primary"
+              size="mini"
+              @click="sendCode"
+            >
+              Выслать код подтверждения
+            </el-button>
+            <el-button
+              v-else
+              type="primary"
+              native-type="submit"
+              size="mini"
+            >
+              Войти
+            </el-button>
+          </el-col>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Getter, Vue } from 'nuxt-property-decorator'
+import { Action, Component, Getter, Ref, Vue } from 'nuxt-property-decorator'
 import { Order, OrderStatus } from '~/interfaces/orders'
 import OrderItem from '~/components/OrderItem.vue'
+import { validateEmail } from '~/utils/validate'
+import { ElForm } from 'element-ui/types/form'
+import { SuccessfulDataResponse } from '~/interfaces/responses'
+import { ConfirmForm, MeForm } from '~/interfaces/users'
+import { Message } from 'element-ui'
 
 @Component({
   layout: 'main',
@@ -51,11 +111,91 @@ import OrderItem from '~/components/OrderItem.vue'
   }
 })
 export default class ProfilePage extends Vue {
+  
+  @Ref('recoverForm') recoverFormRef!: ElForm
+
   @Getter('orders/items') orders!: Order[]
+
+  @Action('authUser/recover') recoverUser!: (data: Pick<ConfirmForm, 'email'>) => Promise<SuccessfulDataResponse<MeForm | null>>
+  @Action('authUser/confirm') confirmUser!: (data: ConfirmForm & { noMessage: boolean }) => Promise<SuccessfulDataResponse<MeForm | null>>
 
   get activeOrders () {
     return this.orders
     .filter((order) => order.status !== OrderStatus.DONE)
+  }
+
+  loading = false
+  showCode = false
+  showRecoverForm = false
+  recoverForm = this.getDefaultRecoverForm()
+  recoverRules = {
+    email: [
+      { required: true, validator: this.validateEmail, trigger: 'blur' }
+    ],
+    code: [
+      { required: true, message: 'Укажите код подтверждения', trigger: 'blur' },
+    ]
+  }
+
+  validateEmail (_rule: Object, value: string, callback: Function) {
+    validateEmail(value, callback)
+  }
+
+  changeRecoverFormState () {
+    this.recoverForm = this.getDefaultRecoverForm()
+    this.showRecoverForm = true
+    this.showCode = false
+  }
+
+  getDefaultRecoverForm () {
+    return {
+      email: '',
+      code: ''
+    }
+  }
+
+  confirm () {
+    this.loading = true
+    this.confirmUser({ ...this.recoverForm, noMessage: true })
+    .then((response) => {
+        if (response.data) {
+          this.$auth.setUser(response.data.me)
+          this.$auth.setUserToken(response.data.token)
+          this.changeRecoverFormState()
+          this.showRecoverForm = false
+          Message.success('Пароль успешно изменен')
+        }
+      })
+      .catch(() => {
+        Message.error('Произошла ошибка при смене пароля')
+      })
+      .finally(() => {
+        this.loading = false
+      })
+  }
+
+  recover () {
+    this.loading = true
+    const params = {
+      email: this.recoverForm.email,
+    }
+    this.recoverUser(params)
+    .then(() => {
+      this.showCode = true
+    }).finally(() => {
+      this.loading = false
+    })
+  }
+
+  submitRecoverForm () {
+    this.recoverFormRef.validate((valid) => valid && this.confirm())
+  }
+
+  sendCode () {
+    this.recoverFormRef.validate((valid) => {
+      if (!valid) return;
+      this.recover()
+    })
   }
 }
 </script>

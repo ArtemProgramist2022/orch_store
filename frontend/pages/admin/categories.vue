@@ -39,6 +39,7 @@
           size="mini"
           icon="el-icon-plus"
           @click="changeFormState"
+          :disabled="loading"
       >
           Создать категорию
       </el-button>

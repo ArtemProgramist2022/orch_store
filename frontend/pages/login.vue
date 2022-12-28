@@ -66,11 +66,12 @@ import { Component, Vue, Ref } from 'nuxt-property-decorator'
 import { ElForm } from 'element-ui/types/form'
 import { LoginForm } from '~/interfaces/users'
 import { validateEmail } from '~/utils/validate'
+import { Message } from 'element-ui'
 
 @Component({
   auth: 'guest',
   layout: 'auth',
-  transition: 'slide-bottom'
+  transition: 'slide-bottom',
 })
 export default class IndexLogin extends Vue {
   @Ref('form') formRef!: ElForm
@@ -96,7 +97,11 @@ export default class IndexLogin extends Vue {
     }
     this.$auth.loginWith('customStrategy', data)
     .then(() => {
+      Message.success('Авторизация прошла успешно')
       this.$router.push('/')
+    })
+    .catch(() => {
+      Message.error('Произошла ошибка при входе в систему')
     })
     .finally(() => this.loading = false)
   }

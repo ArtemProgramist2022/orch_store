@@ -5,23 +5,39 @@
       backgroundColor: getVariant()
     }"
   >
-    {{ title }}
+    {{ titles[title] }}
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'nuxt-property-decorator'
+import { OrderStatus, OrderStatusRU } from '~/interfaces/orders'
+import { LabelVariants } from '~/interfaces/label'
 
 @Component({})
 export default class Label extends Vue {
   @Prop({ required: true }) title!: string
-  @Prop({ default: 'primary' }) variant!: 'success' | 'danger' | 'primary' | 'warning' | 'info'
+
+  variants: Record<string, LabelVariants> = {
+    [OrderStatus.WAIT_PAID]: 'warning',
+    [OrderStatus.PAID]: 'primary',
+    [OrderStatus.DELIVERY]: 'info',
+    [OrderStatus.DONE]: 'success',
+  }
+
+  titles: Record<string, string> = {
+    [OrderStatus.WAIT_PAID]: OrderStatusRU.wait_paid,
+    [OrderStatus.PAID]: OrderStatusRU.paid,
+    [OrderStatus.DELIVERY]: OrderStatusRU.delivery,
+    [OrderStatus.DONE]: OrderStatusRU.done,
+  }
 
   getVariant () {
-    return this.variant === 'primary' ? '#409EFF'
-    : this.variant === 'success' ? '#67C23A'
-    : this.variant === 'danger' ? '#F56C6C'
-    : this.variant === 'warning' ? '#E6A23C'
+    const variant = this.variants[this.title]
+    return variant === 'primary' ? '#409EFF'
+    : variant === 'success' ? '#67C23A'
+    : variant === 'danger' ? '#F56C6C'
+    : variant === 'warning' ? '#E6A23C'
     : '#909399'
   }
 }

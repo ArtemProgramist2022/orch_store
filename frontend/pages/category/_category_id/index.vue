@@ -1,41 +1,18 @@
 <template>
-  <div class="main" v-loading="loading">
-    <Stuff :stuff="stuff" />
-  </div>
+  <main-page />
 </template>
 
 <script lang="ts">
-import { Action, Component, Getter, Vue } from 'nuxt-property-decorator'
-import { StuffItem } from '~/interfaces/stuff'
-import Stuff from '~/components/Stuff.vue'
-import { GetParams } from '~/interfaces/common'
+import { Component, Vue } from 'nuxt-property-decorator'
+import MainPage from '~/components/MainPage.vue'
 
 @Component({
-  auth: false,
   layout: 'main',
+  auth: false,
   transition: 'slide-bottom',
   components: {
-    Stuff
-  }
+    MainPage
+  },
 })
-export default class IndexCategoryId extends Vue {
-  @Getter('stuff/items') stuff!: StuffItem[]
-
-  @Action('stuff/getStuff') getStuff!: (params?: Partial<GetParams> & { category_id?: string }) => Promise<StuffItem[]>
-
-  loading = false
-
-  mounted () {
-    this.loading = true
-    const params = {
-      category_id: this.$route.params.category_id
-    }
-    this.getStuff(params)
-    .finally(() => this.loading = false)
-  }
-}
+export default class IndexPage extends Vue {}
 </script>
-
-<style>
-
-</style>

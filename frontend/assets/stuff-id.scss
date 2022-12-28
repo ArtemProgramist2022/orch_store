@@ -1,0 +1,45 @@
+@use 'variables';
+
+.stuff-id-page {
+  display: flex;
+
+  &__logo {
+    width: 300px;
+    height: 400px;
+  }
+
+  &__main {
+    flex-grow: 1;
+    padding-left: 16px;
+    color: variables.$primary-text;
+  }
+
+  &__name {
+    text-align: left;
+  }
+
+  &__category {
+    font-size: 15px;
+    color: variables.$secondary-text;
+  }
+
+  &__cost {
+    font-size: 20px;
+    padding-top: 24px;
+  }
+
+  &__description {
+    font-size: 16px;
+    padding-top: 12px;
+    color: variables.$regular-text;
+  }
+
+  &__count {
+    padding-top: 12px;
+    color: variables.$regular-text;
+  }
+
+  &__actions {
+    padding-top: 24px;
+  }
+}

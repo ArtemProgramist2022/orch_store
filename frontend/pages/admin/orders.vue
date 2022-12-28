@@ -128,12 +128,12 @@ export default class CategoriesAdminIndex extends Vue {
 
   @Ref('form') formRef!: ElForm
 
-  @Getter('orders/items') orders!: Order[]
+  @Getter('adminOrders/items') orders!: Order[]
 
   @Getter('stuff/items') stuff!: StuffItem[]
 
-  @Action('orders/getOrders') getOrders!: () => Promise<Order[]>;
-  @Action('orders/updateOrder') updateOrder!: (params: UpdateOrder) => Promise<Order>;
+  @Action('adminOrders/getOrders') getOrders!: () => Promise<Order[]>;
+  @Action('adminOrders/updateOrder') updateOrder!: (params: UpdateOrder) => Promise<Order>;
 
   @Action('stuff/getStuff') getStuff!: (params?: Partial<GetParams> & { category_id?: string }) => Promise<StuffItem[]>;
 

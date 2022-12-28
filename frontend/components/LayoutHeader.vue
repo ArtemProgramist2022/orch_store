@@ -63,6 +63,7 @@ export default class LayoutHeader extends Vue {
   adminRoutes = adminRoutes
 
   mounted () {
+    if (!this.$auth.user?.id) return
     const orderParams = {
       user_id: this.$auth.user?.id as string
     }

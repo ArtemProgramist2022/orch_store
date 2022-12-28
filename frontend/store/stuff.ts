@@ -39,6 +39,15 @@ export const actions: ActionTree<ListResponse<StuffItem>, any> = {
       .catch((error) => reject(error))
     })
   },
+  getStuffItem (_, params: { id: string }) {
+    return new Promise(async (resolve, reject) => {
+      await this.$axios.get(`/api/v1/stuff/${params.id}`)
+      .then((response) => {
+        resolve(response.data.data)
+      })
+      .catch((error) => reject(error))
+    })
+  },
   addStuff ({ commit }, data: Omit<StuffItem, 'id'>) {
     return new Promise(async (resolve, reject) => {
       await this.$axios.post('/api/v1/stuff/', data)

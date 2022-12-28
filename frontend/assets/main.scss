@@ -1,73 +1,68 @@
 @use 'variables';
 
-.main {
-  .stuff {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+.main-page {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
 
-    &__item {
-      width: 259px;
-      height: 472px;
-      border-radius: 4px;
-      padding: 16px;
-      padding-bottom: 12px;
-      margin: 0 16px 16px 0;
-      cursor: pointer;
+.stuff-item {
+  width: 259px;
+  height: 472px;
+  border-radius: 4px;
+  padding: 16px;
+  padding-bottom: 12px;
+  margin: 0 16px 16px 0;
+  cursor: pointer;
+  transition: all .175s;
+
+  &:hover {
+    box-shadow: variables.$shadow-indigo;
+    border-radius: 8px;
+  }
+
+  &__logo {
+    width: 227px;
+    height: 224px;
+    border-radius: 4px;
+  }
+
+  &__name {
+    height: 43px;
+    font-size: 16px;
+    line-height: 20px;
+    letter-spacing: 0.0275em;
+    color: variables.$regular-text;
+    margin: 12px 0 8px 0;
+  }
+
+  &__cost {
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 36px;
+    color: variables.$primary-text;
+  }
+
+  &__description {
+    height: 74px;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0.018em;
+    color: variables.$secondary-text;
+    margin-bottom: 8px;
+  }
+
+  &__total {
+    display: flex;
+    align-items: center;
+    
+    .stuff-item__count {
+      flex-grow: 1;
+      color: variables.$secondary-text;
     }
 
-    .stuff-item {
-      transition: all .175s;
-
-      &:hover {
-        box-shadow: variables.$shadow-indigo;
-        border-radius: 8px;
-      }
-
-      &__logo {
-        width: 227px;
-        height: 224px;
-        border-radius: 4px;
-      }
-
-      &__name {
-        height: 43px;
-        font-size: 16px;
-        line-height: 20px;
-        letter-spacing: 0.0275em;
-        color: variables.$regular-text;
-        margin: 12px 0 8px 0;
-      }
-
-      &__cost {
-        font-weight: 700;
-        font-size: 24px;
-        line-height: 36px;
-        color: variables.$primary-text;
-      }
-
-      &__description {
-        height: 74px;
-        font-size: 14px;
-        line-height: 20px;
-        letter-spacing: 0.018em;
-        color: variables.$secondary-text;
-        margin-bottom: 8px;
-      }
-
-      &__total {
-        display: flex;
-        align-items: center;
-        
-        .stuff-item__count {
-          flex-grow: 1;
-          color: variables.$secondary-text;
-        }
-
-        .stuff-item__count-change {
-          width: 130px;
-        }
-      }
+    .stuff-item__count-change {
+      width: 130px;
     }
   }
 }

@@ -68,6 +68,7 @@
         size="mini"
         icon="el-icon-plus"
         @click="changeFormState"
+        :disabled="loading"
       >
         Создать товар
       </el-button>

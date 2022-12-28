@@ -1,0 +1,52 @@
+@use 'variables';
+
+.order-id-page {
+  color: variables.$primary-text;
+
+  &__info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 18px;
+    margin-top: 12px;
+  }
+
+  &__date {
+    margin: 4px 0;
+  }
+
+  &__info-item {
+    font-weight: bold;
+    line-height: 22px;
+  }
+
+  &__stuff {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+
+  &__stuff-item {
+    display: flex;
+    align-items: center;
+  }
+
+  .order-stuff-item {
+    width: calc(50% - 12px);
+    height: 224px;
+    border: 1px solid variables.$border-extralight;
+    border-radius: 4px;
+    margin-bottom: 6px;
+
+    &:nth-child(odd) {
+      margin-right: 6px;
+    }
+
+    &__logo {
+      height: 100%;
+    }
+
+    &__info {
+      padding-left: 12px;
+    }
+  }
+}

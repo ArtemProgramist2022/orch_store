@@ -23,6 +23,12 @@ export default {
     ]
   },
 
+  loading: {
+    color: '#409EFF',
+    failedColor: '#F56C6C',
+  },
+
+
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
     'element-ui/lib/theme-chalk/index.css',
@@ -35,6 +41,8 @@ export default {
     '@/assets/cart.scss',
     '@/assets/checkout.scss',
     '@/assets/orders.scss',
+    '@/assets/order-id.scss',
+    '@/assets/stuff-id.scss',
     '@/assets/profile.scss',
     '@/assets/label.scss',
     '@/assets/variables.scss',
