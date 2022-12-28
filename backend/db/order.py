@@ -68,6 +68,29 @@ async def create_order(
     return None
 
 
+async def get_order(
+        order_id: int,
+        conn: Connection
+) -> Optional[orders.Order]:
+    query = await conn.fetchrow(
+        f"""
+        SELECT * FROM {TABLE} WHERE id = $1
+        """,
+        order_id
+    )
+    result: orders.Order = record_to_model(orders.Order, query)
+    if result:
+        result.user = await users.get_user(
+            conn=conn,
+            pk=result.user_id
+        )
+        result.items = await get_orders_cart_items(
+            result.id,
+            conn
+        )
+    return result
+
+
 async def get_orders_list(
         conn: Connection,
         user_id: int = None,
@@ -126,4 +149,32 @@ async def update_order(
         model: orders.UpdateOrder,
         conn: Connection
 ) -> Optional[orders.Order]:
-    pass
+    data = model.dict()
+    updates = []
+    params = [order_id]
+    idx = 2
+
+    for i in data:
+        if data[i] is not None:
+            updates.append(f"{i} = ${idx}")
+            params.append(data[i])
+            idx += 1
+    result = await conn.fetchrow(
+        f"""
+        UPDATE {TABLE} {"SET " + " , ".join(updates) if updates else ""}
+        WHERE id = $1
+        RETURNING *
+        """,
+        *params
+    )
+    result_data: orders.Order = record_to_model(orders.Order, result)
+    if result_data:
+        result_data.user = await users.get_user(
+            conn=conn,
+            pk=result_data.user_id
+        )
+        result_data.items = await get_orders_cart_items(
+            order_id=result_data.id,
+            conn=conn
+        )
+    return result_data
