@@ -149,11 +149,13 @@ export default class CartPage extends Vue {
 
   async goToCheckout () {
     try {
+      const itemsForDeleting: number[] = [];
       for (const item of this.cart) {
         const selection_item = this.selection.find((selection_item) => selection_item.id === item.id)
-        if (!selection_item) {
-          await this.deleteItemFromCart({ id: item.id })
-        }
+        if (!selection_item) itemsForDeleting.push(item.id)
+      }
+      for (const id of itemsForDeleting) {
+        await this.deleteItemFromCart({ id })
       }
       this.$router.push('/cart/checkout')
     } catch {
