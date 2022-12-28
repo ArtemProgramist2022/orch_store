@@ -132,11 +132,15 @@ export default class CartPage extends Vue {
   }
 
   changeCountStuffInCart (stuff_count: number, id: number) {
-    const params = {
-      id,
-      stuff_count,
+    if (stuff_count > 0) {
+      const params = {
+        id,
+        stuff_count,
+      }
+      this.updateCountItemInCart(params)
+    } else {
+      this.deleteItemFromCart({ id })
     }
-    this.updateCountItemInCart(params)
   }
 
   changeSelection (value: CartItem[]) {
