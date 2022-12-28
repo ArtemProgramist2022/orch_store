@@ -5,6 +5,7 @@
       v-loading="loading"
       class="table-with-overflow-only-body-max-height"
       >
+      <el-table-column label="№" prop="id"></el-table-column>
       <el-table-column
         prop="delivery_address"
         label="Адрес доставки"
