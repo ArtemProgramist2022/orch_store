@@ -98,7 +98,7 @@ async def delete_stuff_item(
     return await handlers.error_404('Товар не найден')
 
 
-@router.get('/{stuff_id', response_model=stuff_models.StuffSuccessResponse)
+@router.get('/{stuff_id}', response_model=stuff_models.StuffSuccessResponse)
 async def get_one_stuff(
         stuff_id: int,
         conn: Connection = Depends(get_db)
