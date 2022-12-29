@@ -1,5 +1,6 @@
 <template>
   <el-container class="layout">
+    <background />
     <el-header class="layout__header layout-header">
       <h1 class="layout-header__name">
         <nuxt-link :to="'/'" class="text-decoration-none" style="color: #303133">

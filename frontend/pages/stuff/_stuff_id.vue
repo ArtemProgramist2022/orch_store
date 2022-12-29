@@ -12,7 +12,7 @@
       <div class="stuff-id-page__main">
         <h2 class="page__header stuff-id-page__name">{{ getValueByKey('name') || '&mdash;' }}</h2>
         <p class="stuff-id-page__category">{{ getValueByKey('category.name') || '&mdash;' }}</p>
-        <p class="stuff-id-page__cost">{{ getValueByKey('cost') || '&mdash;' }} <span v-html="getRuble()" /></p>
+        <p class="stuff-id-page__cost">{{ getValueByKey('cost') }} <span v-html="getRuble()" /></p>
         <p class="stuff-id-page__description">{{ getValueByKey('description') || '&mdash;' }}</p>
         <p class="stuff-id-page__count">{{ getValueByKey('count_on_warehouse') || '&mdash;' }} шт</p>
         <el-col class="stuff-id-page__actions">
@@ -65,7 +65,6 @@ export default class StuffIdPage extends Vue {
     }
     this.getStuffItem(params)
     .then((response) => {
-      debugger
       this.stuffItem = response
     })
     .finally(() => {

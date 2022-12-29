@@ -271,6 +271,9 @@ export default class StuffAdminIndex extends Vue {
       this.formLoading = true
       this.loading = true
       this.addStuff(this.form)
+      .then(() => {
+        this.form = this.getDefaultForm()
+      })
       .finally(() => {
         this.formLoading = false
         this.loading = false
@@ -282,7 +285,6 @@ export default class StuffAdminIndex extends Vue {
   changeFormState () {
     this.formLoading = true
     this.showForm = true
-    this.form = this.getDefaultForm()
     this.getCategories()
     .finally(() => this.formLoading = false)
   }

@@ -1,5 +1,6 @@
 <template>
   <div class="layout">
+    <background />
     <LayoutHeader />
     <div class="categories">
       <nuxt-link
@@ -45,11 +46,13 @@ import { CategoryItem } from '~/interfaces/categories'
 import { adminRoutes } from '~/utils/routes'
 import { CreateElement } from 'vue/types/umd';
 import LayoutHeader from '~/components/LayoutHeader.vue'
+import Background from '~/components/Background/index.vue'
 
 @Component({
   transition: 'slide-bottom',
   components: {
     LayoutHeader,
+    Background
   }
 })
 export default class MainLayout extends Vue {
