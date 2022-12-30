@@ -46,7 +46,7 @@ import { CategoryItem } from '~/interfaces/categories'
 import { adminRoutes } from '~/utils/routes'
 import { CreateElement } from 'vue/types/umd';
 import LayoutHeader from '~/components/LayoutHeader.vue'
-import Background from '~/components/Background/index.vue'
+import Background from '~/components/Background.vue'
 
 @Component({
   transition: 'slide-bottom',

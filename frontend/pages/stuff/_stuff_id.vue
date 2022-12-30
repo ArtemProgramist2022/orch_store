@@ -1,6 +1,17 @@
 <template>
   <Loading :loading="loading">
-    <div v-if="stuffItem" class="stuff-id-page">
+    <el-col :span="24">
+      <nuxt-link :to="`/`">
+        <el-button
+          type="primary"
+          size="mini"
+          icon="el-icon-arrow-left"
+          circle
+          class="back-btn"
+        />
+      </nuxt-link>
+    </el-col>
+    <el-col v-if="stuffItem" class="stuff-id-page">
       <el-image
         class="stuff-id-page__logo"
         :src="'https://orch.store/' + getValueByKey('stuff_link')"
@@ -22,21 +33,23 @@
           />
         </el-col>
       </div>
-    </div>
-    <el-empty v-if="!stuffItem">
-      <el-button
-        type="primary"
-        size="mini"
-        @click="$router.back()"  
-      >
-        Вернуться назад
-      </el-button>
-    </el-empty>
+    </el-col>
+    <el-col v-else>
+      <el-empty>
+        <el-button
+          type="primary"
+          size="mini"
+          @click="$router.back()"  
+        >
+          Вернуться назад
+        </el-button>
+      </el-empty>
+    </el-col>
   </Loading>
 </template>
 <script lang="ts">
 import { Vue, Component, Action } from 'nuxt-property-decorator'
-import { getRuble } from '~/utils/helpers'
+import { getRuble, goBack } from '~/utils/helpers'
 import StuffActions from '~/components/StuffActions.vue'
 import Loading from '~/components/Loading.vue'
 import { StuffItem } from '~/interfaces/stuff'

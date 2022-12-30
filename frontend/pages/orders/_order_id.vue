@@ -1,6 +1,17 @@
 <template>
   <Loading :loading="loading">
-    <div v-if="order" class="order-id-page">
+    <el-col :span="24">
+      <nuxt-link :to="`${goBack()}`">
+        <el-button
+          type="primary"
+          size="mini"
+          icon="el-icon-arrow-left"
+          circle
+          class="back-btn"
+        />
+      </nuxt-link>
+    </el-col>
+    <el-col v-if="order" class="order-id-page">
       <h2 class="page__header">Заказ №{{ order.id }}</h2>
       <div class="order-id-page__main">
         Статус заказа: <Label :title="order.status" />
@@ -10,7 +21,7 @@
               Адрес доставки: <br/> <span class="order-id-page__info-item">{{ order.delivery_address }}</span>
             </div>
             <div class="order-id-page__date">
-              Дата и время доставки: <br/> <span class="order-id-page__info-item">{{ order.delivery_date || '&mdash;' }} {{ order.delivery_time }}</span>
+              Дата и время доставки: <br/> <span class="order-id-page__info-item">{{ getDate(order.delivery_date) || '&mdash;' }} {{ order.delivery_time }}</span>
             </div>
             <div class="order-id-page__user">
               Получатель: <br/> <span class="order-id-page__info-item">{{ order.user.name }} <br/> {{ order.user.email }}</span>
@@ -69,16 +80,18 @@
           </div>
         </div>
       </div>
-    </div>
-    <el-empty v-if="!order">
-      <el-button
-        type="primary"
-        size="mini"
-        @click="$router.back()"  
-      >
-        Вернуться назад
-      </el-button>
-    </el-empty>
+    </el-col>
+    <el-col v-else>
+      <el-empty>
+        <el-button
+          type="primary"
+          size="mini"
+          @click="$router.back()"  
+        >
+          Вернуться назад
+        </el-button>
+      </el-empty>
+    </el-col>
   </Loading>
 </template>
 
@@ -89,6 +102,8 @@ import Label from '~/components/Label.vue'
 import StuffItem from '~/components/StuffItem.vue'
 import { Order } from '~/interfaces/orders'
 import { getTotalCost } from '~/utils/cart'
+import { goBack } from '~/utils/helpers'
+import { getDate } from '~/utils/date'
 
 @Component({
   layout: 'main',
@@ -141,6 +156,14 @@ export default class OrderItemPage extends Vue {
   getTotalCost () {
     if (!this.order) return
     return getTotalCost(this.order.items)
+  }
+
+  goBack () {
+    return goBack(this.$route.path)
+  }
+
+  getDate (str: string | null, server_format = false) {
+    return getDate(str, server_format)
   }
 }
 </script>

@@ -66,6 +66,10 @@ table {
 	border-spacing: 0;
 }
 
+.back-btn {
+  margin: 0 16px 16px 0;
+}
+
 /* === */
 
 .el-input, .el-input-number, .el-autocomplete, .el-select, .el-image {
@@ -149,4 +153,10 @@ table {
 
 .el-tree {
   border-radius: 4px;
+}
+
+// el-table
+
+.el-table, .el-table__expanded-cell, .el-table tr {
+  background-color: rgba(255 ,255 ,255 , .75) !important;
 }

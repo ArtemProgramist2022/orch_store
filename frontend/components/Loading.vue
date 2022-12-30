@@ -1,5 +1,5 @@
 <template>
-  <div v-loading="loading">
+  <div v-loading="loading" class="loading">
     <slot />
   </div>
 </template>

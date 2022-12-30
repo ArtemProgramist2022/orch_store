@@ -3,11 +3,16 @@
 $height-order-item: 200px;
 $height-order-item-header: 75px;
 
+.orders-page {
+  padding-bottom: 12px;
+}
+
 .order-item {
   width: 100%;
   height: $height-order-item;
   border: 1px solid variables.$border-extralight;
   border-radius: 4px;
+  background-color: rgba(255, 255, 255, .75);
   margin-bottom: 12px;
   cursor: pointer;
   transition: all .175s;

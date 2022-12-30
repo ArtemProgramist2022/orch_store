@@ -4,7 +4,7 @@
     @click="goToOrder(order.id)"
   >
     <div class="order-item__header">
-      <div>Дата доставки: {{ order.delivery_date || '&mdash;' }} {{ order.delivery_time }}</div>
+      <div>Дата доставки: {{ getDate(order.delivery_date) || '&mdash;' }} {{ order.delivery_time }}</div>
       <div>Стоимость: {{ getTotalCost(order.items) }} <span v-html="getRuble()"></span></div>
     </div>
     <div class="order-item__main">
@@ -36,10 +36,11 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'nuxt-property-decorator'
 import { CartItem } from '~/interfaces/cart'
-import { Order, OrderStatus, OrderStatusRU } from '~/interfaces/orders'
+import { Order } from '~/interfaces/orders'
 import { getTotalCost } from '~/utils/cart'
 import { getRuble } from '~/utils/helpers'
 import Label from '~/components/Label.vue'
+import { getDate } from '~/utils/date'
 
 @Component({
   transition: 'slide-bottom',
@@ -72,6 +73,10 @@ export default class OrderItem extends Vue {
   getCutItemsLength (order: Order) {
     if (order.items.length) return order.items.length - 1
     return 0
+  }
+
+  getDate (str: string, server_format = false) {
+    return getDate(str, server_format)
   }
 }
 </script>

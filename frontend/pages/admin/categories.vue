@@ -4,7 +4,7 @@
       :data="categories"
       v-loading="loading"
       class="table-with-overflow-only-body-max-height"
-      >
+    >
       <el-table-column
         prop="name"
         label="Наименование"
@@ -38,7 +38,7 @@
           type="primary"
           size="mini"
           icon="el-icon-plus"
-          @click="changeFormState"
+          @click="changeFormState()"
           :disabled="loading"
       >
           Создать категорию
@@ -47,6 +47,7 @@
     <el-dialog
       :title="form.id ? 'Редактирование категории' : 'Новая категория'"
       :visible.sync="showForm"
+      @closed="closedForm()"
     >
       <el-form
         ref="form"
@@ -128,6 +129,10 @@ export default class CategoriesAdminIndex extends Vue {
       id: null,
       name: ''
     }
+  }
+
+  closedForm () {
+    if (this.form.id) this.form = this.getDefaultForm()
   }
 
   changeFormState (category?: CategoryItem) {

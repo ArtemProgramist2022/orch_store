@@ -34,6 +34,7 @@ export default {
     'element-ui/lib/theme-chalk/index.css',
     'element-ui/lib/theme-chalk/display.css',
     '@/assets/background.scss',
+    '@/assets/loading.scss',
     '@/assets/styles.scss',
     '@/assets/styles-ui.scss',
     '@/assets/layout.scss',

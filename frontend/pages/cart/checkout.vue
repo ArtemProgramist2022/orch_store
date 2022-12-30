@@ -1,5 +1,16 @@
 <template>
   <div class="checkout-page">
+    <el-col :span="24">
+      <nuxt-link :to="`${goBack()}`">
+        <el-button
+          type="primary"
+          size="mini"
+          icon="el-icon-arrow-left"
+          circle
+          class="back-btn"
+        />
+      </nuxt-link>
+    </el-col>
     <h2 class="checkout-page__header">Оформление заказа</h2>
     <div class="checkout-page__main">
       <el-col :span="18">
@@ -63,11 +74,13 @@ import { Component, Getter, Action, Ref, Vue, Watch } from 'nuxt-property-decora
 import { CartItem } from '~/interfaces/cart'
 import { Order } from '~/interfaces/orders'
 import { getTotalCost } from '~/utils/cart'
+import { goBack } from '~/utils/helpers'
 
 @Component({
   layout: 'main',
   auth: false,
   transition: 'slide-bottom',
+  middleware: 'checkEmptyCart'
 })
 export default class CheckoutPage extends Vue {
   
@@ -116,6 +129,11 @@ export default class CheckoutPage extends Vue {
 
   getTotalCost () {
     return getTotalCost(this.cart)
+  }
+
+  goBack () {
+    console.log('adsf')
+    return goBack(this.$route.path)
   }
 }
 </script>

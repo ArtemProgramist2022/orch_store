@@ -1,6 +1,7 @@
 @use 'variables';
 
 .cart-page {
+  padding-bottom: 12px;
 
   &__header {
     color: variables.$primary-text;

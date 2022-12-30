@@ -12,7 +12,7 @@
       />
       <el-table-column label="Дата доставки">
         <template slot-scope="scope">
-          {{ scope.row.delivery_date || '&mdash;' }}
+          {{ getDate(scope.row.delivery_date) || '&mdash;' }}
         </template>
       </el-table-column>
       <el-table-column label="Время доставки">
@@ -119,6 +119,7 @@ import { CartItem } from '~/interfaces/cart';
 import { GetParams } from '~/interfaces/common';
 import { Order, OrderStatus, OrderStatusRU, UpdateOrder } from '~/interfaces/orders';
 import { StuffItem } from '~/interfaces/stuff';
+import { getDate } from '~/utils/date'
 
 @Component({
   layout: 'admin',
@@ -242,6 +243,10 @@ export default class CategoriesAdminIndex extends Vue {
 
   getStuffOrder (items: CartItem[]) {
     return items.map((item) => ' ' + item.stuff?.name || '').toString()
+  }
+
+  getDate (str: string) {
+    return getDate(str)
   }
 }
 </script>

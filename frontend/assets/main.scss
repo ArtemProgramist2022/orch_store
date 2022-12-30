@@ -4,12 +4,15 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  height: 100%;
+  padding-bottom: 12px;
 }
 
 .stuff-item {
   width: 259px;
   height: 472px;
   border-radius: 4px;
+  background-color: rgba(255, 255, 255, .75);
   padding: 16px;
   padding-bottom: 12px;
   margin: 0 16px 16px 0;
