@@ -26,11 +26,14 @@
         label="Описание"
       />
       <el-table-column
-        prop="count_on_warehouse"
         label="Стоимость"
-      />
+      >
+        <template slot-scope="scope">
+          {{ scope.row.cost }} <span v-html="getRuble()"></span>
+        </template>
+      </el-table-column>
       <el-table-column
-        prop="cost"
+        prop="count_on_warehouse"
         label="Кол-во на складе"
       />
       <el-table-column
@@ -62,7 +65,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-col :span="24" style="text-align: right; margin-top: 6px">
+    <el-col :span="24" style="text-align: right; padding: 6px 0">
       <el-button
         type="primary"
         size="mini"
@@ -194,6 +197,7 @@ import { ListResponse } from '~/interfaces/responses';
 import { NewStuffItem, StuffItem } from '~/interfaces/stuff';
 import getBase64 from '~/utils/base64'
 import Pagination from '~/components/Pagination.vue'
+import { getRuble } from '~/utils/helpers';
 
 @Component({
   layout: 'admin',
@@ -311,6 +315,10 @@ export default class StuffAdminIndex extends Vue {
 
   getCategory (item: StuffItem) {
     return item.category?.name
+  }
+
+  getRuble () {
+    return getRuble()
   }
 }
 </script>

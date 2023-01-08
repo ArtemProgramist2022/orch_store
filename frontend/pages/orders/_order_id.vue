@@ -28,7 +28,7 @@
             </div>
           </div>
           <div class="order-id-page__total">
-            Сумма: <br/> <span class="order-id-page__info-item">{{ getTotalCost() }}</span>
+            Сумма: <br/> <span class="order-id-page__info-item">{{ getTotalCost() }} <span v-html="getRuble()"></span></span>
           </div>
           <div class="order-id-page__checkout">
             <el-popconfirm
@@ -102,7 +102,7 @@ import Label from '~/components/Label.vue'
 import StuffItem from '~/components/StuffItem.vue'
 import { Order } from '~/interfaces/orders'
 import { getTotalCost } from '~/utils/cart'
-import { goBack } from '~/utils/helpers'
+import { getRuble, goBack } from '~/utils/helpers'
 import { getDate } from '~/utils/date'
 
 @Component({
@@ -164,6 +164,10 @@ export default class OrderItemPage extends Vue {
 
   getDate (str: string | null, server_format = false) {
     return getDate(str, server_format)
+  }
+
+  getRuble () {
+    return getRuble()
   }
 }
 </script>

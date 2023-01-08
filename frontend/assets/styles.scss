@@ -108,7 +108,7 @@ table {
 
 .table-with-overflow-only-body-max-height {
 	.el-table__body-wrapper {
-		max-height: 70vh;
+		max-height: 100vh;
 		overflow: auto;
 	}
 }

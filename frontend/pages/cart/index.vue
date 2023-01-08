@@ -29,7 +29,11 @@
             label="Наименование"
             width="150"
           >
-            <template slot-scope="scope">{{ scope.row.stuff && scope.row.stuff.name }}</template>
+            <template slot-scope="scope">
+              <span>
+                {{ scope.row.stuff && scope.row.stuff.name }}
+              </span>
+              </template>
           </el-table-column>
           <el-table-column
             label="Количество"
