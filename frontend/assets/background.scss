@@ -28,8 +28,8 @@
         &:nth-child(#{$i}) {
           --left-start: #{random(20) - 10}vw;
           --left-end: #{random(20) - 10}vw;
-          --rotate-start: #{random(360) * $rotate-size}deg;
-          --rotate-end: #{random(360) * $rotate-size}deg;
+          --rotate-start: #{random(180) * $rotate-size}deg;
+          --rotate-end: #{random(720) * $rotate-size}deg;
           // left: #{random(100)}vw;
           animation: animate #{$i + random(10)}s linear infinite;
           animation-delay: #{random(6)}s;
