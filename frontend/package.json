@@ -24,6 +24,7 @@
     "@types/lodash": "^4.14.191",
     "core-js": "^3.19.3",
     "element-ui": "^2.15.7",
+    "fs": "^0.0.1-security",
     "lodash": "^4.17.21",
     "nuxt": "^2.15.8",
     "nuxt-property-decorator": "^2.9.1",

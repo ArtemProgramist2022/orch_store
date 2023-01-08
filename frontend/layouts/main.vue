@@ -4,7 +4,19 @@
     <LayoutHeader />
     <div class="categories">
       <nuxt-link
-        v-for="category in categories.filter((_, index) => index <= 6)"
+        :to="`/`"
+        :class="{
+          'categories__category-item': true,
+          'category-item': true,
+          'category-item--active': '/' === $route.path
+        }"
+      >
+        <span class="category-item__name">
+          Все категории
+        </span>
+      </nuxt-link>
+      <nuxt-link
+        v-for="category in categories.filter((_, index) => index <= 5)"
         :key="category.id"
         :class="{
           'categories__category-item': true,
