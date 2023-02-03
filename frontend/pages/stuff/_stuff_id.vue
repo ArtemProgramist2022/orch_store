@@ -4,20 +4,23 @@
       <nuxt-link :to="`/`">
         <el-button
           type="primary"
-          size="mini"
+          size="small"
           icon="el-icon-arrow-left"
           circle
           class="back-btn"
         />
       </nuxt-link>
     </el-col>
-    <el-col v-if="stuffItem" class="stuff-id-page">
+    <el-col v-if="stuffItem" :class="{
+      'stuff-id-page': true,
+      'mobile-stuff-id-page': !$device.isDesktop,
+    }">
       <el-image
         class="stuff-id-page__logo"
         :src="'https://orch.store/' + getValueByKey('stuff_link')"
       >
         <div slot="error" class="image-slot">
-          <i class="el-icon-picture-outline"></i>
+          <i class="el-icon-picture-outline" />
         </div>
       </el-image>
       <div class="stuff-id-page__main">

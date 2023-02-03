@@ -5,7 +5,7 @@
 
   &__logo {
     width: 300px;
-    height: 400px;
+    border-radius: 8px;
   }
 
   &__main {
@@ -19,7 +19,7 @@
   }
 
   &__category {
-    font-size: 15px;
+    font-size: 16px;
     color: variables.$secondary-text;
   }
 
@@ -42,5 +42,11 @@
   &__actions {
     padding-top: 24px;
     max-width: 130px;
+  }
+}
+
+.mobile-stuff-id-page {
+  .stuff-id-page__logo {
+    height: 200px
   }
 }

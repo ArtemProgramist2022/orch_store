@@ -4,7 +4,7 @@
       <nuxt-link :to="`${goBack()}`">
         <el-button
           type="primary"
-          size="mini"
+          size="small"
           icon="el-icon-arrow-left"
           circle
           class="back-btn"
@@ -15,22 +15,24 @@
       <h2 class="page__header">Заказ №{{ order.id }}</h2>
       <div class="order-id-page__main">
         Статус заказа: <Label :title="order.status" />
-        <div class="order-id-page__info">
-          <div>
-            <div class="order-id-page__address">
-              Адрес доставки: <br/> <span class="order-id-page__info-item">{{ order.delivery_address }}</span>
+        <div class="order-id-page__info" :style="$device.isMobile && { flexDirection: 'column' }">
+          <el-col :span="$device.isMobile ? 22 : 18" style="display: flex; justify-content: space-between;">
+            <div>
+              <div class="order-id-page__address">
+                Адрес доставки: <br/> <span class="order-id-page__info-item">{{ order.delivery_address }}</span>
+              </div>
+              <div class="order-id-page__date">
+                Дата и время доставки: <br/> <span class="order-id-page__info-item">{{ getDate(order.delivery_date) || '&mdash;' }} {{ order.delivery_time }}</span>
+              </div>
+              <div class="order-id-page__user">
+                Получатель: <br/> <span class="order-id-page__info-item">{{ order.user.name }} <br/> {{ order.user.email }}</span>
+              </div>
             </div>
-            <div class="order-id-page__date">
-              Дата и время доставки: <br/> <span class="order-id-page__info-item">{{ getDate(order.delivery_date) || '&mdash;' }} {{ order.delivery_time }}</span>
+            <div class="order-id-page__total">
+              Сумма: <br/> <span class="order-id-page__info-item">{{ getTotalCost() }} <span v-html="getRuble()"></span></span>
             </div>
-            <div class="order-id-page__user">
-              Получатель: <br/> <span class="order-id-page__info-item">{{ order.user.name }} <br/> {{ order.user.email }}</span>
-            </div>
-          </div>
-          <div class="order-id-page__total">
-            Сумма: <br/> <span class="order-id-page__info-item">{{ getTotalCost() }} <span v-html="getRuble()"></span></span>
-          </div>
-          <div class="order-id-page__checkout">
+          </el-col>
+          <el-col :span="4" class="order-id-page__checkout">
             <el-popconfirm
               title="Подтвердите повтор заказа"
               confirm-button-text="Подтверждаю"
@@ -39,23 +41,26 @@
               <el-button
                 slot="reference"
                 type="primary"
-                size="mini"
+                size="small"
+                :style="$device.isMobile && { marginTop: '10px' }"
               >
                 Повторить заказ
               </el-button>
             </el-popconfirm>
-          </div>
+          </el-col>
         </div>
         <div class="order-id-page__stuff">
           <div
             v-for="item in order.items"
             :key="item.id"
             class="order-id-page__stuff-item order-stuff-item"
+            :style="!$device.isDesktop && { width: '100%', flexDirection: 'column', height: 'auto', marginBottom: '10px'  }"
           >
             <div style="height: inherit">
               <el-image
                 class="stuff-item__logo order-stuff-item__logo"
                 :src="'https://orch.store/' + item.stuff.stuff_link"
+                :style="!$device.isDesktop && { width: '100%', maxHeight: '300px' }"
               >
                 <div slot="error" class="image-slot">
                   <i class="el-icon-picture-outline"></i>

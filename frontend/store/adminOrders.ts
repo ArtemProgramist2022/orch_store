@@ -43,7 +43,6 @@ export const actions: ActionTree<SuccessfulResponse<Order[]>, any> = {
         resolve(response.data.data)
       })
       .catch((error) => {
-        Message.error('Произошла ошибка при создании заказа')
         reject(error)
       })
     })
@@ -57,7 +56,6 @@ export const actions: ActionTree<SuccessfulResponse<Order[]>, any> = {
         resolve(response.data.data)
       })
       .catch((error) => {
-        Message.error('Произошла ошибка при обновлении заказа')
         reject(error)
       })
     })

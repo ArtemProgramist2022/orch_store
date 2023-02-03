@@ -57,7 +57,6 @@ export const actions: ActionTree<ListResponse<StuffItem>, any> = {
         resolve(response.data.data)
       })
       .catch((error) => {
-        Message.error('Произошла ошибка при создании товара')
         reject(error)
       })
     })
@@ -71,7 +70,6 @@ export const actions: ActionTree<ListResponse<StuffItem>, any> = {
         resolve(response.data.data)
       })
       .catch((error) => {
-        Message.error('Произошла ошибка при удалении товара')
         reject(error)
       })
     })

@@ -5,10 +5,10 @@
       v-loading="loading"
       class="table-with-overflow-only-body-max-height"
     >
-      <el-table-column>
+      <el-table-column min-width="150px">
         <template slot-scope="scope">
           <el-image
-            style="width: 125px; height: 100px"
+            style="width: 110px; height: 100px; border-radius: 8px"
             :src="'https://orch.store/' + scope.row.stuff_link" 
           >
             <div slot="error" class="image-slot">
@@ -20,13 +20,16 @@
       <el-table-column
         prop="name"
         label="Наименование"
+        min-width="150px"
       />
       <el-table-column
         prop="description"
         label="Описание"
+        min-width="150px"
       />
       <el-table-column
         label="Стоимость"
+        min-width="150px"
       >
         <template slot-scope="scope">
           {{ scope.row.cost }} <span v-html="getRuble()"></span>
@@ -34,11 +37,16 @@
       </el-table-column>
       <el-table-column
         prop="count_on_warehouse"
-        label="Кол-во на складе"
-      />
+        min-width="150px"
+      >
+        <template slot="header">
+          <span>Кол-во на складе</span>
+        </template>
+      </el-table-column>
       <el-table-column
         prop="category"
         label="Категория"
+        min-width="150px"
       >
         <template slot-scope="scope">
           {{ getCategory(scope.row) || '&mdash;' }}
@@ -59,7 +67,7 @@
               slot="reference"
               type="danger"
               icon="el-icon-delete"
-              size="mini"
+              size="small"
             />
           </el-popconfirm>
         </template>
@@ -68,7 +76,7 @@
     <el-col :span="24" style="text-align: right; padding: 6px 0">
       <el-button
         type="primary"
-        size="mini"
+        size="small"
         icon="el-icon-plus"
         @click="changeFormState"
         :disabled="loading"
@@ -92,7 +100,7 @@
         ref="form"
         :model="form"
         :rules="formRules"
-        size="mini"
+        size="small"
         label-position="top"
         @submit.prevent.native="updateStuff()"
         v-loading="formLoading"
@@ -163,15 +171,16 @@
             :before-upload="uploadPhoto"
             accept=".jpeg, .jpg, .png"
           >
-            <img v-if="photo" :src="photo" class="photo-upload">
-            <i v-else class="el-icon-plus photo-uploader-icon"></i>
+            <img v-if="photo" :src="photo" class="photo-upload" :style="$device.isMobileOrTablet && { width: '150px', height: '150px', lineHeight: '150px' }">
+            <i v-else class="el-icon-plus photo-uploader-icon" :style="$device.isMobileOrTablet && { width: '150px', height: '150px', lineHeight: '150px' }" />
           </el-upload>
         </el-form-item>
         <el-form-item>
-          <div class="flex-center">
+          <div class="flex-center" :style="$device.isMobile && { flexDirection: 'column' }">
             <el-button
               type="primary"
               native-type="submit"
+              :style="$device.isMobile && { marginBottom: '5px' }"
             >
               Создать
             </el-button>

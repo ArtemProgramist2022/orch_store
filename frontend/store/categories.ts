@@ -52,7 +52,6 @@ export const actions: ActionTree<SuccessfulResponse<CategoryItem[]>, any> = {
         resolve(response.data.data)
       })
       .catch((error) => {
-        Message.error('Произошла ошибка при создании категории')
         reject(error)
       })
     })
@@ -66,7 +65,6 @@ export const actions: ActionTree<SuccessfulResponse<CategoryItem[]>, any> = {
         resolve(response.data.data)
       })
       .catch((error) => {
-        Message.error('Произошла ошибка при обновлении категории')
         reject(error)
       })
     })
@@ -80,7 +78,6 @@ export const actions: ActionTree<SuccessfulResponse<CategoryItem[]>, any> = {
         resolve(response.data.data)
       })
       .catch((error) => {
-        Message.error('Произошла ошибка при удалении категории')
         reject(error)
       })
     })

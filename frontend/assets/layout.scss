@@ -28,7 +28,7 @@
 
     .layout-header-profile {
       &__login {
-        margin: 0 16px 0 25px;
+        margin-left: 25px;
       }
 
       &__admin-panel, &__cart {
@@ -51,6 +51,7 @@
   }
 
   .layout-nuxt {
+    height: 100%;
     position: relative;
     box-shadow: variables.$shadow-dark;
     padding: 16px;
@@ -93,9 +94,12 @@
       color: variables.$secondary-text;
 
       &__name {
-        font-size: 14px;
+        font-size: 16px;
         line-height: 20px;
         letter-spacing: 0.018em;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
       }
 
       &--active {

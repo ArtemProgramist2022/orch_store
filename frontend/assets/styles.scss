@@ -80,6 +80,10 @@ table {
 	height: 100%;
 }
 
+.el-image img {
+  object-fit: cover;
+}
+
 .slide-bottom-enter-active,
 .slide-bottom-leave-active {
   transition: opacity 0.25s ease-in-out, transform 0.25s ease-in-out;
@@ -88,6 +92,13 @@ table {
 .slide-bottom-leave-to {
   opacity: 0;
   transform: translate3d(0, 15px, 0);
+}
+
+// a
+
+a {
+  text-decoration: none;
+  color: inherit;
 }
 
 /* el-tabs */
@@ -108,7 +119,7 @@ table {
 
 .table-with-overflow-only-body-max-height {
 	.el-table__body-wrapper {
-		max-height: 100vh;
+    max-height: 100%;
 		overflow: auto;
 	}
 }
@@ -159,4 +170,26 @@ table {
 
 .el-table, .el-table__expanded-cell, .el-table tr {
   background-color: rgba(255 ,255 ,255 , .75) !important;
+}
+
+.el-table .cell {
+  font-size: 16px;
+}
+
+// el-link
+
+.el-link {
+  font-size: 16px;
+}
+
+// el-tree
+
+.el-tree-node {
+  font-size: 16px;
+}
+
+// el-button
+
+.el-button+.el-button, .el-checkbox.is-bordered+.el-checkbox.is-bordered {
+  margin-left: 0;
 }

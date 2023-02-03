@@ -8,14 +8,19 @@
       <el-table-column
         prop="name"
         label="Имя"
+        min-width="150px"
       />
       <el-table-column
         prop="email"
         label="Email"
+        min-width="150px"
       />
       <el-table-column
-        label="Права администратора"
+        min-width="150px"
       >
+        <template slot="header">
+          <span>Права администратора</span>
+        </template>
         <template slot-scope="scope">
           <i v-if="scope.row.is_admin" class="el-icon-check" />
           <i v-else class="el-icon-close" />

@@ -1,8 +1,8 @@
 <template>
   <div class="cart-page">
     <h2 class="cart-page__header">Корзина</h2>
-    <div class="cart-page__main">
-      <el-col :span="18">
+    <div class="cart-page__main" :style="$device.isMobile && { flexDirection: 'column' }">
+      <el-col :span="$device.isMobile ? 24 : 18">
         <el-table
           ref="tableRef"
           :data="cart"
@@ -16,7 +16,7 @@
           <el-table-column width="150">
             <template slot-scope="scope">
               <el-image
-                style="width: 125px; height: 100px"
+                style="width: 110px; height: 100px; border-radius: 8px"
                 :src="'https://orch.store/' + (scope.row.stuff ? scope.row.stuff.stuff_link : '')"
               >
                 <div slot="error" class="image-slot">
@@ -44,7 +44,7 @@
                 :value="scope.row.stuff_count"
                 :min="0"
                 :max="scope.row.stuff && scope.row.stuff.count_on_warehouse"
-                size="mini"
+                size="small"
                 @change="changeCountStuffInCart($event, scope.row.id)"
               />
             </template>
@@ -68,7 +68,7 @@
                 <el-button
                   slot="reference"
                   type="danger"
-                  size="mini"
+                  size="small"
                   icon="el-icon-delete"
                 />
               </el-popconfirm>
@@ -76,7 +76,7 @@
           </el-table-column>
         </el-table>
       </el-col>
-      <el-col :span="6" class="cart-page__checkout">
+      <el-col :span="$device.isMobile ? 24 : 6" class="cart-page__checkout" :style="$device.isMobile && { marginTop: '10px' }">
         <el-button
           type="success"
           size="large"

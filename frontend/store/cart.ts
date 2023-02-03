@@ -48,7 +48,6 @@ export const actions: ActionTree<SuccessfulResponse<CartItem[]>, any> = {
         resolve(response.data.data)
       })
       .catch((error) => {
-        Message.error('Произошла ошибка при добавлении товара в корзину')
         reject(error)
       })
     })
@@ -61,7 +60,6 @@ export const actions: ActionTree<SuccessfulResponse<CartItem[]>, any> = {
         resolve(response.data.data)
       })
       .catch((error) => {
-        Message.error('Произошла ошибка при изменении кол-ва товара в корзине')
         reject(error)
       })
     })
@@ -75,7 +73,6 @@ export const actions: ActionTree<SuccessfulResponse<CartItem[]>, any> = {
         resolve(response.data.data)
       })
       .catch((error) => {
-        Message.error('Произошла ошибка при удалении товара корзины')
         reject(error)
       })
     })

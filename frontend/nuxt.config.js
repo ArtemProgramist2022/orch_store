@@ -2,7 +2,7 @@ export default {
   // Target: https://go.nuxtjs.dev/config-target
   target: 'server',
   server: {
-    port: 3000,
+    port: 3001,
     host: 'localhost'
   },
   ssr: true,
@@ -15,7 +15,11 @@ export default {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '' },
+      { hid: 'description', name: 'description', content: `
+        Добрый день дорогой посетитель,
+        ты зашел на первый Магаданский сайт посвященный секс-игрушкам,
+        мы гарантируем отличное качество изделий и полную конфиденциальность
+      ` },
       { name: 'format-detection', content: 'telephone=no' }
     ],
     link: [
@@ -54,7 +58,8 @@ export default {
   plugins: [
     '@/plugins/element-ui',
     '@/plugins/fontawesome',
-    '@/plugins/infiniteLoading'
+    '@/plugins/infiniteLoading',
+    '@/plugins/axios'
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -73,7 +78,8 @@ export default {
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
     '@nuxtjs/auth-next',
-    '@nuxtjs/proxy'
+    '@nuxtjs/proxy',
+    '@nuxtjs/device',
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios

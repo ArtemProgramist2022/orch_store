@@ -6,14 +6,17 @@
       class="table-with-overflow-only-body-max-height"
     >
       <el-table-column
-        prop="name"
         label="Наименование"
-      />
+      >
+        <template slot-scope="scope">
+          <span>{{scope.row.name}}</span>
+        </template>
+      </el-table-column>
       <el-table-column width="150">
         <template slot-scope="scope">
           <el-button
             type="primary"
-            size="mini"
+            size="small"
             icon="el-icon-edit"
             @click="changeFormState(scope.row)"
           ></el-button>
@@ -26,7 +29,7 @@
             <el-button
               slot="reference"
               type="danger"
-              size="mini"
+              size="small"
               icon="el-icon-delete"
             ></el-button>
           </el-popconfirm>
@@ -36,7 +39,7 @@
     <el-col :span="24" style="text-align: right; padding: 6px 0">
       <el-button
           type="primary"
-          size="mini"
+          size="small"
           icon="el-icon-plus"
           @click="changeFormState()"
           :disabled="loading"
@@ -53,7 +56,7 @@
         ref="form"
         :model="form"
         :rules="formRules"
-        size="mini"
+        size="small"
         label-position="top"
         @submit.prevent.native="updateCategory()"
         v-loading="loading"
@@ -68,10 +71,11 @@
           />
         </el-form-item>
         <el-form-item>
-          <div class="flex-center">
+          <div class="flex-center" :style="$device.isMobile && { flexDirection: 'column' }">
             <el-button
               type="primary"
               native-type="submit"
+              :style="$device.isMobile && { marginBottom: '5px' }"
             >
               {{ form.id ? 'Редактировать' : 'Создать' }}
             </el-button>

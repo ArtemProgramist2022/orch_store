@@ -3,7 +3,7 @@
     <el-button
       v-if="!getStuffInCart()"
       type="primary"
-      size="mini"
+      size="small"
       @click.stop="addStuffToCart()"
     >
       Купить
@@ -11,7 +11,7 @@
     <el-input-number
       v-else
       :value="getCountStuffInCart()"
-      size="mini"
+      size="small"
       :min="0"
       :max="stuffItem.count_on_warehouse"
       @change="changeCountStuffInCart($event)"

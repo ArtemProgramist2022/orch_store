@@ -7,7 +7,7 @@
         :model="form"
         :rules="rulesForm"
         label-position="top"
-        size="mini"
+        size="small"
         @submit.native.prevent="submitForm"
       >
         <el-form-item
@@ -34,7 +34,7 @@
           <el-button
             v-if="!showCode"
             type="primary"
-            size="mini"
+            size="small"
             @click="sendCode"
           >
             Выслать код подтверждения
@@ -43,7 +43,7 @@
             v-else
             type="primary"
             native-type="submit"
-            size="mini"
+            size="small"
           >
             Войти
           </el-button>

@@ -1,11 +1,14 @@
 <template>
-  <div class="profile-page">
+  <div :class="{
+    'profile-page': true,
+    'mobile-profile-page': !$device.isDesktop,
+  }">
     <h2 class="page__header">{{ $auth.user.name }}</h2>
     <div class="profile-page__info-item">
       Email: {{ $auth.user.email }}
     </div>
-    <div class="profile-page__info-item">
-      Права администратора: {{ $auth.user.is_admin ? 'Есть' : 'Нет' }}
+    <div v-if="$auth.user.is_admin" class="profile-page__info-item">
+      Права администратора: Есть
     </div>
     <div class="profile-page__main">
       <h3 class="page__header-h3">
@@ -23,14 +26,14 @@
     </div>
     <el-col class="profile-page__actions">
       <el-button
-        size="mini"
+        size="small"
         @click="changeRecoverFormState()"
       >
         Сменить пароль
       </el-button>
       <el-button
         type="danger"
-        size="mini"
+        size="small"
         @click="$auth.logout()"
       >
         Выйти
@@ -44,7 +47,7 @@
         ref="recoverForm"
         :model="recoverForm"
         :rules="recoverRules"
-        size="mini"
+        size="small"
         label-position="top"
         @submit.native.prevent="!showCode ? sendCode() : submitRecoverForm()"
       >
@@ -73,7 +76,7 @@
             <el-button
               v-if="!showCode"
               type="primary"
-              size="mini"
+              size="small"
               @click="sendCode"
             >
               Выслать код подтверждения
@@ -82,7 +85,7 @@
               v-else
               type="primary"
               native-type="submit"
-              size="mini"
+              size="small"
             >
               Войти
             </el-button>

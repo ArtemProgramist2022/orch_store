@@ -9,24 +9,26 @@
       <el-table-column
         prop="delivery_address"
         label="Адрес доставки"
+        min-width="150px"
       />
-      <el-table-column label="Дата доставки">
+      <el-table-column label="Дата доставки" min-width="150px">
         <template slot-scope="scope">
           {{ getDate(scope.row.delivery_date) || '&mdash;' }}
         </template>
       </el-table-column>
-      <el-table-column label="Время доставки">
+      <el-table-column label="Время доставки" min-width="150px">
         <template slot-scope="scope">
           {{ scope.row.delivery_time || '&mdash;' }}
         </template>
       </el-table-column>
-      <el-table-column label="Статус">
+      <el-table-column label="Статус" min-width="150px">
         <template slot-scope="scope">
           {{ getOrderStatus(scope.row.status) || '&mdash;' }}
         </template>
       </el-table-column>
       <el-table-column
         label="Пользователь"
+        min-width="150px"
       >
         <template slot-scope="scope">
           {{ scope.row.user.name }}
@@ -34,6 +36,7 @@
       </el-table-column>
       <el-table-column
         label="Товары"
+        min-width="150px"
       >
         <template slot-scope="scope">
           <span>{{ scope.row.items.length ? getStuffOrder(scope.row.items) : '&mdash;' }}</span>
@@ -43,7 +46,7 @@
         <template slot-scope="scope">
           <el-button
             type="primary"
-            size="mini"
+            size="small"
             icon="el-icon-edit"
             @click="changeFormState(scope.row)"
           ></el-button>
@@ -58,7 +61,7 @@
         ref="form"
         :model="form"
         :rules="formRules"
-        size="mini"
+        size="small"
         label-position="top"
         @submit.prevent.native="updateItem()"
         v-loading="loading"
@@ -93,10 +96,11 @@
           </el-select>
         </el-form-item>
         <el-form-item>
-          <div class="flex-center">
+          <div class="flex-center" :style="$device.isMobile && { flexDirection: 'column' }">
             <el-button
               type="primary"
               native-type="submit"
+              :style="$device.isMobile && { marginBottom: '5px' }"
             >
               Редактировать
             </el-button>

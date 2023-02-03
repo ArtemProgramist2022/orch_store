@@ -1,43 +1,43 @@
 <template>
   <el-header class="layout__header layout-header">
-    <h1 class="layout-header__name">
-      <nuxt-link :to="'/'" class="text-decoration-none" style="color: inherit">
-        orch.store
+    <h1 class="layout-header__name" :style="!$device.isDesktop && { color: 'white', fontSize: '18px', lineHeight: 'normal' }">
+      <nuxt-link :to="'/'">
+        Главная
       </nuxt-link>
     </h1>
     <div class="layout-header__profile layout-header-profile">
       <nuxt-link v-if="isAuth()" :to="`/orders`">
         <el-badge :value="orders.length" :max="10">
-          <el-button size="mini" class="layout-header-profile__orders">
+          <el-button v-if="$device.isDesktopOrTablet" size="small" class="layout-header-profile__orders">
             Заказы
           </el-button>
+          <i v-else class="color-white el-icon-box layout-header-profile__orders" />
         </el-badge>
       </nuxt-link>
       <nuxt-link v-if="isAuth()" :to="`/cart`">
         <el-badge :value="cart.length" :max="10">
-          <el-button size="mini" class="layout-header-profile__cart">
+          <el-button v-if="$device.isDesktopOrTablet" size="small" class="layout-header-profile__cart">
             Корзина
           </el-button>
+          <i v-else class="color-white el-icon-shopping-cart-2 layout-header-profile__cart" />
         </el-badge>
       </nuxt-link>
       <nuxt-link v-if="isAdmin()" :to="`${adminRoutes.users}`">
-        <el-button size="mini" class="layout-header-profile__admin-panel">
+        <el-button v-if="$device.isDesktopOrTablet" size="small" class="layout-header-profile__admin-panel">
           Панель админа
         </el-button>
+        <i v-else class="color-white el-icon-user-solid layout-header-profile__admin-panel" />
       </nuxt-link>
-      <nuxt-link v-if="!isAuth()" :to="`/signup`">
-        <el-button size="mini" class="layout-header-profile__register">
+      <nuxt-link v-if="!isAuth() && $device.isDesktopOrTablet" :to="`/signup`">
+        <el-button size="small" class="layout-header-profile__register">
           Зарегистрироваться
         </el-button>
       </nuxt-link>
       <nuxt-link :to="isAuth() ? `/profile` : `/login`">
-        <el-button size="mini" class="layout-header-profile__login">
+        <el-button size="small" class="layout-header-profile__login">
           {{ isAuth() ? 'Профиль' : 'Войти'}}
         </el-button>
       </nuxt-link>
-      <div v-if="isAuth()">
-        <el-avatar :size="40" :src="'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'"></el-avatar>
-      </div>
     </div>
   </el-header>
 </template>

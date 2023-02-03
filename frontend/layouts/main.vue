@@ -2,7 +2,7 @@
   <div class="layout">
     <background />
     <LayoutHeader />
-    <div class="categories">
+    <div v-if="$device.isDesktop" class="categories">
       <nuxt-link
         :to="`/`"
         :class="{
@@ -12,12 +12,12 @@
         }"
       >
         <span class="category-item__name">
-          Все категории
+          Главная
         </span>
       </nuxt-link>
       <nuxt-link
-        v-for="category in categories.filter((_, index) => index <= 5)"
-        :key="category.id"
+        v-for="(category, index) in prevCategories"
+        :key="`${category.id}-${index}`"
         :class="{
           'categories__category-item': true,
           'category-item': true,
@@ -33,6 +33,7 @@
     <el-col :span="24" class="flex-center">
       <el-col class="layout__content layout-content">
         <el-col
+          v-if="$device.isDesktop"
           class="layout-content__menu"
           :span="6"
         >
@@ -43,7 +44,7 @@
             :render-content="renderContentTree"
           />
         </el-col>
-        <el-col class="layout-nuxt" :span="18">
+        <el-col class="layout-nuxt" :span="$device.isDesktop ? 18 : 24">
           <nuxt />
         </el-col>
       </el-col>
@@ -59,6 +60,7 @@ import { adminRoutes } from '~/utils/routes'
 import { CreateElement } from 'vue/types/umd';
 import LayoutHeader from '~/components/LayoutHeader.vue'
 import Background from '~/components/Background.vue'
+import { isEqual } from 'lodash';
 
 @Component({
   transition: 'slide-bottom',
@@ -76,6 +78,7 @@ export default class MainLayout extends Vue {
   @Watch('categories')
   watchCategories () {
     this.treeData[0].children = this.categories
+    this.setPrevCategories()
   }
 
   @Watch('$route.path')
@@ -98,6 +101,7 @@ export default class MainLayout extends Vue {
     }
   ]
   adminRoutes = adminRoutes
+  prevCategories: CategoryItem[] = []
 
   isAuth () {
     return isAuth(this.$auth.user)
@@ -111,6 +115,35 @@ export default class MainLayout extends Vue {
     this.getCategories()
   }
 
+  setPrevCategories(category?: CategoryItem) {
+    const prevCategoriesFromStorage = JSON.parse(localStorage.getItem('prevCategories') || JSON.stringify(""))
+    if (prevCategoriesFromStorage) {
+      if (Array.isArray(prevCategoriesFromStorage)) {
+        const filteredCategories = prevCategoriesFromStorage.filter((item: any) => {
+          const currentCategory = this.categories.find((category) => category.id === item?.id)
+          if (currentCategory) {
+            return isEqual(currentCategory, item)
+          }
+        })
+        this.prevCategories = filteredCategories
+        let newPrevCategories = [...filteredCategories]
+        if (category) {
+          const categoryIndexInStorage = filteredCategories.findIndex((item) => item.id === category.id)
+          if (categoryIndexInStorage !== -1) {
+            newPrevCategories.splice(categoryIndexInStorage, 1)
+          }
+          newPrevCategories.unshift(category)
+          newPrevCategories = newPrevCategories.filter((_, index) => index < 5)
+        }
+        localStorage.setItem('prevCategories', JSON.stringify(newPrevCategories))
+      } else {
+        localStorage.removeItem('prevCategories')
+      }
+    } else {
+      localStorage.setItem('prevCategories', JSON.stringify([]))
+    }
+  }
+
   clickTreeCategories (node: { name: string, children: CategoryItem[] }[] | CategoryItem) { // typeof this.treeData - some problem with build
     if (!Object.hasOwnProperty.call(node, 'children')) {
       this.categories.forEach((category) => {
@@ -122,6 +155,8 @@ export default class MainLayout extends Vue {
         (document.querySelector(`#node-id-${(node as CategoryItem).id}`) as HTMLElement).style.color="#409EFF"
       }
       this.$router.push(`/category/${(node as CategoryItem).id}`)
+      const category = this.categories.find((category) => category.id === (node as CategoryItem).id)
+      this.setPrevCategories(category)
     } else {
       const category = this.categories.find((category) => {
         return category.id === +this.$route.params.category_id

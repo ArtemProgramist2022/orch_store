@@ -4,7 +4,7 @@
       <nuxt-link :to="`${goBack()}`">
         <el-button
           type="primary"
-          size="mini"
+          size="small"
           icon="el-icon-arrow-left"
           circle
           class="back-btn"
@@ -12,13 +12,13 @@
       </nuxt-link>
     </el-col>
     <h2 class="checkout-page__header">Оформление заказа</h2>
-    <div class="checkout-page__main">
-      <el-col :span="18">
+    <div class="checkout-page__main" :style="$device.isMobile && { flexDirection: 'column' }">
+      <el-col :span="$device.isMobile ? 24 : 18">
         <el-form
           ref="form"
           :model="form"
           :rules="rules"
-          size="mini"
+          size="small"
           label-position="top"
         >
           <el-form-item
@@ -39,7 +39,7 @@
               >
                 <el-image
                   :src="'https://orch.store/' + (item.stuff ? item.stuff.stuff_link : '')"
-                  style="border-radius: inherit; height: 100px;"
+                  style="border-radius: inherit;"
                 >
                   <div slot="error" class="image-slot">
                     <i class="el-icon-picture-outline"></i>
@@ -51,7 +51,7 @@
           </el-form-item>
         </el-form>
       </el-col>
-      <el-col :span="6" class="checkout-page__checkout">
+      <el-col :span="$device.isMobile ? 24 : 6" class="checkout-page__checkout" :style="$device.isMobile && { marginTop: '15px' }">
         <el-button
           type="success"
           size="large"

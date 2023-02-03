@@ -16,7 +16,6 @@ export const actions: ActionTree<SuccessfulDataResponse<MeForm | null>, any> = {
         resolve(response.data)
       })
       .catch((error) => {
-        Message.error('Произошла ошибка при отправке кода подтверждения')
         reject(error)
       })
     })
@@ -29,7 +28,6 @@ export const actions: ActionTree<SuccessfulDataResponse<MeForm | null>, any> = {
         resolve(response.data)
       })
       .catch((error) => {
-        Message.error('Произошла ошибка при отправке кода подтверждения')
         reject(error)
       })
     })
@@ -42,7 +40,6 @@ export const actions: ActionTree<SuccessfulDataResponse<MeForm | null>, any> = {
         resolve(response.data)
       })
       .catch((error) => {
-        !data.noMessage && Message.error('Произошла ошибка при входе в систему')
         reject(error)
       })
     })
@@ -55,7 +52,6 @@ export const actions: ActionTree<SuccessfulDataResponse<MeForm | null>, any> = {
         resolve(response.data)
       })
       .catch((error) => {
-        Message.error('Произошла ошибка при входе в систему')
         reject(error)
       })
     })

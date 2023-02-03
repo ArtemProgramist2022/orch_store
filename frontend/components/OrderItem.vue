@@ -12,7 +12,7 @@
         <span class="order-item__status-text">Статус заказа:</span>
         <Label :title="order.status" />
       </div>
-      <div class="order-item__stuff">
+      <div v-if="$device.isDesktop" class="order-item__stuff">
         <div
           v-for="item in getStuffInOrder(order)"
           :key="item.id"

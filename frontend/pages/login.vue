@@ -7,7 +7,7 @@
         :model="form"
         :rules="rulesForm"
         label-position="top"
-        size="mini"
+        size="small"
         @submit.native.prevent="submitForm"
       >
         <el-form-item
@@ -33,7 +33,7 @@
           <el-button
             type="primary"
             native-type="submit"
-            size="mini"
+            size="small"
           >
             Войти
           </el-button>
@@ -99,9 +99,6 @@ export default class IndexLogin extends Vue {
     .then(() => {
       Message.success('Авторизация прошла успешно')
       this.$router.push('/')
-    })
-    .catch(() => {
-      Message.error('Произошла ошибка при входе в систему')
     })
     .finally(() => this.loading = false)
   }

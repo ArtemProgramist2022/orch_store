@@ -9,13 +9,13 @@
 }
 
 .stuff-item {
-  width: 259px;
-  height: 472px;
+  width: 280px;
+  height: 500px;
   border-radius: 4px;
   background-color: rgba(255, 255, 255, .75);
   padding: 16px;
   padding-bottom: 12px;
-  margin: 0 16px 16px 0;
+  // margin: 0 16px 16px 0;
   cursor: pointer;
   transition: all .175s;
 
@@ -25,14 +25,14 @@
   }
 
   &__logo {
-    width: 227px;
-    height: 224px;
+    width: 248px;
+    height: 248px;
     border-radius: 4px;
   }
 
   &__name {
     height: 43px;
-    font-size: 16px;
+    font-size: 18px;
     line-height: 20px;
     letter-spacing: 0.0275em;
     color: variables.$regular-text;
@@ -48,7 +48,7 @@
 
   &__description {
     height: 74px;
-    font-size: 14px;
+    font-size: 16px;
     line-height: 20px;
     letter-spacing: 0.018em;
     color: variables.$secondary-text;

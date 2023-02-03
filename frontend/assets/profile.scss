@@ -2,6 +2,7 @@
 
 .profile-page {
   width: 100%;
+  font-size: 16px;
 
   &__info-item {
     color: variables.$regular-text;
@@ -9,9 +10,9 @@
     text-align: center;
   }
 
-  &__main {
+  // &__main {
 
-  }
+  // }
 
   &__orders {
     display: flex;
@@ -32,5 +33,11 @@
     justify-content: space-between;
     align-items: center;
     padding: 12px 0 12px 4px;
+  }
+}
+
+.mobile-profile-page {
+  .order-item {
+    width: 100%;
   }
 }
