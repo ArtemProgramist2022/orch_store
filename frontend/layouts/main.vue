@@ -37,10 +37,14 @@
           class="layout-content__menu"
           :span="6"
         >
+        <!-- fix node click -->
           <el-tree
             :data="treeData"
             :props="treeProps"
-            @node-click="clickTreeCategories"
+            @node-click="(e) => {
+              clickTreeCategories(e, false)
+              clickTreeCategories(e, false)
+            }"
             :render-content="renderContentTree"
           />
         </el-col>
@@ -75,7 +79,7 @@ export default class MainLayout extends Vue {
 
   @Action('categories/getCategories') getCategories!: () => Promise<CategoryItem[]>
 
-  @Watch('categories')
+  @Watch('categories', { deep: true })
   watchCategories () {
     this.treeData[0].children = this.categories
     this.setPrevCategories()
@@ -87,7 +91,7 @@ export default class MainLayout extends Vue {
       return category.id === +this.$route.params.category_id
     })
     if (!category) return
-    this.clickTreeCategories(category)
+    this.clickTreeCategories(category, true)
   }
 
   treeProps = {
@@ -144,7 +148,7 @@ export default class MainLayout extends Vue {
     }
   }
 
-  clickTreeCategories (node: { name: string, children: CategoryItem[] }[] | CategoryItem) { // typeof this.treeData - some problem with build
+  clickTreeCategories (node: { name: string, children: CategoryItem[] }[] | CategoryItem, artificialClick = false) { // typeof this.treeData - some problem with build
     if (!Object.hasOwnProperty.call(node, 'children')) {
       this.categories.forEach((category) => {
         if ((document.querySelector(`#node-id-${category.id}`) as HTMLElement)) {
@@ -155,8 +159,10 @@ export default class MainLayout extends Vue {
         (document.querySelector(`#node-id-${(node as CategoryItem).id}`) as HTMLElement).style.color="#409EFF"
       }
       this.$router.push(`/category/${(node as CategoryItem).id}`)
-      const category = this.categories.find((category) => category.id === (node as CategoryItem).id)
-      this.setPrevCategories(category)
+      if (!artificialClick) {
+        const category = this.categories.find((category) => category.id === (node as CategoryItem).id)
+        this.setPrevCategories(category)
+      }
     } else {
       const category = this.categories.find((category) => {
         return category.id === +this.$route.params.category_id
