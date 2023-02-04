@@ -19,7 +19,7 @@ export default class Background extends Vue {
   @Ref('backgroundRef') backgroundRef!: HTMLDivElement
 
   mounted () {
-    if (this.backgroundWrapperRef && this.$device.isDesktop) {
+    if (this.backgroundWrapperRef && (this.$device as any).isDesktop) {
       const max = 32 // if change it change also in background.scss!!!
       const icons: string[] = (require as any).context('~/static/orch-background-icons', false, /png$/).keys().map((icon: string) => icon.replace(/^./, ''))
       for (let i = 1; i <= (max > 10 ? max : 10); i++) {
