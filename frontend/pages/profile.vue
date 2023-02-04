@@ -79,7 +79,7 @@
               size="small"
               @click="sendCode"
             >
-              Выслать код подтверждения
+              {{ $device.isDesktop ? 'Выслать код подтверждения' : 'Выслать код' }}
             </el-button>
             <el-button
               v-else

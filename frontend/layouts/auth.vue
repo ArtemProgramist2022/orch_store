@@ -2,9 +2,9 @@
   <el-container class="layout">
     <background />
     <el-header class="layout__header layout-header">
-      <h1 class="layout-header__name">
-        <nuxt-link :to="'/'" class="text-decoration-none" style="color: #303133">
-          orch.store
+      <h1 class="layout-header__name" :style="!$device.isDesktop && { color: 'white', fontSize: '18px', lineHeight: 'normal' }">
+        <nuxt-link :to="'/'">
+          Главная
         </nuxt-link>
       </h1>
     </el-header>
