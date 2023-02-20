@@ -1,6 +1,6 @@
 <template>
   <el-header class="layout__header layout-header">
-    <h1 class="layout-header__name" :style="!$device.isDesktop && { color: 'white', fontSize: '18px', lineHeight: 'normal' }">
+    <h1 class="layout-header__name" :style="!$device.isDesktop && { fontSize: '18px', lineHeight: 'normal' }">
       <nuxt-link :to="'/'">
         Главная
       </nuxt-link>

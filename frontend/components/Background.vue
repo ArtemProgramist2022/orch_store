@@ -1,8 +1,7 @@
 <template>
   <div
     class="background"
-    :style="$device.isMobileOrTablet
-      && { background: 'scroll url(/background-mobile.jpg) no-repeat', backgroundSize: 'cover' }"
+    :style="{ background: 'scroll url(/background-mobile.jpg) no-repeat', backgroundSize: 'cover', backgroundPosition: 'center' }"
   >
     <div ref="backgroundWrapperRef" class="background-internal-wrapper">
     </div>
